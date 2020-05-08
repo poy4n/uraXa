@@ -18,10 +18,11 @@ export default class SearchBar extends Component {
 	handleClick = (e) => {
 		e.preventDefault();
 		console.log(this.state.searchString);
-		let result = autoSuggest(this.state.searchString);
-		console.log(result);
-		this.setState({
-			currentSearch: result
+		let result = autoSuggest(this.state.searchString).then((res) => {
+			console.log(res);
+			this.setState({
+				currentSearch: res
+			});
 		});
 	};
 

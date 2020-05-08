@@ -1,7 +1,23 @@
 import * as React from 'react';
+import { useState } from 'react';
+import currentPosition from './currentPosition';
 
 export const Map = () => {
 	const mapRef = React.useRef(null);
+
+	const [ coordinates, setCoordinates ] = useState();
+	console.log(coordinates);
+
+	React.useLayoutEffect(
+		() => {
+			currentPosition((currentCoordinates) => {
+				console.log(currentCoordinates);
+				setCoordinates(currentCoordinates);
+				console.log(coordinates);
+			});
+		},
+		[ coordinates ]
+	);
 
 	React.useLayoutEffect(
 		() => {
