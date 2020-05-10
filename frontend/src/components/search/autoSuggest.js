@@ -1,6 +1,7 @@
 export const autoSuggest = async (searchString) => {
 	const center = { lat: -37.8136, lng: 144.9631 };
 	const apikey = 'Plzpoyk5PfFE85BLe9FTbYJlSarM9Wb2lMjzki6QQwY';
+	let results = [];
 
 	if (!searchString) {
 		return;
