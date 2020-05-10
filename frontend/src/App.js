@@ -9,7 +9,7 @@ import Home from './components/home/Home';
 
 import history from './history';
 
-import { Router, Switch, Route, Link } from "react-router-dom";
+import { Router, Switch, Route, Link } from 'react-router-dom';
 
 import './App.css';
 
@@ -17,30 +17,40 @@ export default function App() {
 	return (
 		<div>
 			<Router history={history}>
-				<div className="header">
-					<Link className="nav" to="/profile">Profile</Link>
-					<Link className="nav" to="/hub">Hub</Link>
-					<Link className="nav" to="/login">login</Link>
-					<Link className="nav" to="/add">Add</Link>
-					<Link className="nav" to="/">Home</Link>
+				<div className='header'>
+					<Link className='nav' to='/'>
+						Home
+					</Link>
+					<Link className='nav' to='/hub'>
+						Hub
+					</Link>
+					<Link className='nav' to='/profile'>
+						Profile
+					</Link>
+					<Link className='nav' to='/add'>
+						Add
+					</Link>
+					<Link className='nav' to='/login'>
+						login
+					</Link>
 				</div>
 				<Switch>
-					<Route path="/profile">
+					<Route path='/profile'>
 						<Profile />
 					</Route>
-					<Route path="/hub">
+					<Route path='/hub'>
 						<Hub />
 					</Route>
-					<Route path="/signup">
+					<Route path='/signup'>
 						<Signup />
 					</Route>
-					<Route path="/login">
+					<Route path='/login'>
 						<Login />
 					</Route>
-					<Route path="/add">
+					<Route path='/add'>
 						<Add />
 					</Route>
-					<Route path="/">
+					<Route path='/'>
 						<Home />
 					</Route>
 				</Switch>

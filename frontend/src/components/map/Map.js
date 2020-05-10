@@ -22,7 +22,7 @@ export const Map = () => {
 				setCoordinates(currentCoordinates);
 				console.log(currentCoordinates, coordinates);
 			});
-			
+
 			const defaultLayers = platform.createDefaultLayers();
 			const map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
 				center: coordinates,
@@ -74,5 +74,5 @@ export const Map = () => {
 		},
 		[ mapRef, coordinates ]
 	);
-	return <div className='map' ref={mapRef}/>;
+	return <div className='map' ref={mapRef} />;
 };

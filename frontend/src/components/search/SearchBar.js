@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { autoSuggest } from './autoSuggest';
 
-import './SearchBar.css'
+import './SearchBar.css';
 
 export default class SearchBar extends Component {
 	state = {
@@ -31,8 +31,26 @@ export default class SearchBar extends Component {
 		console.log(searchString, currentSearch);
 
 		return (
-			<React.Fragment>
+			<div className='search-container'>
 				<form className='search-bar'>
+					<input
+						className='search-input'
+						placeholder='Search for places...'
+						type='text'
+						name='search'
+						id='search'
+						value={searchString}
+						onChange={this.handleChange}
+					/>
+					<input
+						className='search-input'
+						placeholder='Search for places...'
+						type='text'
+						name='search'
+						id='search'
+						value={searchString}
+						onChange={this.handleChange}
+					/>
 					<input
 						className='search-input'
 						placeholder='Search for places...'
@@ -47,7 +65,7 @@ export default class SearchBar extends Component {
 					</button>
 					<div>{}</div>
 				</form>
-			</React.Fragment>
+			</div>
 		);
 	}
 }
