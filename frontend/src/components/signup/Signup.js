@@ -1,10 +1,11 @@
 import React from 'react'
+
 import './Signup.css';
 
 export default function Signup() {
     return (
         <div className="form-container">
-        
+            <h1>Join uruXa</h1> 
             <form className="form-wraper" method="POST" name="signup">
                 <div className="input-wraper">
                     <input className="input" type="text" id="name" name="name" autoComplete="off" required></input>
@@ -25,8 +26,10 @@ export default function Signup() {
                     <input className="input" type="password" id="password" name="password" required></input>
                     <label className="label" htmlFor="password">Password</label>
                 </div>
+                <button className='signup-btn'>
+                    SignUp
+                </button>
             </form>
-
         </div>
     )
 }

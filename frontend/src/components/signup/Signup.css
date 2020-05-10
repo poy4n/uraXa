@@ -2,6 +2,7 @@
     display: grid;
     place-items: center;
     height: 50vh;
+    text-align: center;
 }
 .input-wraper {
     position: relative;
@@ -33,4 +34,22 @@
     font-family: Arial, Helvetica, sans-serif;
     top: 0;
     font-size: 12px;
+}
+
+.signup-btn {
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #fefefe;
+    background-color: #e01a22;
+    height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-weight: bold;
+    font-size: 12px;
+    width: 100%;
+}
+
+.signup-btn:focus  {
+    outline: none;
 }
