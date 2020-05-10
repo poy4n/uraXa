@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { autoSuggest } from '../search/autoSuggest';
+import { autoSuggest } from './autoSuggest';
 
 import './SearchBar.css'
 

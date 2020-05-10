@@ -1,7 +1,7 @@
 import React from 'react'
 import { Map } from '../map/Map';
 import SearchBar from '../search/SearchBar';
-import history from '../../../../src/history';
+import history from '../../history';
 
 import './Home.css';
 
