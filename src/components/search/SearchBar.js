@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { autoSuggest } from '../search/autoSuggest';
 
-// import './SearchBar.css'
+import './SearchBar.css'
 
 export default class SearchBar extends Component {
 	state = {
@@ -18,7 +18,7 @@ export default class SearchBar extends Component {
 	handleClick = (e) => {
 		e.preventDefault();
 		console.log(this.state.searchString);
-		let result = autoSuggest(this.state.searchString).then((res) => {
+		autoSuggest(this.state.searchString).then((res) => {
 			console.log(res);
 			this.setState({
 				currentSearch: res
@@ -35,7 +35,7 @@ export default class SearchBar extends Component {
 				<form className='search-bar'>
 					<input
 						className='search-input'
-						placeholder='Search...'
+						placeholder='Search for places...'
 						type='text'
 						name='search'
 						id='search'
