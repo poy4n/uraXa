@@ -12,12 +12,14 @@ CREATE TABLE  users (
     id              serial NOT NULL,
     email           varchar(250) NOT NULL,
     password_digest varchar(400) NOT NULL,
-    avatar          varchar(500) NOT NULL,
-    description     varchar(500) NOT NULL,
     username        varchar(50) NOT NULL,
     CONSTRAINT PK_users PRIMARY KEY ( id ),
     CONSTRAINT unique_email UNIQUE (email)
 );
+
+ALTER TABLE users ADD token text;
+ALTER TABLE users ADD avatar text;
+ALTER TABLE users ADD description text;
 
 -- ************************************** posts
 
@@ -94,6 +96,8 @@ CREATE TABLE  comments
     CONSTRAINT FK_users FOREIGN KEY ( user_id ) REFERENCES users ( id ) ON DELETE CASCADE,
     CONSTRAINT FK_posts FOREIGN KEY ( post_id ) REFERENCES posts ( id ) ON DELETE CASCADE
 );
+
+ALTER TABLE comments ADD comment varchar(500) NOT NULL;
 
 CREATE INDEX fkIdx_27 ON comments
 (

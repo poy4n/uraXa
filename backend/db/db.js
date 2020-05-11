@@ -1,9 +1,16 @@
-const pg = require('pg');
+const pg = require("pg");
+require('dotenv').config()
 
-const pool = new pg.Pool({database: uralla});
+let pool
+
+if (process.env.PRODUCTION) {
+  pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+} else {
+  pool = new pg.Pool({ database: process.env.DATABASE, user: process.env.USER, password: process.env.PASSWORD });
+}
 
 module.exports = {
-    query: (sql, params) => {
-        return pool.query(sql, params);
-    }
-}
+  query: (sql, params) => {
+    return pool.query(sql, params);
+  }
+};
