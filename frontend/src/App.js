@@ -7,9 +7,8 @@ import Login from './components/login/Login';
 import Add from './components/add/Add';
 import Home from './components/home/Home';
 
-import history from './history';
-
 import { Router, Switch, Route, Link } from 'react-router-dom';
+import history from './history';
 
 import './App.css';
 

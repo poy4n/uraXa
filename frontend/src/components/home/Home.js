@@ -32,7 +32,7 @@ export default function Home() {
 					</button>
 				</div>
 			</div>
-			<div>
+			<div className='container-map'>
 				<SearchBar />
 				<Map />
 			</div>
