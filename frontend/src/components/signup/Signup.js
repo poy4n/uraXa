@@ -1,35 +1,41 @@
-import React from 'react'
+import React from 'react';
 
 import './Signup.css';
 
 export default function Signup() {
-    return (
-        <div className="form-container">
-            <h1>Join uruXa</h1> 
-            <form className="form-wraper" method="POST" name="signup">
-                <div className="input-wraper">
-                    <input className="input" type="text" id="name" name="name" autoComplete="off" required></input>
-                    <label className="label" htmlFor="name">Your name</label>
-                </div>
+	return (
+		<div className='form-container'>
+			<h1>Join uraXa</h1>
+			<form className='form-wraper' method='POST' name='signup'>
+				<div className='input-wraper'>
+					<input className='input' type='text' id='name' name='name' autoComplete='off' required />
+					<label className='label' htmlFor='name'>
+						Your name
+					</label>
+				</div>
 
-                <div className="input-wraper">
-                    <input className="input" type="text" id="username" name="username" autoComplete="off" required></input>
-                    <label className="label" htmlFor="username">Username</label>
-                </div>
+				<div className='input-wraper'>
+					<input className='input' type='text' id='username' name='username' autoComplete='off' required />
+					<label className='label' htmlFor='username'>
+						Username
+					</label>
+				</div>
 
-                <div className="input-wraper">
-                    <input className="input" type="email" id="email" name="email" autoComplete="off" required></input>
-                    <label className="label" htmlFor="email">Email address</label>
-                 </div>
+				<div className='input-wraper'>
+					<input className='input' type='email' id='email' name='email' autoComplete='off' required />
+					<label className='label' htmlFor='email'>
+						Email address
+					</label>
+				</div>
 
-                 <div className="input-wraper">
-                    <input className="input" type="password" id="password" name="password" required></input>
-                    <label className="label" htmlFor="password">Password</label>
-                </div>
-                <button className='signup-btn'>
-                    SignUp
-                </button>
-            </form>
-        </div>
-    )
+				<div className='input-wraper'>
+					<input className='input' type='password' id='password' name='password' required />
+					<label className='label' htmlFor='password'>
+						Password
+					</label>
+				</div>
+				<button className='signup-btn'>SignUp</button>
+			</form>
+		</div>
+	);
 }
