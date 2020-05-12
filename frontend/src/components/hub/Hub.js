@@ -6,7 +6,8 @@ import { useState, useEffect } from 'react';
 import './Hub.css';
 
 export default function Hub() {
-	const [ hasError, setErrors ] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(false);
 	const [ data, setData ] = useState([
 		{
 			name: 'couple',
@@ -27,18 +28,22 @@ export default function Hub() {
 		}
 	]);
 
-	async function fetchData() {
-		const res = await fetch('');
-		res.json().then((res) => setData(res)).catch((err) => setErrors(err));
-	}
-
-	// useEffect(() => {
-	// 	fetchData();
-	// });
+	useEffect(() => {
+		fetch('')
+		  .then((response) => response.json())
+		  .then((data) => {
+			setLoading(false);
+			setData(data);
+		})
+		  .catch((e) => {
+			setLoading(false);
+			setError(true);
+		});
+	}, []);
 
 	const renderData = (ele, index) => {
 		return (
-			<div className='hub-posts'>
+			<div key={index} className='hub-posts'>
 				<div className='img-container'>
 					<img src={ele.photo} className='img-post' />
 				</div>
@@ -51,6 +56,8 @@ export default function Hub() {
 
 	return (
 		<div className='hub'>
+			{loading && <h2>posts are loading...</h2>}
+			{!error && <h2>loading failed...</h2>}
 			<div className='container-posts'>{data && data.map(renderData)}</div>
 			<div className='container-map'>
 				<SearchBar />

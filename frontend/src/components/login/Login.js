@@ -7,6 +7,7 @@ export default function Login() {
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
+	const [ token, setToken ] = useState('');
 
 	useEffect(
 		() => {
@@ -23,11 +24,21 @@ export default function Login() {
 	const handleLogin = (e) => {
 		e.preventDefault();
 
-		if (email === 'abc@email.com' && password === 'password') {
-			console.log('Correct username or password');
-		} else {
-			console.log('Incorrect username or password');
-		}
+		let url = '/api/login'
+
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email: email, password: password})
+		};
+		fetch(url, requestOptions)
+			.then(response => response.json())
+			.then(data => {
+			console.log(data)
+			setEmail(data.user.email);
+			setToken(data.user.token);
+		})
+		.catch(error => console.log(error.error))
 	};
 
 	return (
