@@ -4,53 +4,53 @@ import { useState, useEffect } from 'react';
 import './Signup.css';
 
 export default function Signup() {
-	const [ name, setName ] = useState('');
 	const [ username, setUsername ] = useState('');
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
+	const [ token, setToken ] = useState('');
 
 	useEffect(
 		() => {
-			if (name.trim() && username.trim() && email.trim() && password.trim()) {
+			if (username.trim() && email.trim() && password.trim()) {
 				setIsButtonDisabled(false);
 			} else {
 				setIsButtonDisabled(true);
 			}
 		},
-		[ name, username, email, password ]
+		[ username, email, password ]
 	);
-	console.log(name, username, email, password);
+	console.log(username, email, password);
 
 	const handleJoin = (e) => {
 		e.preventDefault();
 
-		if (email === 'abc@email.com' && password === 'password') {
-			console.log('Correct username or password');
-		} else {
-			console.log('Incorrect username or password');
-		}
-	};
+		let url = '/api/signup'
+
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email: email, password: password, username: username })
+		};
+		fetch(url, requestOptions)
+			.then(response => response.json())
+			.then(data => {
+			console.log(data)
+			setEmail(data.user.email);
+			setToken(data.user.token);
+		})
+			.catch(error => {
+			console.log(error.error);
+			console.log(error.warning);
+		})
+	}
+
 
 	return (
 		<div className='form-container'>
 			<h1>Join uraXa</h1>
 			<form className='form-wraper' method='POST' name='signup'>
-				<div className='input-wraper'>
-					<input
-						className='input'
-						type='text'
-						id='name'
-						name='name'
-						autoComplete='off'
-						onChange={(e) => setName(e.target.value)}
-						required
-					/>
-					<label className='label' htmlFor='name'>
-						Your name
-					</label>
-				</div>
-
+		
 				<div className='input-wraper'>
 					<input
 						className='input'
