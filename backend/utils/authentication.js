@@ -1,9 +1,15 @@
 const User = require('../models/user');
 
 const authenticate = async (email, token) => {
-    const query_res = await User.findByToken(token);
+    console.log(email);
+    console.log(token);
     
-    return query_res.rows.length > 0 ? query_res.rows[0].email === email : false;       
+    
+    const userRecord = await User.findByToken(token);
+    
+    return (userRecord.rows.length > 0 && userRecord.rows[0].email === email) ? 
+        userRecord.rows[0] : 
+        {};       
 }
 
 module.exports = {

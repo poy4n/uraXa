@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 // require the exported routs
 const sessionController = require('./controllers/sessionController');
 const usersController = require('./controllers/usersController');
+const potsController = require('./controllers/postsController');
 
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors());
 
 //middleware which will parse JSON request
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.get('/', (req, res) => {
@@ -23,6 +25,7 @@ app.get('/', (req, res) => {
 // use the controller, the order is important, that's why it's located after the '/' rout
 app.use('/api', usersController);
 app.use('/api', sessionController);
+app.use('/api', potsController);
 
 app.listen(PORT, () => {
     console.log(`uraxa_api listening on ${PORT}`);    

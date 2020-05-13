@@ -1,5 +1,6 @@
 // mini router
 const express = require('express'); 
+const _ = require('lodash');
 
 const router = express.Router();
 const User = require('../models/user');
@@ -11,15 +12,15 @@ router.get('/user/email', (req, res) => {
         
     User
         .findByEmail(req.body.email)
-        .then(query_res => {
-            if(query_res) {
-                res.status(200).json({user: query_res.rows[0]})
+        .then(userRecord => {
+            if(userRecord) {
+                res.status(200).json({ user: userRecord.rows[0] })
             } else {
-                res.status(300).send({warning: "User with this email does not exist"})
+                res.status(404).send({ error: "User with this email does not exist." })
             }
         })
         .catch(err =>                    
-            res.status(500).send({error: err.message})                       
+            res.status(500).send({ error: err.message })                       
         );
 });
 
@@ -28,37 +29,39 @@ router.get('/user/id', (req, res) => {
         
     User
         .findById(req.body.id)
-        .then(query_res => {
-            if(query_res) {
-                res.status(200).json({user: query_res.rows[0]})
+        .then(userRecord => {
+            if(userRecord) {
+                res.status(200).json({ user: userRecord.rows[0] })
             } else {
-                res.status(300).send({warning: "User with this id does not exist"})
+                res.status(404).send({ error: "User with this id does not exist." })
             }
         })
         .catch(err =>                    
-            res.status(500).send({error: err.message})                       
+            res.status(500).send({ error: err.message })                       
         );
 });
 
 // update user's avatar and description
 router.patch('/user/email', (req, res) => {
-
-    const param = req.body;
+    const { email, token, avatar, description } = req.body;
       
     auth
-        .authenticate(param.email, param.token)
-        .then(isLoggedIn => {
-            if (isLoggedIn) {
+        .authenticate(email, token)
+        .then(userRecord => {
+            if (!_.isEmpty(userRecord)) {
                 User
-                    .updateUser(param.email, param.avatar, param.description)
-                    .then(query_res => res.status(200).json({user: query_res.rows[0]}))
+                    .updateUser(email, avatar, description)
+                    .then(updatedUserRecord => res.status(200).json({ user: updatedUserRecord.rows[0] }))
                     .catch(err =>                    
-                        res.status(500).send({error: err.message})                       
+                        res.status(500).send({ error: err.message })                       
                     );
             } else {
-                res.status(300).send({warning: "User not logged in."})                       
+                res.status(401).send({ error: "Unauthenticated user. Please login." })                       
             }
-        });
+        })
+        .catch(err =>                    
+            res.status(500).send({ error: err.message })                       
+        );
 });
 
 module.exports = router;
