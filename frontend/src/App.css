@@ -6,15 +6,16 @@
 
 body {
 	background: #f0f2f5;
-	font-family: 'Trebuchet MS';
+	font-family: 'Josefin Sans', sans-serif;
 }
 
 .header {
+	display: flex;
+	justify-content: center;
 	background-color: #fefefe;
 	box-shadow: 0px 0px 10px 1px #c9c9c9;
 	height: 40px;
 	width: 100%;
-	padding: 10px;
 }
 
 .nav {
@@ -27,6 +28,5 @@ body {
 }
 
 .nav:hover {
-	background-color: #f66d51;
-	color: #fefefe;
+	background-color: #f0f2f5;
 }

@@ -1,7 +1,10 @@
 .map {
 	height: 85vh;
-	width: 95%;
+	width: 90%;
 	margin: auto;
 	box-shadow: 0px 0px 20px 5px #727272;
-	border: 1px solid;
+}
+
+.container-map {
+	width: 100%;
 }

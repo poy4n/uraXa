@@ -1,17 +1,8 @@
-.login-btn {
-	border: none;
-	cursor: pointer;
-	border-radius: 5px;
-	color: #fefefe;
-	background-color: #f66d51;
-	height: 30px;
-	padding-left: 20px;
-	padding-right: 20px;
-	font-weight: bold;
-	font-size: 12px;
-	width: 100%;
+.error-msg {
+	color: red;
+	margin-top: 10px;
 }
 
-.login-btn:focus {
-	outline: none;
+.title {
+	margin: 50px 0;
 }
