@@ -23,7 +23,11 @@ export default function Profile() {
 		{
 			name: 'john',
 			photo: 'https://i.somethingawful.com/u/russ/goldmine95/tourist1.jpg'
-		}
+		},
+		{
+			name: 'rose',
+			photo: 'https://i.somethingawful.com/u/russ/goldmine95/tourist1.jpg'
+		},
 	]);
 
 	useEffect(() => {
@@ -55,8 +59,8 @@ export default function Profile() {
 	return (
 		<React.Fragment>
 			<div className='loading-error'>
-				{loading && <h3>posts are loading...</h3>}
-				{!error && <h3>loading failed...</h3>}
+				{loading && <h3>. . . . . .</h3>}
+				{!error && <h3>loading failed</h3>}
 			</div>
 			<div className='hub'>
 				<div className='container-posts'>{data && data.map(renderData)}</div>

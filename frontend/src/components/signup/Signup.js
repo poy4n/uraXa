@@ -9,8 +9,8 @@ export default function Signup() {
 
 	const { email, setEmail } = useContext(UserContext)
 	const { token, setToken } = useContext(UserContext)
+	const { username, setUsername } = useContext(UserContext)
 
-	const [ username, setUsername ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 	const [ password, setPassword ] = useState('');
 
@@ -47,13 +47,13 @@ export default function Signup() {
 				console.log(error.error);
 				console.log(error.warning);
 			});
-		history.push('/hub');
+		history.push('/map');
 	};
 
 	return (
 		<div className='form-container'>
 			<div className="title">
-				<h1>Join uruXa</h1>
+				<h1>Join uraXa</h1>
 			</div>
 			<form className='form-wraper' method='POST' name='signup' onSubmit={handleJoin}>
 				<div className='input-wraper'>
@@ -100,9 +100,8 @@ export default function Signup() {
 					</label>
 				</div>
 				<button className='btn' type="submit" disabled={isButtonDisabled}>
-					SignUp
+					Join
 				</button>
-				<div><p>{token}</p></div>
 			</form>
 		</div>
 	);
