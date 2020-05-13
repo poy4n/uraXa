@@ -11,6 +11,9 @@ const hashPassword = password => {
 };
 
 const checkPassword = (reqPassword, password_digest) => {
+    console.log(reqPassword);
+    console.log(password_digest);
+        
     return new Promise((resolve, reject) => {
         bcrypt.compare(reqPassword, password_digest, (err, res) => {
             if(err) {
