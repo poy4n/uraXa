@@ -1,12 +1,10 @@
 .home {
 	display: flex;
 	justify-content: space-around;
-	height: 100%;
 }
 
 .description {
-	width: 50%;
-	padding: 0 100px;
+	width: 70%;
 	margin-top: 100px;
 }
 
@@ -15,6 +13,8 @@
 }
 
 .container-btn {
+	display: flex;
+	justify-content: left;
 	margin-top: 100px;
 }
 

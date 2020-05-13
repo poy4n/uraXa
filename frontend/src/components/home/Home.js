@@ -1,6 +1,4 @@
 import React from 'react';
-import { Map } from '../map/Map';
-import SearchBar from '../search/SearchBar';
 import history from '../../history';
 
 import './Home.css';
@@ -31,10 +29,6 @@ export default function Home() {
 						Join
 					</button>
 				</div>
-			</div>
-			<div className='container-map'>
-				<SearchBar />
-				<Map />
 			</div>
 		</div>
 	);

@@ -1,18 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
+import history from '../../history';
+import {UserContext} from '../../UserContext';
 
 import './Login.css';
 
 export default function Login() {
-	const [ email, setEmail ] = useState('');
+	
+	const { email, setEmail } = useContext(UserContext)
+	const { token, setToken } = useContext(UserContext)
+
 	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
-	const [ token, setToken ] = useState('');
+	const [ login, setLogin ] = useState(false);
+	const [ helperText, setHelperText ] = useState('');
 
 	useEffect(
 		() => {
-			if (email.trim() && password.trim()) {
+			if (email.trim() && password.trim() || email === '') {
 				setIsButtonDisabled(false);
+				setHelperText('');
 			} else {
 				setIsButtonDisabled(true);
 			}
@@ -24,27 +31,36 @@ export default function Login() {
 	const handleLogin = (e) => {
 		e.preventDefault();
 
-		let url = '/api/login'
+		let url = '/api/login';
 
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ email: email, password: password})
+			body: JSON.stringify({ email: email, password: password })
 		};
 		fetch(url, requestOptions)
-			.then(response => response.json())
-			.then(data => {
-			console.log(data)
-			setEmail(data.user.email);
-			setToken(data.user.token);
-		})
-		.catch(error => console.log(error.error))
+			.then((response) => response.json())
+			.then((data) => {
+				console.log(data);
+				setEmail(data.user.email);
+				setToken(data.user.token);
+				setLogin(true);
+
+				history.push('/hub');
+			})
+			.catch((err) => {
+				console.log(err.error);
+				setLogin(false);
+				setHelperText('wrong email or password');
+			})
 	};
 
 	return (
 		<div className='form-container'>
-			<h1>Login To Your Account</h1>
-			<form className='form-wraper' method='POST' name='signup'>
+			<div className="title">
+				<h1>Login To Your Account</h1>
+			</div>
+			<form className='form-wraper' method='POST' name='signup' onSubmit={handleLogin}>
 				<div className='input-wraper'>
 					<input
 						className='input'
@@ -73,9 +89,10 @@ export default function Login() {
 						Password
 					</label>
 				</div>
-				<button className='login-btn' disabled={isButtonDisabled} onClick={(e) => handleLogin(e)}>
+				<button className='btn' type="submit" disabled={isButtonDisabled}>
 					Login
 				</button>
+				<p className="error-msg">{helperText}</p>
 			</form>
 		</div>
 	);

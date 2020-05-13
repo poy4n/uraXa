@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
+import history from '../../history';
+import {UserContext} from '../../UserContext';
 
 import './Signup.css';
 
 export default function Signup() {
+
+	const { email, setEmail } = useContext(UserContext)
+	const { token, setToken } = useContext(UserContext)
+
 	const [ username, setUsername ] = useState('');
-	const [ email, setEmail ] = useState('');
-	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
-	const [ token, setToken ] = useState('');
+	const [ password, setPassword ] = useState('');
 
 	useEffect(
 		() => {
@@ -25,7 +29,7 @@ export default function Signup() {
 	const handleJoin = (e) => {
 		e.preventDefault();
 
-		let url = '/api/signup'
+		let url = '/api/signup';
 
 		const requestOptions = {
 			method: 'POST',
@@ -33,24 +37,25 @@ export default function Signup() {
 			body: JSON.stringify({ email: email, password: password, username: username })
 		};
 		fetch(url, requestOptions)
-			.then(response => response.json())
-			.then(data => {
-			console.log(data)
-			setEmail(data.user.email);
-			setToken(data.user.token);
-		})
-			.catch(error => {
-			console.log(error.error);
-			console.log(error.warning);
-		})
-	}
-
+			.then((response) => response.json())
+			.then((data) => {
+				console.log(data);
+				setEmail(data.user.email);
+				setToken(data.user.token);
+			})
+			.catch((error) => {
+				console.log(error.error);
+				console.log(error.warning);
+			});
+		history.push('/hub');
+	};
 
 	return (
 		<div className='form-container'>
-			<h1>Join uraXa</h1>
-			<form className='form-wraper' method='POST' name='signup'>
-		
+			<div className="title">
+				<h1>Join uruXa</h1>
+			</div>
+			<form className='form-wraper' method='POST' name='signup' onSubmit={handleJoin}>
 				<div className='input-wraper'>
 					<input
 						className='input'
@@ -94,9 +99,10 @@ export default function Signup() {
 						Password
 					</label>
 				</div>
-				<button className='signup-btn' disabled={isButtonDisabled} onClick={(e) => handleJoin(e)}>
+				<button className='btn' type="submit" disabled={isButtonDisabled}>
 					SignUp
 				</button>
+				<div><p>{token}</p></div>
 			</form>
 		</div>
 	);

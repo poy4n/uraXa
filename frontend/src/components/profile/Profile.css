@@ -1,0 +1,31 @@
+.img-container {
+	width: 200px;
+	height: 200px;
+	margin: 20px 0 0 20px;
+}
+
+.data-container {
+	margin: 20px 0 0 20px;
+}
+
+.img-post {
+	object-fit: cover;
+	width: 200px;
+	height: 200px;
+}
+
+.container-posts {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px;
+	width: 100%;
+	margin-top: 60px;
+	margin-bottom: 60px;
+}
+
+.loading-error {
+	display: flex;
+	justify-content: left;
+	color: red;
+	margin: 10px 0 0 10px;
+}
