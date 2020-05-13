@@ -35,10 +35,11 @@ export default class SearchBar extends Component {
 				<form className='search-bar'>
 					<input
 						className='search-input'
-						placeholder='Search for places...'
+						placeholder='Wehere to?'
 						type='text'
 						name='search'
 						id='search'
+						autoComplete='off'
 						value={searchString}
 						onChange={this.handleChange}
 					/>

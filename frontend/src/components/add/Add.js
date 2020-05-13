@@ -7,12 +7,15 @@ export default function Add() {
 	const [ title, setTitle ] = useState('');
 	const [ description, setDescription ] = useState('');
 	const [ location, setLocation ] = useState('');
-	const [ image_url, setImage_url ] = useState('');
+	const [ image, setImage ] = useState('');
+	const [ category, setCategory ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 
 	const handleAdd = () => {
 		return <p>helloo</p>;
 	};
+
+	console.log(title, description, image, location , category)
 
 	return (
 		<div className='form-container'>
@@ -57,6 +60,7 @@ export default function Add() {
 						type='text'
 						id='location'
 						name='location'
+						autoComplete='off'
 						onChange={(e) => setLocation(e.target.value)}
 						required
 					/>
@@ -66,16 +70,35 @@ export default function Add() {
 				</div>
 
 				<div className='input-wraper'>
+					<select  className='select-wraper' onChange={(e) => setCategory(e.target.value)}>
+						<option disabled selected hidden>Select a type of place</option>
+						<option value="grapefruit">Grapefruit</option>
+						<option value="lime">Lime</option>
+						<option value="coconut">Coconut</option>
+						<option value="mango">Mango</option>
+						<option value="grapefruit">Grapefruit</option>
+						<option value="lime">Lime</option>
+						<option value="coconut">Coconut</option>
+						<option value="mango">Mango</option>
+						<option value="coconut">Coconut</option>
+						<option value="mango">Mango</option>
+					</select>
+					<label className='label' htmlFor='select'>
+						Category 
+					</label>
+				</div>
+
+				<div className='input-wraper'>
 					<input
 						className='input'
-						type='text'
-						id='image_url'
-						name='image_url'
-						onChange={(e) => setImage_url(e.target.value)}
+						type='file'
+						id='file'
+						name='file'
+						onChange={(e) => setImage(e.target.files[0])}
 						required
 					/>
-					<label className='label' htmlFor='image_url'>
-						Image URL
+					<label className='file-label' htmlFor='file'>
+						Upload an Image
 					</label>
 				</div>
 				<button className='btn' disabled={isButtonDisabled} onClick={(e) => handleAdd(e)}>

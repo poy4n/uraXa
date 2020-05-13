@@ -22,7 +22,7 @@ export default function Home() {
 				</p>
 
 				<div className='container-btn'>
-					<button className='explore-btn' onClick={() => history.push('/hub')}>
+					<button className='explore-btn' onClick={() => history.push('/map')}>
 						Explore
 					</button>
 					<button className='join-btn' onClick={() => history.push('/signup')}>

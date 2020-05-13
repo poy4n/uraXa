@@ -10,6 +10,7 @@ export default function Login() {
 	const { email, setEmail } = useContext(UserContext)
 	const { token, setToken } = useContext(UserContext)
 
+
 	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 	const [ login, setLogin ] = useState(false);
@@ -46,12 +47,12 @@ export default function Login() {
 				setToken(data.user.token);
 				setLogin(true);
 
-				history.push('/hub');
+				history.push('/map');
 			})
 			.catch((err) => {
 				console.log(err.error);
 				setLogin(false);
-				setHelperText('wrong email or password');
+				setHelperText('incorrect email or password');
 			})
 	};
 
@@ -90,7 +91,7 @@ export default function Login() {
 					</label>
 				</div>
 				<button className='btn' type="submit" disabled={isButtonDisabled}>
-					Login
+				 	LogIn
 				</button>
 				<p className="error-msg">{helperText}</p>
 			</form>

@@ -22,8 +22,9 @@
 	border: none;
 	cursor: pointer;
 	border-radius: 50px;
-	color: #fefefe;
-	background-color: #438828;
+	color: #f66d51;
+	border: 1px solid #f66d51;
+	background-color: #fefefe;
 	height: 30px;
 	padding-left: 20px;
 	padding-right: 20px;
@@ -59,7 +60,7 @@
 }
 
 .explore-btn:hover {
-	border: 1px solid #438828;
-	color: #438828;
-	background-color: #fefefe;
+	border: 1px solid #fefefe;
+	color: #fefefe;
+	background-color: #f66d51;
 }
