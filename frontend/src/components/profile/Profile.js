@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
+import { UserContext } from '../../UserContext';
 
 import './Profile.css';
 
 export default function Profile() {
+	const { email, setEmail } = useContext(UserContext);
+	const { token, setToken } = useContext(UserContext);
+	const { username, setUsername } = useContext(UserContext);
+
 	const [ loading, setLoading ] = useState(true);
 	const [ error, setError ] = useState(true);
 	const [ data, setData ] = useState([
@@ -27,21 +32,29 @@ export default function Profile() {
 		{
 			name: 'rose',
 			photo: 'https://i.somethingawful.com/u/russ/goldmine95/tourist1.jpg'
-		},
+		}
 	]);
 
 	useEffect(() => {
-		fetch('')
+		let url = '/api/post/email';
+
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email: email, token: token })
+		};
+
+		fetch(url, requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
+				console.log(data);
+				setData(data.posts);
 				setLoading(false);
-				setData(data);
 			})
-			.catch((e) => {
-				setLoading(false);
-				setError(true);
+			.catch((err) => {
+				console.log(err.error);
 			});
-	}, []);
+	});
 
 	const renderData = (ele, index) => {
 		return (
@@ -52,6 +65,7 @@ export default function Profile() {
 				<div className='data-container'>
 					<p>{ele.name}</p>
 				</div>
+				<button className='delete-btn'>Delete</button>
 			</div>
 		);
 	};

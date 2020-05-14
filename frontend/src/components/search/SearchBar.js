@@ -43,6 +43,16 @@ export default class SearchBar extends Component {
 						value={searchString}
 						onChange={this.handleChange}
 					/>
+					<input
+						className='search-input'
+						placeholder='Change your city'
+						type='text'
+						name='search'
+						id='search'
+						autoComplete='off'
+						value={searchString}
+						onChange={this.handleChange}
+					/>
 					<button className='search-btn' onClick={this.handleClick}>
 						Search
 					</button>
