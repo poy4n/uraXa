@@ -8,32 +8,10 @@ export default function Profile() {
 	const { email, setEmail } = useContext(UserContext);
 	const { token, setToken } = useContext(UserContext);
 	const { username, setUsername } = useContext(UserContext);
+	const { data, setData } = useContext(UserContext);
 
-	const [ loading, setLoading ] = useState(true);
+	const [ loading, setLoading ] = useState(false);
 	const [ error, setError ] = useState(true);
-	const [ data, setData ] = useState([
-		{
-			name: 'couple',
-			photo:
-				'https://www.traveller.com.au/content/dam/images/3/3/3/t/v/image.related.articleLeadwide.620x349.333o4.png/1392875575197.jpg'
-		},
-		{
-			name: 'rose',
-			photo: 'https://i.somethingawful.com/u/russ/goldmine95/tourist1.jpg'
-		},
-		{
-			name: 'jack',
-			photo: 'https://www.elliott.org/wp-content/uploads/shutterstock_248622628.jpg'
-		},
-		{
-			name: 'john',
-			photo: 'https://i.somethingawful.com/u/russ/goldmine95/tourist1.jpg'
-		},
-		{
-			name: 'rose',
-			photo: 'https://i.somethingawful.com/u/russ/goldmine95/tourist1.jpg'
-		}
-	]);
 
 	useEffect(() => {
 		let url = '/api/post/email';
@@ -54,7 +32,7 @@ export default function Profile() {
 			.catch((err) => {
 				console.log(err.error);
 			});
-	});
+	}, []);
 
 	const renderData = (ele, index) => {
 		return (

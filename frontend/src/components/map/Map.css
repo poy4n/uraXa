@@ -1,8 +1,18 @@
+.map {
+	height: 80vh;
+	margin: auto;
+	box-shadow: 0px 0px 30px 1px #727272;
+}
+
+.container-map {
+	width: 100%;
+}
+
 .hub {
 	display: flex;
 	justify-content: center;
 	margin: auto;
-	width: 90%;
+	width: 95%;
 }
 
 .hub-posts {

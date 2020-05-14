@@ -26,7 +26,6 @@ export default function Login() {
 		},
 		[ email, password ]
 	);
-	console.log(email, password);
 
 	const handleLogin = (e) => {
 		e.preventDefault();

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
+import history from '../../history';
 
 import '../signup/Signup.css';
 
@@ -13,10 +13,20 @@ export default function Add() {
 	const [ category, setCategory ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 
+	const { data, setData } = useContext(UserContext);
 	const { email, setEmail } = useContext(UserContext);
 	const { token, setToken } = useContext(UserContext);
-	const { login, setLogin } = useContext(UserContext);
-	const { username, setUsername } = useContext(UserContext);
+
+	useEffect(
+		() => {
+			if (title.trim() && description.trim() && location.trim() && category !== '' && image !== null) {
+				setIsButtonDisabled(false);
+			} else {
+				setIsButtonDisabled(true);
+			}
+		},
+		[ title, description, location, image, category ]
+	);
 
 	const handleAdd = (e) => {
 		e.preventDefault();
@@ -24,35 +34,36 @@ export default function Add() {
 		let url = '/api/post';
 		console.log(image);
 
-		const data = new FormData();
-		data.append('title', title);
-		data.append('text', description);
-		data.append('location', `(${location})`);
-		data.append('token', token);
-		data.append('email', email);
-		data.append('image', image);
+		const dataForm = new FormData();
+		dataForm.append('title', title);
+		dataForm.append('text', description);
+		dataForm.append('location', `(${location})`);
+		dataForm.append('token', token);
+		dataForm.append('email', email);
+		dataForm.append('image', image);
 
 		const requestOptions = {
 			method: 'POST',
-			// headers: { 'Content-Type': 'multipart/form-data; boundary=—-WebKitFormBoundaryfgtsKTYLsT7PNUVD' },
-			body: data
+			body: dataForm
 		};
 
-		console.log(requestOptions.body);
 		fetch(url, requestOptions)
 			.then((response) => {
-				console.log(response.json());
-				return response.json();
+				const json = response.json();
+				console.log(json);
+				return json;
 			})
-			.then((data) => {
-				console.log(data);
+			.then((userData) => {
+				console.log(userData.posts[0]);
+				let newData = userData.posts[0];
+				setData([ ...data, newData ]);
+
+				history.push('/map');
 			})
 			.catch((err) => {
 				console.log(err.error);
 			});
 	};
-
-	console.log(title, description, image, location, category);
 
 	return (
 		<div className='form-container'>
@@ -107,8 +118,12 @@ export default function Add() {
 				</div>
 
 				<div className='input-wraper'>
-					<select className='select-wraper' onChange={(e) => setCategory(e.target.value)}>
-						<option disabled selected hidden>
+					<select
+						className='select-wraper'
+						defaultValue={'default'}
+						onChange={(e) => setCategory(e.target.value)}
+					>
+						<option value='default' disabled>
 							Select a type of place
 						</option>
 						<option value='grapefruit'>Grapefruit</option>
@@ -140,7 +155,7 @@ export default function Add() {
 						Upload an Image
 					</label>
 				</div>
-				<button className='btn' onClick={(e) => handleAdd(e)}>
+				<button className='btn' disabled={isButtonDisabled} onClick={(e) => handleAdd(e)}>
 					ADD
 				</button>
 			</form>

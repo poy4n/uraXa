@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import history from '../../history';
+import { UserContext } from '../../UserContext';
 
 import './Home.css';
 
 export default function Home() {
+	const { login, setLogin } = useContext(UserContext);
+
 	return (
 		<div className='home'>
 			<div className='description'>
@@ -20,14 +23,15 @@ export default function Home() {
 					Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
 					est laborum.
 				</p>
-
 				<div className='container-btn'>
 					<button className='explore-btn' onClick={() => history.push('/map')}>
 						Explore
 					</button>
-					<button className='join-btn' onClick={() => history.push('/signup')}>
-						Join
-					</button>
+					{!login ? (
+						<button className='join-btn' onClick={() => history.push('/signup')}>
+							Join
+						</button>
+					) : null}
 				</div>
 			</div>
 		</div>
