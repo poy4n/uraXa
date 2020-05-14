@@ -31,6 +31,7 @@
 	font-weight: bold;
 	font-size: 12px;
 	width: 100px;
+	font-family: 'Josefin Sans', sans-serif;
 }
 
 .join-btn {
@@ -46,6 +47,7 @@
 	font-size: 12px;
 	margin: 0 50px;
 	width: 100px;
+	font-family: 'Josefin Sans', sans-serif;
 }
 
 .join-btn:focus,
