@@ -3,7 +3,7 @@ import { Map } from '../map/Map';
 import SearchBar from '../search/SearchBar';
 import { useState, useEffect } from 'react';
 
-import './Hub.css';
+import '../map/Map.css';
 
 export default function Hub() {
 	const [ loading, setLoading ] = useState(true);

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import currentPosition from './currentPosition';
 
-import './Mapp.css';
+import './Map.css';
 
 export const Map = () => {
 	const mapRef = React.useRef(null);

@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import history from '../../history';
-import {UserContext} from '../../UserContext';
+import { UserContext } from '../../UserContext';
 
 import './Signup.css';
 
 export default function Signup() {
-
-	const { email, setEmail } = useContext(UserContext)
-	const { token, setToken } = useContext(UserContext)
-	const { username, setUsername } = useContext(UserContext)
+	const { email, setEmail } = useContext(UserContext);
+	const { token, setToken } = useContext(UserContext);
+	const { username, setUsername } = useContext(UserContext);
+	const { login, setLogin } = useContext(UserContext);
 
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 	const [ password, setPassword ] = useState('');
@@ -42,6 +42,10 @@ export default function Signup() {
 				console.log(data);
 				setEmail(data.user.email);
 				setToken(data.user.token);
+				setUsername(data.user.username);
+				setLogin(true);
+
+				history.push('/map');
 			})
 			.catch((error) => {
 				console.log(error.error);
@@ -52,7 +56,7 @@ export default function Signup() {
 
 	return (
 		<div className='form-container'>
-			<div className="title">
+			<div className='title'>
 				<h1>Join uraXa</h1>
 			</div>
 			<form className='form-wraper' method='POST' name='signup' onSubmit={handleJoin}>
@@ -99,7 +103,7 @@ export default function Signup() {
 						Password
 					</label>
 				</div>
-				<button className='btn' type="submit" disabled={isButtonDisabled}>
+				<button className='btn' type='submit' disabled={isButtonDisabled}>
 					Join
 				</button>
 			</form>

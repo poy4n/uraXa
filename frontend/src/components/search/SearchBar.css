@@ -45,6 +45,6 @@ input[type=text] {
 
 .search-btn:hover {
 	border: 1px solid #f66d51;
-	color: #f66d51;
-	background-color: #fefefe;
+	color: #fefefe;
+	background-color: #f66d51;
 }
