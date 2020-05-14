@@ -45,7 +45,7 @@ export const Map = () => {
 				'https://heremaps.github.io/maps-api-for-javascript-examples/change-style-at-load/data/dark.yaml',
 				'https://js.api.here.com/v3/3.1/styles/omv/'
 			);
-			provider.setStyle(style);
+			// provider.setStyle(style);
 
 			// tap location
 			map.addEventListener('tap', function(evt) {
