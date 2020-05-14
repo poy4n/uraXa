@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
 import { useState } from 'react';
+import { UserContext } from '../../UserContext';
 
 import '../signup/Signup.css';
 
@@ -7,15 +9,50 @@ export default function Add() {
 	const [ title, setTitle ] = useState('');
 	const [ description, setDescription ] = useState('');
 	const [ location, setLocation ] = useState('');
-	const [ image, setImage ] = useState('');
+	const [ image, setImage ] = useState(null);
 	const [ category, setCategory ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 
-	const handleAdd = () => {
-		return <p>helloo</p>;
+	const { email, setEmail } = useContext(UserContext);
+	const { token, setToken } = useContext(UserContext);
+	const { login, setLogin } = useContext(UserContext);
+	const { username, setUsername } = useContext(UserContext);
+
+	const handleAdd = (e) => {
+		e.preventDefault();
+
+		let url = '/api/post';
+		console.log(image);
+
+		const data = new FormData();
+		data.append('title', title);
+		data.append('text', description);
+		data.append('location', `(${location})`);
+		data.append('token', token);
+		data.append('email', email);
+		data.append('image', image);
+
+		const requestOptions = {
+			method: 'POST',
+			// headers: { 'Content-Type': 'multipart/form-data; boundary=—-WebKitFormBoundaryfgtsKTYLsT7PNUVD' },
+			body: data
+		};
+
+		console.log(requestOptions.body);
+		fetch(url, requestOptions)
+			.then((response) => {
+				console.log(response.json());
+				return response.json();
+			})
+			.then((data) => {
+				console.log(data);
+			})
+			.catch((err) => {
+				console.log(err.error);
+			});
 	};
 
-	console.log(title, description, image, location , category)
+	console.log(title, description, image, location, category);
 
 	return (
 		<div className='form-container'>
@@ -70,21 +107,23 @@ export default function Add() {
 				</div>
 
 				<div className='input-wraper'>
-					<select  className='select-wraper' onChange={(e) => setCategory(e.target.value)}>
-						<option disabled selected hidden>Select a type of place</option>
-						<option value="grapefruit">Grapefruit</option>
-						<option value="lime">Lime</option>
-						<option value="coconut">Coconut</option>
-						<option value="mango">Mango</option>
-						<option value="grapefruit">Grapefruit</option>
-						<option value="lime">Lime</option>
-						<option value="coconut">Coconut</option>
-						<option value="mango">Mango</option>
-						<option value="coconut">Coconut</option>
-						<option value="mango">Mango</option>
+					<select className='select-wraper' onChange={(e) => setCategory(e.target.value)}>
+						<option disabled selected hidden>
+							Select a type of place
+						</option>
+						<option value='grapefruit'>Grapefruit</option>
+						<option value='lime'>Lime</option>
+						<option value='coconut'>Coconut</option>
+						<option value='mango'>Mango</option>
+						<option value='grapefruit'>Grapefruit</option>
+						<option value='lime'>Lime</option>
+						<option value='coconut'>Coconut</option>
+						<option value='mango'>Mango</option>
+						<option value='coconut'>Coconut</option>
+						<option value='mango'>Mango</option>
 					</select>
 					<label className='label' htmlFor='select'>
-						Category 
+						Category
 					</label>
 				</div>
 
@@ -101,7 +140,7 @@ export default function Add() {
 						Upload an Image
 					</label>
 				</div>
-				<button className='btn' disabled={isButtonDisabled} onClick={(e) => handleAdd(e)}>
+				<button className='btn' onClick={(e) => handleAdd(e)}>
 					ADD
 				</button>
 			</form>

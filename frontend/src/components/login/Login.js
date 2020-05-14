@@ -1,24 +1,23 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import history from '../../history';
-import {UserContext} from '../../UserContext';
+import { UserContext } from '../../UserContext';
 
 import './Login.css';
 
 export default function Login() {
-	
-	const { email, setEmail } = useContext(UserContext)
-	const { token, setToken } = useContext(UserContext)
-
+	const { email, setEmail } = useContext(UserContext);
+	const { token, setToken } = useContext(UserContext);
+	const { login, setLogin } = useContext(UserContext);
+	const { username, setUsername } = useContext(UserContext);
 
 	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
-	const [ login, setLogin ] = useState(false);
 	const [ helperText, setHelperText ] = useState('');
 
 	useEffect(
 		() => {
-			if (email.trim() && password.trim() || email === '') {
+			if ((email.trim() && password.trim()) || email === '') {
 				setIsButtonDisabled(false);
 				setHelperText('');
 			} else {
@@ -45,6 +44,7 @@ export default function Login() {
 				console.log(data);
 				setEmail(data.user.email);
 				setToken(data.user.token);
+				setUsername(data.user.username);
 				setLogin(true);
 
 				history.push('/map');
@@ -53,12 +53,12 @@ export default function Login() {
 				console.log(err.error);
 				setLogin(false);
 				setHelperText('incorrect email or password');
-			})
+			});
 	};
 
 	return (
 		<div className='form-container'>
-			<div className="title">
+			<div className='title'>
 				<h1>Login To Your Account</h1>
 			</div>
 			<form className='form-wraper' method='POST' name='signup' onSubmit={handleLogin}>
@@ -90,10 +90,10 @@ export default function Login() {
 						Password
 					</label>
 				</div>
-				<button className='btn' type="submit" disabled={isButtonDisabled}>
-				 	LogIn
+				<button className='btn' type='submit' disabled={isButtonDisabled}>
+					LogIn
 				</button>
-				<p className="error-msg">{helperText}</p>
+				<p className='error-msg'>{helperText}</p>
 			</form>
 		</div>
 	);
