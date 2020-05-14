@@ -6,6 +6,8 @@ import Signup from './components/signup/Signup';
 import Login from './components/login/Login';
 import Add from './components/add/Add';
 import Home from './components/home/Home';
+import Footer from './components/footer/Footer';
+
 import { UserContext } from './UserContext';
 
 import { Router, Switch, Route, NavLink } from 'react-router-dom';
@@ -18,6 +20,7 @@ export default function App() {
 	const [ email, setEmail ] = useState('');
 	const [ username, setUsername ] = useState('');
 	const [ login, setLogin ] = useState(false);
+	const [ data, setData ] = useState([]);
 
 	const userContext = {
 		token,
@@ -27,7 +30,9 @@ export default function App() {
 		username,
 		setUsername,
 		login,
-		setLogin
+		setLogin,
+		data,
+		setData
 	};
 
 	return (
@@ -42,21 +47,29 @@ export default function App() {
 						<NavLink className='nav' activeClassName='active-nav' to='/map'>
 							Map
 						</NavLink>
-						<NavLink className='nav' activeClassName='active-nav' to='/profile'>
-							Profile
-						</NavLink>
 						<NavLink className='nav' activeClassName='active-nav' to='/add'>
 							Add
 						</NavLink>
 					</div>
 					<div className='header-right'>
-						<h4>{login ? username : ''}</h4>
-						<NavLink className='nav' activeClassName='active-nav' to='/login'>
-							LogIn
-						</NavLink>
-						<NavLink className='nav' activeClassName='active-nav' to='/signup'>
-							SignUp
-						</NavLink>
+						<h5>
+							{login ? 'heXo' : ''} {login ? username : ''}
+						</h5>
+						{login ? (
+							<NavLink className='nav' activeClassName='active-nav' to='/profile'>
+								Profile
+							</NavLink>
+						) : null}
+						{!login ? (
+							<NavLink className='nav' activeClassName='active-nav' to='/login'>
+								LogIn
+							</NavLink>
+						) : null}
+						{!login ? (
+							<NavLink className='nav' activeClassName='active-nav' to='/signup'>
+								SignUp
+							</NavLink>
+						) : null}
 					</div>
 				</div>
 				<Switch>
@@ -82,6 +95,7 @@ export default function App() {
 					</UserContext.Provider>
 				</Switch>
 			</Router>
+			<Footer />
 		</div>
 	);
 }
