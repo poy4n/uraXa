@@ -15,6 +15,11 @@ function findByUserId(user_id) {
     return db.query("select * from posts where user_id = $1;", [user_id]);
 }
 
+// find posts by tag_id
+function findByTag(tag_id) {
+    return db.query("select * from posts where tag_id = $1;", [tag_id]);
+}
+
 // insert / create post
 function createPost(title, text, location, user_id, image, tag_id) {
     console.log(image);    
@@ -35,6 +40,7 @@ module.exports = {
     allPosts,
     findById,
     findByUserId,
+    findByTag,
     createPost,
     deletePost,
     deletePostsByUserId

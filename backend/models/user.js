@@ -27,8 +27,8 @@ function createUser(email, pass_digest, username, description, token) {
 }
 
 // update user's avatar and description
-function updateUser(email, avatar, description) {
-    return db.query("UPDATE users SET avatar = $1, description = $2 WHERE email = $3 RETURNING *;", [avatar, description, email]);
+function updateUser(email, description) {
+    return db.query("UPDATE users SET description = $1 WHERE email = $2 RETURNING *;", [description, email]);
 }
 
 // update user's avatar and description
