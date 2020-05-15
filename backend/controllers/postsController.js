@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 
-const auth = require('../utils/authentication');
+const auth = require('../services/authService');
 
 const Post = require('../models/post');
 

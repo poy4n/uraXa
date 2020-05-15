@@ -5,7 +5,7 @@ const _ = require('lodash');
 const router = express.Router();
 const User = require('../models/user');
 
-const auth = require('../utils/authentication');
+const auth = require('../services/authService');
 
 // find user by email
 router.get('/user/email', (req, res) => {
@@ -45,9 +45,13 @@ router.patch('/user/email', (req, res) => {
         .authenticate(email, token)
         .then(userRecord => {
             if (!_.isEmpty(userRecord)) {
+                delete userRecord.password_digest;
                 User
                     .updateUser(email, description)
-                    .then(updatedUserRecord => res.status(200).json({ user: updatedUserRecord.rows[0] }))
+                    .then(updatedUserRecord => {
+                        delete updatedUserRecord.rows[0].password_digest;
+                        return res.status(200).json({ user: updatedUserRecord.rows[0] })
+                    })
                     .catch(err => res.status(500).send({ error: err.message }));
             } else {
                 return res.status(401).send({ error: "Unauthenticated user. Please login." })                       
