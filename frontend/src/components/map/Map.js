@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useContext } from 'react';
+import { UserContext } from '../../UserContext';
+
+
+import { useLayoutEffect } from 'react';
 import currentPosition from './currentPosition';
 
 import './Map.css';
@@ -7,10 +11,10 @@ import './Map.css';
 export const Map = () => {
 	const mapRef = React.useRef(null);
 
-	const [ coordinates, setCoordinates ] = useState({ lat: -37.8136, lng: 144.9631 });
+	const { coordinates, setCoordinates } = useContext(UserContext);
 	console.log(coordinates);
 
-	React.useLayoutEffect(
+	useLayoutEffect(
 		() => {
 			if (!mapRef.current) return;
 			const H = window.H;

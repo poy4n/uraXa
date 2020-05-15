@@ -6,7 +6,7 @@ export default function Footer() {
 	return (
 		<footer className='footer'>
 			<p>
-				Developed by <span>Brown Bear</span> | Copyright &copy; 2020
+				Created by <span>Brown Bear</span> | Copyright &copy; 2020
 			</p>
 		</footer>
 	);
