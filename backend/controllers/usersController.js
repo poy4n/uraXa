@@ -39,18 +39,18 @@ router.get('/user/id', (req, res) => {
 
 // update user's avatar and description
 router.patch('/user/email', (req, res) => {
-    const { email, token, avatar, description } = req.body;
+    const { email, token, description } = req.body;
       
     auth
         .authenticate(email, token)
         .then(userRecord => {
             if (!_.isEmpty(userRecord)) {
                 User
-                    .updateUser(email, avatar, description)
+                    .updateUser(email, description)
                     .then(updatedUserRecord => res.status(200).json({ user: updatedUserRecord.rows[0] }))
                     .catch(err => res.status(500).send({ error: err.message }));
             } else {
-                res.status(401).send({ error: "Unauthenticated user. Please login." })                       
+                return res.status(401).send({ error: "Unauthenticated user. Please login." })                       
             }
         })
         .catch(err => res.status(500).send({ error: err.message }));

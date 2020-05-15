@@ -6,8 +6,6 @@ const _ = require('lodash');
 const auth = require('../utils/authentication');
 
 const Post = require('../models/post');
-const PostImage = require('../models/post_image');
-const postImgs = require("../services/postImgsService");
 
 const cloudinary = require('cloudinary');
 const cloudinaryStorage = require('multer-storage-cloudinary');
@@ -33,18 +31,20 @@ const parser = multer({ storage: storage });
 // find post by post id
 router.get('/post/id', (req, res) => {
     const { email, token, id } = req.query;
+console.log(email, token);
 
     auth
         .authenticate(email, token)
         .then(userRecord => {
             if (!_.isEmpty(userRecord)) {
+
                 Post
                     .findById(id)
                     .then(postsRecord => {
                         if(postsRecord.rows.length > 0) {
                             return res.status(200).json({ posts: postsRecord.rows });
                         } else {
-                            return res.status(404).send({ error: "The posts are not found for this user." });
+                            return res.status(404).send({ error: "There are no posts for this user." });
                         }
                     })
                     .catch(err => res.status(500).send({ error: err.message }));
@@ -82,18 +82,47 @@ router.get('/post/email', (req, res) => {
         .catch(err => res.status(500).send({ error: err.message }));
 });
 
+// find posts by tag
+router.get('/post/tag', (req, res) => {
+    const { email, token, tag } = req.query;
+
+    auth
+        .authenticate(email, token)
+        .then(userRecord => {
+            if (!_.isEmpty(userRecord)) {  
+                console.log(userRecord);
+                  
+                Post
+                    .findByTag(tag)
+                    .then(postsRecord => {
+                        if(postsRecord.rows.length > 0) {
+                            return res.status(200).json({ posts: postsRecord.rows })
+                        } else {
+                            return res.status(404).send({ error: "There are no posts for this tag." });
+                        }
+                    })
+                    .catch(err => res.status(500).send({ error: err.message }));
+            } else {
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
+            }
+        })
+        .catch(err => res.status(500).send({ error: err.message }));
+});
+
 // create post
 router.post('/post', parser.single("image"), (req, res) => {
 
     const { email, token, title, text, location, tag } = req.body;
-    const file = req.file;
+    const image = req.file;
+
+    const imageUrl = image ? image.url : "";
 
     auth
         .authenticate(email, token)
         .then(userRecord => {
             if (!_.isEmpty(userRecord)) {                
                 Post
-                    .createPost(title, text, location, userRecord.id, file.url, tag)
+                    .createPost(title, text, location, userRecord.id, imageUrl, tag)
                     .then(postRecord => {
                         const post = postRecord.rows[0];
                         console.log(post);
@@ -121,7 +150,7 @@ router.delete('/post/id', (req, res) => {
                     .then(deletedPostRecord => res.status(200).json({ post: deletedPostRecord.rows[0] }))
                     .catch(err => res.status(500).send({ error: err.message }));
             } else {
-                res.status(401).send({ error: "Unauthenticated user. Please login." });
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
             }
         })
         .catch(err => res.status(500).send({ error: err.message }));
