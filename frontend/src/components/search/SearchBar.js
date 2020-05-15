@@ -17,7 +17,6 @@ export default class SearchBar extends Component {
 
 	handleClick = (e) => {
 		e.preventDefault();
-		console.log(this.state.searchString);
 		autoSuggest(this.state.searchString).then((res) => {
 			console.log(res);
 			this.setState({
@@ -27,8 +26,7 @@ export default class SearchBar extends Component {
 	};
 
 	render() {
-		const { searchString, currentSearch } = this.state;
-		console.log(searchString, currentSearch);
+		const { searchString } = this.state;
 
 		return (
 			<div className='search-container'>
