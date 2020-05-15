@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const sessionController = require('./controllers/sessionController');
 const usersController = require('./controllers/usersController');
 const potsController = require('./controllers/postsController');
+const tagsController = require('./controllers/tagsController');
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 app.use('/api', usersController);
 app.use('/api', sessionController);
 app.use('/api', potsController);
+app.use('/api', tagsController);
 
 app.listen(PORT, () => {
     console.log(`uraxa_api listening on ${PORT}`);    
