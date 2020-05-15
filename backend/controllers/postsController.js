@@ -32,7 +32,7 @@ const parser = multer({ storage: storage });
 
 // find post by post id
 router.get('/post/id', (req, res) => {
-    const { email, token, id } = req.body;
+    const { email, token, id } = req.query;
 
     auth
         .authenticate(email, token)
@@ -40,36 +40,24 @@ router.get('/post/id', (req, res) => {
             if (!_.isEmpty(userRecord)) {
                 Post
                     .findById(id)
-                    .then(postRecord => {
-                        if(postRecord.rows.length > 0) {
-                            const post = postRecord.rows[0];
-
-                            PostImage.findByPostId(post.id)
-                                .then(postImagesRecord => {
-                                    res.json({ post: post, images: postImagesRecord.rows });
-                                })
-                                .catch(err =>                    
-                                    res.status(500).send({ error: err.message })                       
-                                );
+                    .then(postsRecord => {
+                        if(postsRecord.rows.length > 0) {
+                            return res.status(200).json({ posts: postsRecord.rows });
                         } else {
-                            res.status(404).send({ error: "The post is not found." });
+                            return res.status(404).send({ error: "The posts are not found for this user." });
                         }
                     })
-                    .catch(err =>                    
-                        res.status(500).send({ error: err.message })                       
-                    );
+                    .catch(err => res.status(500).send({ error: err.message }));
             } else {
-                res.status(401).send({ error: "Unauthenticated user. Please login." });
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
             }
         })
-        .catch(err =>                    
-            res.status(500).send({ error: err.message })                       
-        );
+        .catch(err => res.status(500).send({ error: err.message }));
 });
 
 // find posts by user email
 router.get('/post/email', (req, res) => {
-    const { email, token } = req.body;
+    const { email, token } = req.query;
 
     auth
         .authenticate(email, token)
@@ -79,82 +67,45 @@ router.get('/post/email', (req, res) => {
                   
                 Post
                     .findByUserId(userRecord.id)
-                        .then(postRecord => {
-                            if(postRecord.rows.length > 0) {
-                                const posts = postRecord.rows;
-
-                                Promise.all(posts.map(post => 
-                                    postImgs.postImages(post)
-                                        .then(imgRecords => {
-                                            console.log(imgRecords);                                
-                                            return ({ post: post, images: imgRecords });
-                                        })
-                                        .catch(err =>                    
-                                            res.status(500).send({ error: err.message })                       
-                                        )
-                                ))
-                                .then(postAndImages => 
-                                    res.json({ posts: postAndImages }))
-                                .catch(err =>                    
-                                    res.status(500).send({ error: err.message })                       
-                                );                            
-                            } else {
-                                res.status(404).send({ error: "There are no posts for this user." });
-                            }
-                        })
-                        .catch(err =>                    
-                            res.status(500).send({ error: err.message })                       
-                        );
+                    .then(postsRecord => {
+                        if(postsRecord.rows.length > 0) {
+                            return res.status(200).json({ posts: postsRecord.rows })
+                        } else {
+                            return res.status(404).send({ error: "There are no posts for this user." });
+                        }
+                    })
+                    .catch(err => res.status(500).send({ error: err.message }));
             } else {
-                res.status(401).send({ error: "Unauthenticated user. Please login." });
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
             }
         })
-        .catch(err =>                    
-            res.status(500).send({ error: err.message })                       
-        );
+        .catch(err => res.status(500).send({ error: err.message }));
 });
 
 // create post
-router.post('/post', parser.array("image"), (req, res) => {
+router.post('/post', parser.single("image"), (req, res) => {
 
-    const { email, token, title, text, location } = req.body;
-    const files = req.files;
+    const { email, token, title, text, location, tag } = req.body;
+    const file = req.file;
 
     auth
         .authenticate(email, token)
         .then(userRecord => {
             if (!_.isEmpty(userRecord)) {                
                 Post
-                    .createPost(title, text, location, userRecord.id)
+                    .createPost(title, text, location, userRecord.id, file.url, tag)
                     .then(postRecord => {
                         const post = postRecord.rows[0];
-
-                        Promise.all(files.map(file => 
-                            PostImage.createPostImages(file.url, post.id)
-                                .then(imgRecords => {
-                                    console.log(imgRecords);                                
-                                    return ({ post: post, images: imgRecords.rows });
-                                })
-                                .catch(err =>                    
-                                    res.status(500).send({ error: err.message })                       
-                                )                        
-                        ))
-                        .then(postAndImages => 
-                            res.status(201).json({ posts: postAndImages }))                            
-                        .catch(err =>                    
-                            res.status(500).send({ error: err.message })                       
-                        );
-                    })                         
-                    .catch(err =>                    
-                        res.status(500).send({ error: err.message })                       
-                    );
+                        console.log(post);
+                        
+                        return res.status(201).json({ post: post });                        
+                    })                                          
+                    .catch(err => res.status(500).send({ error: err.message }));
             } else {
-                res.status(401).send({ error: "Unauthenticated user. Please login." });
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
             }
         })
-        .catch(err =>                    
-            res.status(500).send({ error: err.message })                       
-        );
+        .catch(err => res.status(500).send({ error: err.message }));
 });
 
 // delete post by post id
@@ -167,21 +118,13 @@ router.delete('/post/id', (req, res) => {
             if (!_.isEmpty(userRecord)) {
                 Post
                     .deletePost(id)
-                    .then(deletedPostRecord => {
-                        console.log(deletedPostRecord);
-                        
-                        res.json({ post: deletedPostRecord.rows[0] })
-                    })
-                    .catch(err =>                    
-                        res.status(500).send({ error: err.message })                       
-                    );
+                    .then(deletedPostRecord => res.status(200).json({ post: deletedPostRecord.rows[0] }))
+                    .catch(err => res.status(500).send({ error: err.message }));
             } else {
                 res.status(401).send({ error: "Unauthenticated user. Please login." });
             }
         })
-        .catch(err =>                    
-            res.status(500).send({ error: err.message })                       
-        );
+        .catch(err => res.status(500).send({ error: err.message }));
 });
 
 // delete posts of a user by user email
@@ -194,18 +137,13 @@ router.delete('/post/email', (req, res) => {
             if (!_.isEmpty(userRecord)) {
                 Post
                     .deletePostsByUserId(userRecord.id)
-                    .then(deletedPostsRecords => 
-                        res.json({ post: deletedPostsRecords.rows }))
-                    .catch(err =>                    
-                        res.status(500).send({ error: err.message })                       
-                    );
+                    .then(deletedPostsRecords => res.status(200).json({ post: deletedPostsRecords.rows }))
+                    .catch(err => res.status(500).send({ error: err.message }));
             } else {
-                res.status(401).send({ error: "Unauthenticated user. Please login." });
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
             }
         })
-        .catch(err =>                    
-            res.status(500).send({ error: err.message })                       
-        );
+        .catch(err => res.status(500).send({ error: err.message }));
 });
 
 

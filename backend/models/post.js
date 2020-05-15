@@ -16,8 +16,9 @@ function findByUserId(user_id) {
 }
 
 // insert / create post
-function createPost(title, text, location, user_id) {
-    return db.query("insert into posts (title, text, location, user_id) values ($1, $2, $3, $4) returning *;", [title, text, location, user_id]);
+function createPost(title, text, location, user_id, image, tag_id) {
+    console.log(image);    
+    return db.query("insert into posts (title, text, location, user_id, image, tag_id) values ($1, $2, $3, $4, $5, $6) returning *;", [title, text, location, user_id, image, tag_id]);
 }
 
 // delete post by id
