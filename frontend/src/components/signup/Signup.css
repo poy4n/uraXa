@@ -36,12 +36,13 @@
 	border: none;
 	cursor: pointer;
 	border-radius: 5px;
-	color: #fefefe;
-	background-color: #f66d51;
+	color: #f66d51;
+	background-color: #fefefe;
+	border: 1px solid #f66d51;
+
 	height: 30px;
 	padding-left: 20px;
 	padding-right: 20px;
-	font-weight: bold;
 	font-size: 12px;
 	width: 100%;
 	margin-top: 20px;
@@ -50,8 +51,8 @@
 
 .btn:hover {
 	border: 1px solid #f66d51;
-	color: #f66d51;
-	background-color: #fefefe;
+	color: #fefefe;
+	background-color: #f66d51;
 }
 
 .btn:focus {

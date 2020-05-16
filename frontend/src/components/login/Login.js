@@ -7,9 +7,9 @@ import './Login.css';
 
 export default function Login() {
 	const { email, setEmail } = useContext(UserContext);
-	const { token, setToken } = useContext(UserContext);
+	const { setToken } = useContext(UserContext);
 	const { login, setLogin } = useContext(UserContext);
-	const { username, setUsername } = useContext(UserContext);
+	const { setUsername } = useContext(UserContext);
 
 	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
@@ -37,10 +37,10 @@ export default function Login() {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email, password: password })
 		};
+
 		fetch(url, requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				console.log(data);
 				setEmail(data.user.email);
 				setToken(data.user.token);
 				setUsername(data.user.username);
@@ -51,14 +51,15 @@ export default function Login() {
 			.catch((err) => {
 				console.log(err.error);
 				setLogin(false);
-				setHelperText('incorrect email or password');
+				setHelperText('incorrect email or password, try again');
 			});
 	};
 
 	return (
 		<div className='form-container'>
 			<div className='title'>
-				<h1>Login To Your Account</h1>
+				<h2>Your moments make great stories</h2>
+				<h4>Thanks for being a guide</h4>
 			</div>
 			<form className='form-wraper' method='POST' name='signup' onSubmit={handleLogin}>
 				<div className='input-wraper'>
@@ -93,6 +94,14 @@ export default function Login() {
 					LogIn
 				</button>
 				<p className='error-msg'>{helperText}</p>
+				<div className='join-direction'>
+					<p>Haven't signed up yet?</p>
+					{!login ? (
+						<button className='join-btn' onClick={() => history.push('/signup')}>
+							Make Account
+						</button>
+					) : null}
+				</div>
 			</form>
 		</div>
 	);

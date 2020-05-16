@@ -20,21 +20,10 @@ export default function App() {
 	const [ email, setEmail ] = useState('');
 	const [ username, setUsername ] = useState('');
 	const [ login, setLogin ] = useState(false);
+	const [ types, setTypes ] = useState([]);
+
 	const [ coordinates, setCoordinates ] = useState({ lat: -37.8136, lng: 144.9631 });
-	const [ data, setData ] = useState([
-		{
-			post: {
-				id: 23,
-				location: { x: -49, y: 144 }
-			},
-			images: [
-				{
-					img_url:
-						'https://www.airsage.com/blog/content/images/size/w2000/2019/09/beach-blue-coastline-1268855.jpg'
-				}
-			]
-		}
-	]);
+	const [ data, setData ] = useState([]);
 
 	const userContext = {
 		token,
@@ -48,7 +37,9 @@ export default function App() {
 		data,
 		setData,
 		coordinates,
-		setCoordinates
+		setCoordinates,
+		types,
+		setTypes
 	};
 
 	return (

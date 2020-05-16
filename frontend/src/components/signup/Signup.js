@@ -7,9 +7,9 @@ import './Signup.css';
 
 export default function Signup() {
 	const { email, setEmail } = useContext(UserContext);
-	const { token, setToken } = useContext(UserContext);
+	const { setToken } = useContext(UserContext);
 	const { username, setUsername } = useContext(UserContext);
-	const { login, setLogin } = useContext(UserContext);
+	const { setLogin } = useContext(UserContext);
 
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 	const [ password, setPassword ] = useState('');
@@ -57,7 +57,8 @@ export default function Signup() {
 	return (
 		<div className='form-container'>
 			<div className='title'>
-				<h1>Join uraXa</h1>
+				<h2>Your moments make great stories</h2>
+				<h4>Sign up for a free account</h4>
 			</div>
 			<form className='form-wraper' method='POST' name='signup' onSubmit={handleJoin}>
 				<div className='input-wraper'>
