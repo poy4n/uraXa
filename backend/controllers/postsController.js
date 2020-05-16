@@ -6,11 +6,7 @@ const _ = require('lodash');
 const auth = require('../services/authService');
 
 const Post = require('../models/post');
-<<<<<<< Updated upstream
-=======
-const PostImage = require('../models/post_image');
-const postImgs = require('../services/postImgsService');
->>>>>>> Stashed changes
+const Tag = require('../models/tag');
 
 const cloudinary = require('cloudinary');
 const cloudinaryStorage = require('multer-storage-cloudinary');
@@ -33,9 +29,8 @@ const parser = multer({ storage: storage });
 
 // find post by post id
 router.get('/post/id', (req, res) => {
-<<<<<<< Updated upstream
     const { email, token, id } = req.query;
-console.log(email, token);
+    console.log(email, token);
 
     auth
         .authenticate(email, token)
@@ -57,28 +52,6 @@ console.log(email, token);
             }
         })
         .catch(err => res.status(500).send({ error: err.message }));
-=======
-	const { email, token, id } = req.query;
-
-	auth
-		.authenticate(email, token)
-		.then((userRecord) => {
-			if (!_.isEmpty(userRecord)) {
-				Post.findById(id)
-					.then((postsRecord) => {
-						if (postsRecord.rows.length > 0) {
-							return res.status(200).json({ posts: postsRecord.rows });
-						} else {
-							return res.status(404).send({ error: 'The posts are not found for this user.' });
-						}
-					})
-					.catch((err) => res.status(500).send({ error: err.message }));
-			} else {
-				return res.status(401).send({ error: 'Unauthenticated user. Please login.' });
-			}
-		})
-		.catch((err) => res.status(500).send({ error: err.message }));
->>>>>>> Stashed changes
 });
 
 // find posts by user email
@@ -134,8 +107,98 @@ router.get('/post/tag', (req, res) => {
         .catch(err => res.status(500).send({ error: err.message }));
 });
 
+const postsByTags = tags => {
+    return Promise.all(                                                       
+        tags.map(tag =>
+            Post
+                .findByTag(tag.id)
+                .then(postsRecord => {
+                    if(postsRecord.rows.length > 0) {                                            
+                        return { tag: tag.tag, posts: postsRecord.rows };                                    
+                    } else {
+                        return { tag: tag.tag, posts: []}
+                    } 
+                })
+                .catch(err => res.status(500).send({ error: err.message }))
+        ))   
+        .then(postsByTag => {
+            return postsByTag
+        })
+        .catch((err) => res.status(500).send({ error: err.message })) 
+}
+
+// get posts by all tags
+router.get('/post/tags/all', (req, res) => {
+    const { email, token } = req.query;
+
+    auth
+        .authenticate(email, token)
+        .then(userRecord => {
+            if (!_.isEmpty(userRecord)) {  
+                console.log(userRecord);
+                
+                Tag
+                    .allTags()
+                    .then(tagsRecord => tagsRecord.rows)                        
+                    .then(tags => {
+                        postsByTags(tags)
+                        .then(postsByTag => res.status(200).json({ postsByTag: postsByTag }))
+                        .catch((err) => res.status(500).send({ error: err.message }));
+                    })
+                    .catch((err) => res.status(500).send({ error: err.message }))
+            } else {
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
+            }
+        })
+        .catch(err => res.status(500).send({ error: err.message }));
+});
+
+const getTagsRecords = ids => {
+    return Promise.all(
+        ids.map(tagId => 
+            Tag
+                .findById(tagId)
+                .then(tagsRecord => {
+                    console.log(tagsRecord.rows[0]);                    
+                    return tagsRecord.rows[0];
+                })                        
+                .catch((err) => res.status(500).send({ error: err.message }))
+    ))
+    .then(tags => {
+        console.log(tags);        
+        return tags;
+    })
+    .catch((err) => res.status(500).send({ error: err.message }))
+}
+
+// find posts by tag ids
+router.get('/post/tag/ids', (req, res) => {
+    const { email, token, ids } = req.query;
+    console.log(req.query);
+    // var ids = JSON.parse(req.query['ids']); //use if impl will use QueryString
+    
+
+    auth
+        .authenticate(email, token)
+        .then(userRecord => {
+            if (!_.isEmpty(userRecord)) {  
+                console.log(userRecord);
+                
+                getTagsRecords(ids)
+                    .then(tags => {
+                        postsByTags(tags)
+                        .then(postsByTag => res.status(200).json({ postsByTag: postsByTag }))
+                        .catch((err) => res.status(500).send({ error: err.message }));
+                    })
+                    .catch((err) => res.status(500).send({ error: err.message }))
+            } else {
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
+            }
+        })
+        .catch(err => res.status(500).send({ error: err.message }));
+});
+
 // create post
-<<<<<<< Updated upstream
 router.post('/post', parser.single("image"), (req, res) => {
 
     const { email, token, title, text, location, tag } = req.body;
@@ -161,34 +224,11 @@ router.post('/post', parser.single("image"), (req, res) => {
             }
         })
         .catch(err => res.status(500).send({ error: err.message }));
-=======
-router.post('/post', parser.single('image'), (req, res) => {
-	const { email, token, title, text, location, tag } = req.body;
-	const file = req.file;
 
-	auth
-		.authenticate(email, token)
-		.then((userRecord) => {
-			if (!_.isEmpty(userRecord)) {
-				Post.createPost(title, text, location, userRecord.id, file.url, tag)
-					.then((postRecord) => {
-						const post = postRecord.rows[0];
-						console.log(post);
-
-						return res.status(201).json({ post: post });
-					})
-					.catch((err) => res.status(500).send({ error: err.message }));
-			} else {
-				return res.status(401).send({ error: 'Unauthenticated user. Please login.' });
-			}
-		})
-		.catch((err) => res.status(500).send({ error: err.message }));
->>>>>>> Stashed changes
 });
 
 // delete post by post id
 router.delete('/post/id', (req, res) => {
-<<<<<<< Updated upstream
     const { email, token, id } = req.body;
 
     auth
@@ -204,22 +244,7 @@ router.delete('/post/id', (req, res) => {
             }
         })
         .catch(err => res.status(500).send({ error: err.message }));
-=======
-	const { email, token, id } = req.body;
-	console.log(email, token, id);
-	auth
-		.authenticate(email, token)
-		.then((userRecord) => {
-			if (!_.isEmpty(userRecord)) {
-				Post.deletePost(id)
-					.then((deletedPostRecord) => res.status(200).json({ post: deletedPostRecord.rows[0] }))
-					.catch((err) => res.status(500).send({ error: err.message }));
-			} else {
-				res.status(401).send({ error: 'Unauthenticated user. Please login.' });
-			}
-		})
-		.catch((err) => res.status(500).send({ error: err.message }));
->>>>>>> Stashed changes
+
 });
 
 // delete posts of a user by user email
