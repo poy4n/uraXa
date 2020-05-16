@@ -4,12 +4,30 @@
 }
 
 .description {
-	width: 70%;
-	margin-top: 100px;
+	width: 50%;
+	margin-top: 80px;
+	line-height: 1.5em;
 }
 
 .description h1 {
-	padding-bottom: 50px;
+	padding-top: 20px;
+	color: #f66d51;
+	font-size: 24px;
+}
+
+.desc-parag,
+.desc-uralla {
+	padding-top: 20px;
+}
+
+.desc-small {
+	font-size: 16px;
+	color: #000000;
+}
+
+.desc-parag span {
+	color: #f66d51;
+	font-size: 24px;
 }
 
 .container-btn {
@@ -30,7 +48,7 @@
 	padding-right: 20px;
 	font-weight: bold;
 	font-size: 12px;
-	width: 100px;
+	width: 120px;
 	font-family: 'Josefin Sans', sans-serif;
 }
 
@@ -46,7 +64,7 @@
 	font-weight: bold;
 	font-size: 12px;
 	margin: 0 50px;
-	width: 100px;
+	width: 120px;
 	font-family: 'Josefin Sans', sans-serif;
 }
 

@@ -7,15 +7,3 @@
 .container-map {
 	width: 100%;
 }
-
-.hub {
-	display: flex;
-	justify-content: center;
-	margin: auto;
-	width: 95%;
-}
-
-.hub-posts {
-	height: 30vh;
-	box-shadow: 0px 0px 10px 1px #c9c9c9;
-}
