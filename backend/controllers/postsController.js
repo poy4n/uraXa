@@ -6,6 +6,7 @@ const _ = require('lodash');
 const auth = require('../services/authService');
 
 const Post = require('../models/post');
+const Tag = require('../models/tag');
 
 const cloudinary = require('cloudinary');
 const cloudinaryStorage = require('multer-storage-cloudinary');
@@ -102,6 +103,97 @@ router.get('/post/tag', (req, res) => {
                         }
                     })
                     .catch(err => res.status(500).send({ error: err.message }));
+            } else {
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
+            }
+        })
+        .catch(err => res.status(500).send({ error: err.message }));
+});
+
+const postsByTags = tags => {
+    return Promise.all(                                                       
+        tags.map(tag =>
+            Post
+                .findByTag(tag.id)
+                .then(postsRecord => {
+                    if(postsRecord.rows.length > 0) {                                            
+                        return { tag: tag.tag, posts: postsRecord.rows };                                    
+                    } else {
+                        return { tag: tag.tag, posts: []}
+                    } 
+                })
+                .catch(err => res.status(500).send({ error: err.message }))
+        ))   
+        .then(postsByTag => {
+            return postsByTag
+        })
+        .catch((err) => res.status(500).send({ error: err.message })) 
+}
+
+// get posts by all tags
+router.get('/post/tags/all', (req, res) => {
+    const { email, token } = req.query;
+
+    auth
+        .authenticate(email, token)
+        .then(userRecord => {
+            if (!_.isEmpty(userRecord)) {  
+                console.log(userRecord);
+                
+                Tag
+                    .allTags()
+                    .then(tagsRecord => tagsRecord.rows)                        
+                    .then(tags => {
+                        postsByTags(tags)
+                        .then(postsByTag => res.status(200).json({ postsByTag: postsByTag }))
+                        .catch((err) => res.status(500).send({ error: err.message }));
+                    })
+                    .catch((err) => res.status(500).send({ error: err.message }))
+            } else {
+                return res.status(401).send({ error: "Unauthenticated user. Please login." });
+            }
+        })
+        .catch(err => res.status(500).send({ error: err.message }));
+});
+
+const getTagsRecords = ids => {
+    return Promise.all(
+        ids.map(tagId => 
+            Tag
+                .findById(tagId)
+                .then(tagsRecord => {
+                    console.log(tagsRecord.rows[0]);                    
+                    return tagsRecord.rows[0];
+                })                        
+                .catch((err) => res.status(500).send({ error: err.message }))
+    ))
+    .then(tags => {
+        console.log(tags);        
+        return tags;
+    })
+    .catch((err) => res.status(500).send({ error: err.message }))
+}
+
+// find posts by tag ids
+router.get('/post/tag/ids', (req, res) => {
+    const { email, token, ids } = req.query;
+    console.log(req.query);
+    // var ids = JSON.parse(req.query['ids']); //use if impl will use QueryString
+    
+
+    auth
+        .authenticate(email, token)
+        .then(userRecord => {
+            if (!_.isEmpty(userRecord)) {  
+                console.log(userRecord);
+                
+                getTagsRecords(ids)
+                    .then(tags => {
+                        postsByTags(tags)
+                        .then(postsByTag => res.status(200).json({ postsByTag: postsByTag }))
+                        .catch((err) => res.status(500).send({ error: err.message }));
+                    })
+                    .catch((err) => res.status(500).send({ error: err.message }))
             } else {
                 return res.status(401).send({ error: "Unauthenticated user. Please login." });
             }
