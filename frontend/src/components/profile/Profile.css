@@ -33,6 +33,8 @@
 .data-container {
 	margin: 20px;
 	text-align: center;
+	width: 400px;
+	height: 260px;
 }
 
 .img-post {
