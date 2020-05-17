@@ -14,8 +14,9 @@ export default function Add() {
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 
 	const { data, setData } = useContext(UserContext);
-	const { email, setEmail } = useContext(UserContext);
-	const { token, setToken } = useContext(UserContext);
+	const { email } = useContext(UserContext);
+	const { token } = useContext(UserContext);
+	const { types, setTypes } = useContext(UserContext);
 
 	useEffect(
 		() => {
@@ -28,11 +29,32 @@ export default function Add() {
 		[ title, description, location, image, category ]
 	);
 
+	useEffect(() => {
+		let url = `/api/tag?email=${email}&token=${token}`;
+
+		const requestOptions = {
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json' }
+		};
+
+		fetch(url, requestOptions)
+			.then((response) => {
+				const json = response.json();
+				return json;
+			})
+			.then((data) => {
+				console.log(data.tags);
+				setTypes(data.tags);
+			})
+			.catch((err) => {
+				console.log(err.error);
+			});
+	}, []);
+
 	const handleAdd = (e) => {
 		e.preventDefault();
-
+		console.log('clicked');
 		let url = '/api/post';
-		console.log(image);
 
 		const dataForm = new FormData();
 		dataForm.append('title', title);
@@ -41,6 +63,7 @@ export default function Add() {
 		dataForm.append('token', token);
 		dataForm.append('email', email);
 		dataForm.append('image', image);
+		dataForm.append('tag', category);
 
 		const requestOptions = {
 			method: 'POST',
@@ -57,18 +80,17 @@ export default function Add() {
 				console.log(userData.posts[0]);
 				let newData = userData.posts[0];
 				setData([ ...data, newData ]);
-
-				history.push('/map');
 			})
 			.catch((err) => {
 				console.log(err.error);
+				history.push('/map');
 			});
 	};
 
 	return (
 		<div className='form-container'>
 			<div className='title'>
-				<h1>Add a Journey</h1>
+				<h1>Add your story</h1>
 			</div>
 			<form className='form-wraper' method='POST' name='signup'>
 				<div className='input-wraper'>
@@ -126,16 +148,15 @@ export default function Add() {
 						<option value='default' disabled>
 							Select a type of place
 						</option>
-						<option value='grapefruit'>Grapefruit</option>
-						<option value='lime'>Lime</option>
-						<option value='coconut'>Coconut</option>
-						<option value='mango'>Mango</option>
-						<option value='grapefruit'>Grapefruit</option>
-						<option value='lime'>Lime</option>
-						<option value='coconut'>Coconut</option>
-						<option value='mango'>Mango</option>
-						<option value='coconut'>Coconut</option>
-						<option value='mango'>Mango</option>
+						{types !== undefined && types.length > 0 ? (
+							types.map((type) => {
+								return (
+									<option key={type.id} value={type.id}>
+										{type.tag}
+									</option>
+								);
+							})
+						) : null}
 					</select>
 					<label className='label' htmlFor='select'>
 						Category
@@ -155,8 +176,8 @@ export default function Add() {
 						Upload an Image
 					</label>
 				</div>
-				<button className='btn' disabled={isButtonDisabled} onClick={(e) => handleAdd(e)}>
-					ADD
+				<button className='btn' onClick={(e) => handleAdd(e)}>
+					Publish
 				</button>
 			</form>
 		</div>
