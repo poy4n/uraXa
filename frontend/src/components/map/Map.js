@@ -2,19 +2,19 @@ import * as React from 'react';
 import { useContext } from 'react';
 import { UserContext } from '../../UserContext';
 
-
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import currentPosition from './currentPosition';
+import { isEmpty } from 'lodash';
 
 import './Map.css';
 
-export const Map = () => {
+export const Map = ({ markers }) => {
 	const mapRef = React.useRef(null);
 
 	const { coordinates, setCoordinates } = useContext(UserContext);
 	console.log(coordinates);
 
-	useLayoutEffect(
+	useEffect(
 		() => {
 			if (!mapRef.current) return;
 			const H = window.H;
@@ -37,11 +37,17 @@ export const Map = () => {
 			new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 			const ui = H.ui.UI.createDefault(map, defaultLayers);
 
-			// marker
-			let LocationOfMarker = coordinates;
-			let icon = new H.map.Icon('https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png');
-			let marker = new H.map.Marker(LocationOfMarker, { icon: icon });
-			map.addObject(marker);
+			// TODO marker
+			markers.forEach((coordinate) => {
+				if (!isEmpty(coordinate)) {
+					let LocationOfMarker = coordinate;
+					let icon = new H.map.Icon(
+						'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png'
+					);
+					let marker = new H.map.Marker(LocationOfMarker, { icon: icon });
+					map.addObject(marker);
+				}
+			});
 
 			// style
 			const provider = map.getBaseLayer().getProvider();
@@ -76,7 +82,7 @@ export const Map = () => {
 				map.dispose();
 			};
 		},
-		[ mapRef, coordinates ]
+		[ mapRef, markers ]
 	);
 	return <div className='map' ref={mapRef} />;
 };
