@@ -1,0 +1,23 @@
+.sidebar {
+  margin-top: 65px;
+  width: 10px;
+  position: relative;
+  transition: width 0.5s ease-in-out;
+}
+
+.sidebar--expand {
+  width: 200px;
+}
+
+span.arrow {
+  position: absolute;
+  top: 50%;
+  right: 1px;
+  transition: transform 0.3s linear;
+  cursor: pointer;
+
+}
+
+.reverse {
+  transform: rotate(180deg);
+}

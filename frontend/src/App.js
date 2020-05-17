@@ -47,7 +47,8 @@ export default function App() {
 			<Router history={history}>
 				<div className='header'>
 					<div className='header-left'>
-						<h1>uraXa</h1>
+						{!login ? <h1>uralla</h1> : null}
+						{login ? <h1>uraXa</h1> : null}
 						<NavLink className='nav' activeClassName='active-nav' to='/' exact>
 							Home
 						</NavLink>
