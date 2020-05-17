@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
 import history from '../../history';
+import { autoSuggest } from '../search/autoSuggest';
 
 import '../signup/Signup.css';
 
@@ -57,34 +58,38 @@ export default function Add() {
 		let url = '/api/post';
 
 		const dataForm = new FormData();
+
 		dataForm.append('title', title);
 		dataForm.append('text', description);
-		dataForm.append('location', `(${location})`);
 		dataForm.append('token', token);
 		dataForm.append('email', email);
 		dataForm.append('image', image);
 		dataForm.append('tag', category);
 
-		const requestOptions = {
-			method: 'POST',
-			body: dataForm
-		};
+		autoSuggest(location).then((res) => {
+			dataForm.append('location', `(${res[0].position.lat}, ${res[0].position.lng})`);
 
-		fetch(url, requestOptions)
-			.then((response) => {
-				const json = response.json();
-				console.log(json);
-				return json;
-			})
-			.then((userData) => {
-				console.log(userData.posts[0]);
-				let newData = userData.posts[0];
-				setData([ ...data, newData ]);
-			})
-			.catch((err) => {
-				console.log(err.error);
-				history.push('/map');
-			});
+			const requestOptions = {
+				method: 'POST',
+				body: dataForm
+			};
+
+			fetch(url, requestOptions)
+				.then((response) => {
+					const json = response.json();
+					console.log(json);
+					return json;
+				})
+				.then((userData) => {
+					console.log(userData.posts[0]);
+					let newData = userData.posts[0];
+					setData([ ...data, newData ]);
+				})
+				.catch((err) => {
+					console.log(err.error);
+				});
+		});
+		history.push('/map');
 	};
 
 	return (
@@ -96,6 +101,7 @@ export default function Add() {
 				<div className='input-wraper'>
 					<input
 						className='input'
+						placeholder='name your story'
 						type='text'
 						id='title'
 						name='title'
@@ -112,6 +118,7 @@ export default function Add() {
 					<textarea
 						style={{ height: '200px' }}
 						className='input'
+						placeholder='tell the world your story'
 						type='text'
 						id='description'
 						name='description'
@@ -127,6 +134,7 @@ export default function Add() {
 				<div className='input-wraper'>
 					<input
 						className='input'
+						placeholder='name of a city, place or address'
 						type='text'
 						id='location'
 						name='location'
@@ -176,7 +184,7 @@ export default function Add() {
 						Upload an Image
 					</label>
 				</div>
-				<button className='btn' onClick={(e) => handleAdd(e)}>
+				<button className='btn' disabled={isButtonDisabled} onClick={(e) => handleAdd(e)}>
 					Publish
 				</button>
 			</form>
