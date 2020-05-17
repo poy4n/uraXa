@@ -132,13 +132,13 @@ const postsByTags = tags => {
 
 // get posts by all tags
 router.get('/post/tags/all', (req, res) => {
-    const { email, token } = req.query;
+    // const { email, token } = req.query;
 
-    auth
-        .authenticate(email, token)
-        .then(userRecord => {
-            if (!_.isEmpty(userRecord)) {  
-                console.log(userRecord);
+    // auth
+    //     .authenticate(email, token)
+    //     .then(userRecord => {
+    //         if (!_.isEmpty(userRecord)) {  
+    //             console.log(userRecord);
                 
                 Tag
                     .allTags()
@@ -149,11 +149,11 @@ router.get('/post/tags/all', (req, res) => {
                         .catch((err) => res.status(500).send({ error: err.message }));
                     })
                     .catch((err) => res.status(500).send({ error: err.message }))
-            } else {
-                return res.status(401).send({ error: "Unauthenticated user. Please login." });
-            }
-        })
-        .catch(err => res.status(500).send({ error: err.message }));
+        //     } else {
+        //         return res.status(401).send({ error: "Unauthenticated user. Please login." });
+        //     }
+        // })
+        // .catch(err => res.status(500).send({ error: err.message }));
 });
 
 const getTagsRecords = ids => {
@@ -176,16 +176,16 @@ const getTagsRecords = ids => {
 
 // find posts by tag ids
 router.get('/post/tag/ids', (req, res) => {
-    const { email, token, ids } = req.query;
+    const { /*email, token,*/ ids } = req.query;
     console.log(req.query);
     // var ids = JSON.parse(req.query['ids']); //use if impl will use QueryString
     
 
-    auth
-        .authenticate(email, token)
-        .then(userRecord => {
-            if (!_.isEmpty(userRecord)) {  
-                console.log(userRecord);
+    // auth
+    //     .authenticate(email, token)
+    //     .then(userRecord => {
+    //         if (!_.isEmpty(userRecord)) {  
+    //             console.log(userRecord);
                 
                 getTagsRecords(ids)
                     .then(tags => {
@@ -194,11 +194,11 @@ router.get('/post/tag/ids', (req, res) => {
                         .catch((err) => res.status(500).send({ error: err.message }));
                     })
                     .catch((err) => res.status(500).send({ error: err.message }))
-            } else {
-                return res.status(401).send({ error: "Unauthenticated user. Please login." });
-            }
-        })
-        .catch(err => res.status(500).send({ error: err.message }));
+            // } else {
+            //     return res.status(401).send({ error: "Unauthenticated user. Please login." });
+            // }
+        // })
+        // .catch(err => res.status(500).send({ error: err.message }));
 });
 
 // create post
