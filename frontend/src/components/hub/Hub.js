@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Map } from '../map/Map';
+import { Sidebar } from '../sidebar/Sidebar';
 import SearchBar from '../search/SearchBar';
 import Filter from '../filterTags/Filter';
 import { markerPosition } from '../map/markerPosition';
@@ -48,6 +49,7 @@ export default function Hub() {
 	return (
 		<React.Fragment>
 			<div className='hub'>
+				<Sidebar />
 				<div className='container-map'>
 					{/* <Filter /> */}
 					<SearchBar />

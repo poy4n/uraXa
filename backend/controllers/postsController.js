@@ -130,27 +130,17 @@ const postsByTags = tags => {
 // get posts by all tags
 router.get('/post/tags/all', (req, res) => {
     // const { email, token } = req.query;
-
-    // auth
-    //     .authenticate(email, token)
-    //     .then(userRecord => {
-    //         if (!_.isEmpty(userRecord)) {  
-    //             console.log(userRecord);
-                
-                Tag
-                    .allTags()
-                    .then(tagsRecord => tagsRecord.rows)                        
-                    .then(tags => {
-                        postsByTags(tags)
-                        .then(postsByTag => res.status(200).json({ postsByTag: postsByTag }))
-                        .catch((err) => res.status(500).send({ error: err.message }));
-                    })
-                    .catch((err) => res.status(500).send({ error: err.message }))
-        //     } else {
-        //         return res.status(401).send({ error: "Unauthenticated user. Please login." });
-        //     }
-        // })
-        // .catch(err => res.status(500).send({ error: err.message }));
+    
+    Tag
+        .allTags()
+        .then(tagsRecord => tagsRecord.rows)                        
+        .then(tags => {
+            postsByTags(tags)
+            .then(postsByTag => res.status(200).json({ postsByTag: postsByTag }))
+            .catch((err) => res.status(500).send({ error: err.message }));
+        })
+        .catch((err) => res.status(500).send({ error: err.message }))
+    
 });
 
 const getTagsRecords = ids => {
@@ -176,26 +166,14 @@ router.get('/post/tag/ids', (req, res) => {
     const { /*email, token,*/ ids } = req.query;
     console.log(req.query);
     // var ids = JSON.parse(req.query['ids']); //use if impl will use QueryString
-    
-
-    // auth
-    //     .authenticate(email, token)
-    //     .then(userRecord => {
-    //         if (!_.isEmpty(userRecord)) {  
-    //             console.log(userRecord);
                 
-                getTagsRecords(ids)
-                    .then(tags => {
-                        postsByTags(tags)
-                        .then(postsByTag => res.status(200).json({ postsByTag: postsByTag }))
-                        .catch((err) => res.status(500).send({ error: err.message }));
-                    })
-                    .catch((err) => res.status(500).send({ error: err.message }))
-            // } else {
-            //     return res.status(401).send({ error: "Unauthenticated user. Please login." });
-            // }
-        // })
-        // .catch(err => res.status(500).send({ error: err.message }));
+    getTagsRecords(ids)
+        .then(tags => {
+            postsByTags(tags)
+            .then(postsByTag => res.status(200).json({ postsByTag: postsByTag }))
+            .catch((err) => res.status(500).send({ error: err.message }));
+        })
+        .catch((err) => res.status(500).send({ error: err.message }))           
 });
 
 // create post
