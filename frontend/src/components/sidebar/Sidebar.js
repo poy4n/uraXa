@@ -13,28 +13,28 @@ export const Sidebar = () => {
     event.target.classList.toggle('reverse');
   }
 
-  useEffect(
-    () => {
-      let url = `/api/post/email?email=${email}&token=${token}`;
+  // useEffect(
+  //   () => {
+  //     let url = `/api/post/email?email=${email}&token=${token}`;
 
-      const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      };
+  //     const requestOptions = {
+  //       method: 'GET',
+  //       headers: { 'Content-Type': 'application/json' }
+  //     };
 
-      fetch(url, requestOptions)
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          setData(data.posts);
-        })
-        .catch((err) => {
-          console.log(err.error);
-        })
-    },
-    [ login ]
-  );
+  //     fetch(url, requestOptions)
+  //       .then((response) => {
+  //         return response.json();
+  //       })
+  //       .then((data) => {
+  //         setData(data.posts);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err.error);
+  //       })
+  //   },
+  //   [ login ]
+  // );
 
   return(
     <div className="sidebar">

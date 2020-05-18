@@ -7,3 +7,19 @@
 .container-map {
 	width: 100%;
 }
+
+.pin_card {
+	display: flex;
+	width: 250px;
+}
+
+.pin_image {
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	margin-right: 20px;
+}
+
+.pin_text {
+	width: 70%;
+}
