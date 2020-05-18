@@ -8,6 +8,10 @@
 	width: 100%;
 }
 
+.H_ib_body {
+	animation: bubble 0.3s;
+}
+
 .pin_card {
 	display: flex;
 	width: 250px;
@@ -22,4 +26,11 @@
 
 .pin_text {
 	width: 70%;
+}
+
+@keyframes bubble {
+	0% {transform: scale(0);}
+	70% {transform: scale(1.05);}
+	85% {transform: scale(0.95);}
+	100% {transform: scale(1);}
 }
