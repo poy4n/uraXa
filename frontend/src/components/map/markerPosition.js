@@ -1,4 +1,4 @@
-export const markerPosition = (tags) => {
+export const postsMarkers = (tags) => {
 	return tags.map((tag) => {
 		let coordinates = {};
 		if (tag.posts.length > 0) {
@@ -8,4 +8,12 @@ export const markerPosition = (tags) => {
 		}
 		return coordinates;
 	});
+};
+
+export const searchMarkers = (mapSearch) => {
+	let coordinates = [];
+	mapSearch.map((search) => {
+		coordinates.push(search.position);
+	});
+	return coordinates;
 };

@@ -6,7 +6,7 @@ export const autoSuggest = async (searchString) => {
 		return;
 	}
 	let response = await fetch(
-		`https://discover.search.hereapi.com/v1/discover?apiKey=${apikey}&at=${center.lat},${center.lng}&limit=5&q=${searchString}`
+		`https://discover.search.hereapi.com/v1/discover?apiKey=${apikey}&at=${center.lat},${center.lng}&limit=10&q=${searchString}`
 	);
 	let data = await response.json();
 	return await data.items;

@@ -7,34 +7,64 @@
 
 .container-posts {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
 	gap: 20px;
 	width: 100%;
-	margin-top: 50px;
+	margin-top: 30px;
 	margin-bottom: 100px;
+}
+
+.add-post {
+	position: relative;
+	top: 10px;
 }
 
 .hub-posts {
 	display: flex;
 	justify-content: center;
 	height: 300px;
-	width: 600px;
+	width: 500px;
 	box-shadow: 0px 0px 10px 1px #c9c9c9;
 	margin: auto;
+	border-radius: 20px;
+	border: 1px solid #f66d51;
+}
+
+.add-post button {
+	border: none;
+	cursor: pointer;
+	border-radius: 50px;
+	color: #fefefe;
+	background-color: #f66d51;
+	height: 30px;
+	font-size: 26px;
+	margin: 0 20px;
+	width: 100px;
+	font-family: 'Josefin Sans', sans-serif;
+}
+
+.add-post button:hover {
+	border: 1px solid #f66d51;
+	color: #f66d51;
+	background-color: #fefefe;
+}
+
+.add-post button:focus {
+	outline: none;
 }
 
 .img-container {
 	width: 150px;
 	height: 150px;
 	margin: 20px 0 0 20px;
-	box-shadow: 0px 0px 10px 1px #c9c9c9;
+	box-shadow: 0px 0px 10px 1px #808080;
 }
 
 .data-container {
 	margin: 20px;
-	text-align: center;
 	width: 400px;
 	height: 260px;
+	line-height: 1.1em;
 }
 
 .img-post {
@@ -44,7 +74,7 @@
 }
 
 .title-post {
-	margin-top: 10px;
+	margin-top: 20px;
 }
 
 .date-post {
@@ -60,14 +90,17 @@
 }
 
 .delete-btn {
+	position: relative;
+	left: 230px;
+	bottom: 20px;
 	border: none;
 	cursor: pointer;
-	border-radius: 5px;
+	border-radius: 50px;
 	color: #f66d51;
 	border: 1px solid #f66d51;
 	height: 20px;
 	font-size: 12px;
-	width: 70px;
+	width: 60px;
 	margin-top: 10px;
 	font-family: 'Josefin Sans', sans-serif;
 }

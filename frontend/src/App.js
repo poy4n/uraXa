@@ -21,8 +21,8 @@ export default function App() {
 	const [ username, setUsername ] = useState('');
 	const [ login, setLogin ] = useState(false);
 	const [ types, setTypes ] = useState([]);
+	const [ mapSearch, setMapSearch ] = useState([]);
 
-	const [ coordinates, setCoordinates ] = useState({ lat: -37.8136, lng: 144.9631 });
 	const [ data, setData ] = useState([]);
 
 	const userContext = {
@@ -36,10 +36,10 @@ export default function App() {
 		setLogin,
 		data,
 		setData,
-		coordinates,
-		setCoordinates,
 		types,
-		setTypes
+		setTypes,
+		mapSearch,
+		setMapSearch
 	};
 
 	return (
@@ -54,9 +54,6 @@ export default function App() {
 						</NavLink>
 						<NavLink className='nav' activeClassName='active-nav' to='/map'>
 							Map
-						</NavLink>
-						<NavLink className='nav' activeClassName='active-nav' to='/add'>
-							Add
 						</NavLink>
 					</div>
 					<div className='header-right'>

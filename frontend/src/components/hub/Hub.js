@@ -1,16 +1,19 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Map } from '../map/Map';
 import { Sidebar } from '../sidebar/Sidebar';
 import SearchBar from '../search/SearchBar';
 import Filter from '../filterTags/Filter';
-import { markerPosition } from '../map/markerPosition';
+import { postsMarkers, searchMarkers } from '../map/markerPosition';
+import { UserContext } from '../../UserContext';
 
 import '../map/Map.css';
 
 export default function Hub() {
 	const [ tags, setTags ] = useState([]);
-	const [ markers, setMarkers ] = useState([]);
+	const [ postMarkers, setPostMarkers ] = useState([]);
+	const [ mapSearchCoord, setMapSearchCoord ] = useState([]);
+
+	const { mapSearch, setMapSearch } = useContext(UserContext);
 
 	useEffect(() => {
 		let url = `/api/post/tags/all`;
@@ -37,13 +40,24 @@ export default function Hub() {
 
 	useEffect(
 		() => {
-			let marks = markerPosition(tags);
+			let marks = postsMarkers(tags);
 			console.log(marks);
 			if (marks.length > 0) {
-				setMarkers(marks);
+				setPostMarkers(marks);
 			}
 		},
 		[ tags ]
+	);
+
+	useEffect(
+		() => {
+			let marks = searchMarkers(mapSearch);
+			console.log(mapSearch);
+			if (marks.length > 0) {
+				setMapSearchCoord(marks);
+			}
+		},
+		[ mapSearch ]
 	);
 
 	return (
@@ -53,7 +67,7 @@ export default function Hub() {
 				<div className='container-map'>
 					{/* <Filter /> */}
 					<SearchBar />
-					<Map markers={markers} />
+					<Map postMarkers={postMarkers} mapSearchCoord={mapSearchCoord} />
 				</div>
 			</div>
 		</React.Fragment>

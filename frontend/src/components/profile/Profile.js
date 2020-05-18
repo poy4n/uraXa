@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
+import history from '../../history';
 
 import './Profile.css';
 
@@ -78,6 +79,9 @@ export default function Profile() {
 				{loading && <h3>. | . | . | .</h3>}
 				{!error && <h3>loading failed</h3>}
 			</div>
+			<div className='add-post'>
+				<button onClick={() => history.push('/add')}>+</button>
+			</div>
 			<div className='hub'>
 				<div className='container-posts'>
 					{data &&
@@ -89,12 +93,12 @@ export default function Profile() {
 										<h2 className='title-post'>{post.title}</h2>
 										<p className='user-post'>By: {username}</p>
 										<p className='date-post'>{post.date.slice(0, 10)}</p>
+									</div>
+									<div className='data-container'>
+										<h4>{post.text}</h4>
 										<button className='delete-btn' onClick={() => deletePost(post.id)}>
 											Delete
 										</button>
-									</div>
-									<div className='data-container'>
-										<h3>{post.text}</h3>
 									</div>
 								</div>
 							);
