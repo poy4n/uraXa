@@ -6,6 +6,7 @@ let pool
 if (process.env.PRODUCTION) {
   pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 } else {
+  console.log(process.env.DATABASE);
   pool = new pg.Pool({ database: process.env.DATABASE, user: process.env.USER, password: process.env.PASSWORD });
 }
 
