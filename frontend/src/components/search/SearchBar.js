@@ -1,51 +1,42 @@
-import React, { Component } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { autoSuggest } from './autoSuggest';
+import { UserContext } from '../../UserContext';
 
 import './SearchBar.css';
 
-export default class SearchBar extends Component {
-	state = {
-		searchString: '',
-		currentSearch: []
+export default function SearchBar() {
+	const [ searchString, setSearchString ] = useState('');
+	const { mapSearch, setMapSearch } = useContext(UserContext);
+
+	const handleChange = (e) => {
+		setSearchString(e.target.value);
 	};
 
-	handleChange = (e) => {
-		this.setState({
-			searchString: e.target.value
-		});
-	};
-
-	handleClick = (e) => {
+	const handleClick = (e) => {
 		e.preventDefault();
-		autoSuggest(this.state.searchString).then((res) => {
+		autoSuggest(searchString).then((res) => {
 			console.log(res);
-			this.setState({
-				currentSearch: res
-			});
+			setMapSearch(res);
 		});
 	};
 
-	render() {
-		const { searchString } = this.state;
-
-		return (
-			<div className='search-container'>
-				<form className='search-bar'>
-					<input
-						className='search-input'
-						placeholder='Wehere to?'
-						type='text'
-						name='search'
-						id='search'
-						autoComplete='off'
-						value={searchString}
-						onChange={this.handleChange}
-					/>
-					<button className='search-btn' onClick={this.handleClick}>
-						Search
-					</button>
-				</form>
-			</div>
-		);
-	}
+	return (
+		<div className='search-container'>
+			<form className='search-bar'>
+				<input
+					className='search-input'
+					placeholder='Wehere to?'
+					type='text'
+					name='search'
+					id='search'
+					autoComplete='off'
+					value={searchString}
+					onChange={handleChange}
+				/>
+				<button className='search-btn' onClick={handleClick}>
+					Search
+				</button>
+			</form>
+		</div>
+	);
 }

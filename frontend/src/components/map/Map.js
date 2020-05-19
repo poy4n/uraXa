@@ -1,18 +1,15 @@
 import * as React from 'react';
-import { useContext } from 'react';
-import { UserContext } from '../../UserContext';
-
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import currentPosition from './currentPosition';
 import { isEmpty } from 'lodash';
 
 import './Map.css';
 
-export const Map = ({ markers }) => {
+export const Map = ({ postMarkers, mapSearchCoord }) => {
 	const mapRef = React.useRef(null);
 
-	const { coordinates, setCoordinates } = useContext(UserContext);
-	console.log(coordinates);
+	const [ currentCoordinates, setCurrentCoordinates ] = useState({ lat: -37.8136, lng: 144.9631 });
+	console.log(currentCoordinates);
 
 	useEffect(
 		() => {
@@ -23,13 +20,13 @@ export const Map = ({ markers }) => {
 			});
 
 			currentPosition((currentCoordinates) => {
-				setCoordinates(currentCoordinates);
-				console.log(currentCoordinates, coordinates);
+				setCurrentCoordinates(currentCoordinates);
+				console.log(currentCoordinates);
 			});
 
 			const defaultLayers = platform.createDefaultLayers();
 			const map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
-				center: coordinates,
+				center: currentCoordinates,
 				zoom: 10,
 				pixelRatio: window.devicePixelRatio || 1
 			});
@@ -37,16 +34,32 @@ export const Map = ({ markers }) => {
 			new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 			const ui = H.ui.UI.createDefault(map, defaultLayers);
 
-			// TODO marker
-			markers.forEach((coordinate) => {
+			// post marker
+			postMarkers.forEach((coordinate) => {
 				if (!isEmpty(coordinate)) {
-					let LocationOfMarker = coordinate;
+					let LocationOfPostMarker = coordinate;
 					let icon = new H.map.Icon(
 						'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png'
 					);
-					let marker = new H.map.Marker(LocationOfMarker, { icon: icon });
+					let marker = new H.map.Marker(LocationOfPostMarker, { icon: icon });
 					map.addObject(marker);
 				}
+			});
+
+			// currentlocation marker
+			let locationOfUser = currentCoordinates;
+			let icon = new H.map.Icon('https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Home.png');
+			let marker = new H.map.Marker(locationOfUser, { icon: icon });
+			map.addObject(marker);
+
+			// map search marker
+			mapSearchCoord.forEach((coordinate) => {
+				let LocationOfPostMarker = coordinate;
+				let icon = new H.map.Icon(
+					'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Yellow_ball.png'
+				);
+				let marker = new H.map.Marker(LocationOfPostMarker, { icon: icon });
+				map.addObject(marker);
 			});
 
 			// style
@@ -70,7 +83,7 @@ export const Map = ({ markers }) => {
 					let pointer = evt.currentPointer;
 					let pointerPosition = map.screenToGeo(pointer.viewportX, pointer.viewportY);
 					let icon = new H.map.Icon(
-						'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Red_ball.png'
+						'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/View.png'
 					);
 					let marker = new H.map.Marker(pointerPosition, { icon: icon });
 					marker.setData('helloooo');
@@ -82,7 +95,7 @@ export const Map = ({ markers }) => {
 				map.dispose();
 			};
 		},
-		[ mapRef, markers ]
+		[ mapRef, postMarkers, mapSearchCoord ]
 	);
 	return <div className='map' ref={mapRef} />;
 };
