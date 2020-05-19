@@ -4,8 +4,8 @@ import { Sidebar } from '../sidebar/Sidebar';
 import SearchBar from '../search/SearchBar';
 import Filter from '../filterTags/Filter';
 import { postsMarkers, searchMarkers } from '../map/markerPosition';
+import { handleErrors } from "../../services/errorHandlerService";
 import { UserContext } from '../../UserContext';
-
 import '../map/Map.css';
 
 export default function Hub() {
@@ -24,6 +24,7 @@ export default function Hub() {
 		};
 
 		fetch(url, requestOptions)
+			.then(handleErrors)
 			.then((response) => {
 				const json = response.json();
 				console.log(json);
@@ -34,7 +35,9 @@ export default function Hub() {
 				setTags(data.postsByTag);
 			})
 			.catch((err) => {
-				console.log(err.error);
+				err.text().then( errorMessage => {
+					console.log(errorMessage);
+				});
 			});
 	}, []);
 

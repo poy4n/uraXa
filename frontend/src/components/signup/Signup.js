@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
+import { handleErrors } from '../../services/errorHandlerService';
 import history from '../../history';
 import { UserContext } from '../../UserContext';
 
@@ -37,6 +38,7 @@ export default function Signup() {
 			body: JSON.stringify({ email: email, password: password, username: username })
 		};
 		fetch(url, requestOptions)
+			.then(handleErrors)
 			.then((response) => response.json())
 			.then((data) => {
 				console.log(data);
@@ -47,9 +49,10 @@ export default function Signup() {
 
 				history.push('/map');
 			})
-			.catch((error) => {
-				console.log(error.error);
-				console.log(error.warning);
+			.catch((err) => {
+				err.text().then( errorMessage => {
+					console.log(errorMessage);
+				});
 			});
 		history.push('/map');
 	};

@@ -12,7 +12,7 @@ router.post('/signup', async (req, res) => {
         const isFound = await sessionService.findUser(user.email);
                   
         if(isFound) {
-            res.status(409).send({warning: "User with this email already exist. Please Login."});
+            res.status(409).send({ error: "User with this email already exist. Please Login." });
         } else {
             const userRecord = await sessionService.signup(user);
                         
@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
         const userRecord = await sessionService.login(email, password);
         console.log(userRecord);
 
-        if(!_.isEmpty(userRecord)) {
+        if(!_.isEmpty(userRecord.user)) {
             res.status(200).json(userRecord);
         } else {
             res.status(404).send({ error: "Email/Password are not correct." })
