@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import history from '../../history';
 import { UserContext } from '../../UserContext';
+import { handleErrors } from '../../services/errorHandlerService'
 
 import './Login.css';
 
@@ -38,6 +39,7 @@ export default function Login() {
 		};
 
 		fetch(url, requestOptions)
+			.then(handleErrors)
 			.then((response) => response.json())
 			.then((data) => {
 				setEmail(data.user.email);
@@ -48,9 +50,11 @@ export default function Login() {
 				history.push('/map');
 			})
 			.catch((err) => {
-				console.log(err.error);
-				setLogin(false);
-				setHelperText('incorrect email or password, try again');
+				err.text().then( errorMessage => {
+					console.log(errorMessage);
+					setLogin(false);
+					setHelperText('incorrect email or password, try again');
+				})
 			});
 	};
 

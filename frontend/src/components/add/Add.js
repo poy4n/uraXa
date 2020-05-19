@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
 import history from '../../history';
 import { autoSuggest } from '../search/autoSuggest';
+import { handleErrors } from '../../services/errorHandlerService'
 import Bar from '../bar/Bar';
 
 import '../signup/Signup.css';
@@ -40,6 +41,7 @@ export default function Add() {
 		};
 
 		fetch(url, requestOptions)
+			.then(handleErrors)
 			.then((response) => {
 				const json = response.json();
 				return json;
@@ -49,7 +51,9 @@ export default function Add() {
 				setTypes(data.tags);
 			})
 			.catch((err) => {
-				console.log(err.error);
+				err.text().then( errorMessage => {
+					console.log(errorMessage);
+				});
 			});
 	});
 
@@ -76,6 +80,7 @@ export default function Add() {
 			};
 
 			fetch(url, requestOptions)
+				.then(handleErrors)
 				.then((response) => {
 					const json = response.json();
 					console.log(json);
@@ -87,7 +92,9 @@ export default function Add() {
 					setData([ ...data, newData ]);
 				})
 				.catch((err) => {
-					console.log(err.error);
+					err.text().then( errorMessage => {
+						console.log(errorMessage);
+					});
 				});
 		});
 		history.push('/map');
