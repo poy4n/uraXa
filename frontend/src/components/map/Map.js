@@ -11,6 +11,8 @@ export const Map = ({ postMarkers, mapSearchCoord }) => {
 	const [ currentCoordinates, setCurrentCoordinates ] = useState({ lat: -37.8136, lng: 144.9631 });
 	console.log(currentCoordinates);
 
+	
+
 	useEffect(
 		() => {
 			if (!mapRef.current) return;
@@ -70,10 +72,32 @@ export const Map = ({ postMarkers, mapSearchCoord }) => {
 			);
 			// provider.setStyle(style);
 
+			const setPin = (location, img, txt) => {
+				let icon = new H.map.Icon(
+					'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Red_ball.png'
+				);
+				let marker = new H.map.Marker(location, { icon: icon });
+				const pinContent = (img, txt) => {
+					return(
+						`
+							<div class="pin_card">
+								<img src="${img}" class="pin_image">
+								<p class="pin_text">${txt}</p>
+							</div>
+						`
+					);
+				}
+				marker.setData(pinContent('https://images.unsplash.com/photo-1524293581917-878a6d017c71?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', 'anythin asddfsafd fasdfasdf asdfs ad'));
+				map.addObject(marker); 
+			}
+
 			// tap location
 			map.addEventListener('tap', function(evt) {
 				// bubble
+				ui.removeBubble(ui.getBubbles()[0]);	// Remove current bubble
+				
 				if (evt.target instanceof H.map.Marker) {
+					// currentBubble.close();
 					var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
 						content: evt.target.getData()
 					});
@@ -82,12 +106,15 @@ export const Map = ({ postMarkers, mapSearchCoord }) => {
 					console.log(evt);
 					let pointer = evt.currentPointer;
 					let pointerPosition = map.screenToGeo(pointer.viewportX, pointer.viewportY);
-					let icon = new H.map.Icon(
-						'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/View.png'
-					);
-					let marker = new H.map.Marker(pointerPosition, { icon: icon });
-					marker.setData('helloooo');
-					map.addObject(marker);
+
+					// let icon = new H.map.Icon(
+					// 	'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Red_ball.png'
+					// );
+					// let marker = new H.map.Marker(pointerPosition, { icon: icon });
+					// marker.setData('helloooo');
+					// map.addObject(marker);
+					setPin(pointerPosition)
+
 				}
 			});
 

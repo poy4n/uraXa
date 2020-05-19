@@ -1,7 +1,10 @@
+
 import React, { useContext } from 'react';
+
 import { UserContext } from '../../UserContext';
 
 import './Sidebar.css';
+
 
 const reverse = (event) => {
 	const sidebar = document.querySelector('div.sidebar');
@@ -43,3 +46,4 @@ export const Sidebar = () => {
 		</div>
 	);
 };
+
