@@ -1,0 +1,9 @@
+.bar {
+	height: 5px;
+	background-color: #f66d51;
+	transition: all 100ms linear;
+}
+
+.bar-wrapper span {
+	color: #f66d51;
+}

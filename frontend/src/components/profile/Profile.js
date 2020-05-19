@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
+import { handleErrors } from '../../services/errorHandlerService';
+import history from '../../history';
 
 import './Profile.css';
 
@@ -24,6 +26,7 @@ export default function Profile() {
 			};
 
 			fetch(url, requestOptions)
+				.then(handleErrors)
 				.then((response) => {
 					setLoading(true);
 					const json = response.json();
@@ -36,7 +39,9 @@ export default function Profile() {
 					setLoading(false);
 				})
 				.catch((err) => {
-					console.log(err.error);
+					err.text().then( errorMessage => {
+						console.log(errorMessage);
+					});
 				});
 		},
 		[ login ]
@@ -57,6 +62,7 @@ export default function Profile() {
 		};
 
 		fetch(url, requestOptions)
+			.then(handleErrors)
 			.then((response) => {
 				const json = response.json();
 				console.log(json);
@@ -68,7 +74,9 @@ export default function Profile() {
 				setData([ ...data, newData ]);
 			})
 			.catch((err) => {
-				console.log(err.error);
+				err.text().then( errorMessage => {
+					console.log(errorMessage);
+				});
 			});
 	};
 
@@ -77,6 +85,9 @@ export default function Profile() {
 			<div className='loading-error'>
 				{loading && <h3>. | . | . | .</h3>}
 				{!error && <h3>loading failed</h3>}
+			</div>
+			<div className='add-post'>
+				<button onClick={() => history.push('/add')}>+</button>
 			</div>
 			<div className='hub'>
 				<div className='container-posts'>
@@ -89,12 +100,12 @@ export default function Profile() {
 										<h2 className='title-post'>{post.title}</h2>
 										<p className='user-post'>By: {username}</p>
 										<p className='date-post'>{post.date.slice(0, 10)}</p>
+									</div>
+									<div className='data-container'>
+										<h4>{post.text}</h4>
 										<button className='delete-btn' onClick={() => deletePost(post.id)}>
 											Delete
 										</button>
-									</div>
-									<div className='data-container'>
-										<h3>{post.text}</h3>
 									</div>
 								</div>
 							);

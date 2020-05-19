@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
 import history from '../../history';
 import { autoSuggest } from '../search/autoSuggest';
+import { handleErrors } from '../../services/errorHandlerService'
+import Bar from '../bar/Bar';
 
 import '../signup/Signup.css';
 
@@ -39,6 +41,7 @@ export default function Add() {
 		};
 
 		fetch(url, requestOptions)
+			.then(handleErrors)
 			.then((response) => {
 				const json = response.json();
 				return json;
@@ -48,9 +51,11 @@ export default function Add() {
 				setTypes(data.tags);
 			})
 			.catch((err) => {
-				console.log(err.error);
+				err.text().then( errorMessage => {
+					console.log(errorMessage);
+				});
 			});
-	}, []);
+	});
 
 	const handleAdd = (e) => {
 		e.preventDefault();
@@ -75,6 +80,7 @@ export default function Add() {
 			};
 
 			fetch(url, requestOptions)
+				.then(handleErrors)
 				.then((response) => {
 					const json = response.json();
 					console.log(json);
@@ -86,16 +92,21 @@ export default function Add() {
 					setData([ ...data, newData ]);
 				})
 				.catch((err) => {
-					console.log(err.error);
+					err.text().then( errorMessage => {
+						console.log(errorMessage);
+					});
 				});
 		});
 		history.push('/map');
 	};
 
+	const maxLength = 600;
+	const charsLeft = maxLength - description.length;
+
 	return (
 		<div className='form-container'>
 			<div className='title'>
-				<h1>Add your story</h1>
+				<h2>Add your story</h2>
 			</div>
 			<form className='form-wraper' method='POST' name='signup'>
 				<div className='input-wraper'>
@@ -116,7 +127,7 @@ export default function Add() {
 
 				<div className='input-wraper'>
 					<textarea
-						style={{ height: '200px' }}
+						style={{ height: '150px' }}
 						className='input'
 						placeholder='tell the world your story'
 						type='text'
@@ -124,8 +135,10 @@ export default function Add() {
 						name='description'
 						autoComplete='off'
 						onChange={(e) => setDescription(e.target.value)}
+						maxlength='600'
 						required
 					/>
+					<Bar maxLength={maxLength} charsLeft={charsLeft} />
 					<label className='label' htmlFor='description'>
 						Description
 					</label>

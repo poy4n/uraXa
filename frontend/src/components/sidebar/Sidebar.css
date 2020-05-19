@@ -1,23 +1,41 @@
 .sidebar {
-  margin-top: 65px;
-  width: 10px;
-  position: relative;
-  transition: width 0.5s ease-in-out;
+	margin-top: 60px;
+	width: 1px;
+	position: relative;
+	transition: width 0.5s ease-in-out;
 }
 
 .sidebar--expand {
-  width: 200px;
+	width: 520px;
 }
 
 span.arrow {
-  position: absolute;
-  top: 50%;
-  right: 1px;
-  transition: transform 0.3s linear;
-  cursor: pointer;
-
+	position: absolute;
+	left: 20px;
+	top: -50px;
+	font-size: 35px;
+	transition: transform 0.3s linear;
+	cursor: pointer;
+	color: #f66d51;
 }
 
 .reverse {
-  transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+.sidebar-display-none {
+	display: none;
+}
+
+.sidebar-display-posts {
+	display: flex;
+	justify-content: center;
+	height: 290px;
+	width: 500px;
+	box-shadow: 0px 0px 10px 1px #c9c9c9;
+	margin: auto;
+	margin-left: 10px;
+	margin-right: 10px;
+	border-radius: 20px;
+	border: 1px solid #f66d51;
 }

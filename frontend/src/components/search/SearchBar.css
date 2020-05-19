@@ -17,6 +17,7 @@
 	height: 20px;
 	margin: 15px 15px 0 0;
 	border: 1px solid #a1a1a1;
+	border-radius: 50px;
 }
 
 .search-input:focus,
@@ -32,12 +33,11 @@ input[type=text] {
 .search-btn {
 	border: none;
 	cursor: pointer;
-	border: 1px solid #a1a1a1;
+	border-radius: 50px;
+	color: #f66d51;
+	border: 1px solid #f66d51;
 	background-color: #fefefe;
 	height: 30px;
-	padding-left: 20px;
-	padding-right: 20px;
-	font-weight: bold;
 	font-size: 12px;
 	width: 100px;
 	font-family: 'Josefin Sans', sans-serif;
