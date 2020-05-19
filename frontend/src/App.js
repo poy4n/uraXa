@@ -45,6 +45,7 @@ export default function App() {
 	return (
 		<div>
 			<Router history={history}>
+			<main>
 				<div className='header'>
 					<div className='header-left'>
 						{!login ? <h1>uralla</h1> : null}
@@ -78,27 +79,30 @@ export default function App() {
 					</div>
 				</div>
 				<Switch>
-					<UserContext.Provider value={userContext}>
-						<Route path='/profile'>
-							<Profile />
-						</Route>
-						<Route path='/map'>
-							<Hub />
-						</Route>
-						<Route path='/signup'>
-							<Signup />
-						</Route>
-						<Route path='/login'>
-							<Login />
-						</Route>
-						<Route path='/add'>
-							<Add />
-						</Route>
-						<Route path='/' exact>
-							<Home />
-						</Route>
-					</UserContext.Provider>
+
+						<UserContext.Provider value={userContext}>
+							<Route path='/profile'>
+								<Profile />
+							</Route>
+							<Route path='/map'>
+								<Hub />
+							</Route>
+							<Route path='/signup'>
+								<Signup />
+							</Route>
+							<Route path='/login'>
+								<Login />
+							</Route>
+							<Route path='/add'>
+								<Add />
+							</Route>
+							<Route path='/' exact>
+								<Home />
+							</Route>
+						</UserContext.Provider>
+					
 				</Switch>
+			</main>
 			</Router>
 			<Footer />
 		</div>
