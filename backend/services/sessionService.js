@@ -41,13 +41,12 @@ const createToken = () => {
 
 // services
 const signup = async user => {
-    const hashedPassword = await hashPassword(user.password);
-    
+    const hashedPassword = await hashPassword(user.password);    
     delete user.password;
     
     const token = await createToken();
 
-    const userRecord = await User.createUser(user.email, hashedPassword, user.username, user.description, token);    
+    const userRecord = await User.createUser(user.email, hashedPassword, user.username, user.description, token, user.position);    
     delete userRecord.rows[0].password_digest;
   
     return ({ user: userRecord.rows[0] });  

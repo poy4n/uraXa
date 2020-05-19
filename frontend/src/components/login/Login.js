@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import history from '../../history';
 import { UserContext } from '../../UserContext';
-import { handleErrors } from '../../services/errorHandlerService'
+import { handleErrors, parseErrors } from '../../services/errorHandlerService'
 
 import './Login.css';
 
@@ -10,6 +10,7 @@ export default function Login() {
 	const { setToken } = useContext(UserContext);
 	const { login, setLogin } = useContext(UserContext);
 	const { setUsername } = useContext(UserContext);
+	const { center, setCenter } = useContext(UserContext);
 
 	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
@@ -45,16 +46,17 @@ export default function Login() {
 				setEmail(data.user.email);
 				setToken(data.user.token);
 				setUsername(data.user.username);
+				setCenter({ lat: data.user.position.x, lng: data.user.position.y });
 				setLogin(true);
 
+				console.log(center);
+				
 				history.push('/map');
 			})
 			.catch((err) => {
-				err.text().then( errorMessage => {
-					console.log(errorMessage);
-					setLogin(false);
-					setHelperText('incorrect email or password, try again');
-				})
+				parseErrors(err);
+				setLogin(false);
+				setHelperText('incorrect email or password, try again');
 			});
 	};
 

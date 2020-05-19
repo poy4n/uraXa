@@ -4,7 +4,7 @@ import { Sidebar } from '../sidebar/Sidebar';
 import SearchBar from '../search/SearchBar';
 import Filter from '../filterTags/Filter';
 import { postsMarkers, searchMarkers } from '../map/markerPosition';
-import { handleErrors } from "../../services/errorHandlerService";
+import { handleErrors, parseErrors } from "../../services/errorHandlerService";
 import { UserContext } from '../../UserContext';
 import '../map/Map.css';
 
@@ -14,6 +14,8 @@ export default function Hub() {
 	const [ mapSearchCoord, setMapSearchCoord ] = useState([]);
 
 	const { mapSearch, setMapSearch } = useContext(UserContext);
+	const { center } = useContext(UserContext);
+	console.log(center);
 
 	useEffect(() => {
 		let url = `/api/post/tags/all`;
@@ -35,9 +37,7 @@ export default function Hub() {
 				setTags(data.postsByTag);
 			})
 			.catch((err) => {
-				err.text().then( errorMessage => {
-					console.log(errorMessage);
-				});
+				parseErrors(err);
 			});
 	}, []);
 
@@ -70,7 +70,7 @@ export default function Hub() {
 				<div className='container-map'>
 					{/* <Filter /> */}
 					<SearchBar />
-					<Map postMarkers={postMarkers} mapSearchCoord={mapSearchCoord} />
+					<Map postMarkers={postMarkers} mapSearchCoord={mapSearchCoord} center={center} />
 				</div>
 			</div>
 		</React.Fragment>

@@ -1,18 +1,21 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import currentPosition from './currentPosition';
+import { useState, useEffect} from 'react';
+// import currentPosition from './currentPosition';
 import { isEmpty } from 'lodash';
 
 import './Map.css';
+import { UserContext } from '../../UserContext';
 
-export const Map = ({ postMarkers, mapSearchCoord }) => {
+export const Map = ({ postMarkers, mapSearchCoord, center }) => {
 	const mapRef = React.useRef(null);
+	if(isEmpty(center)){
+		center = { lat: -37.8136, lng: 144.9631 };
+	}
+	console.log(center);
 
-	const [ currentCoordinates, setCurrentCoordinates ] = useState({ lat: -37.8136, lng: 144.9631 });
-	console.log(currentCoordinates);
-
+	// const [ currentCoordinates, setCurrentCoordinates ] = useState();
+	// console.log(currentCoordinates);
 	
-
 	useEffect(
 		() => {
 			if (!mapRef.current) return;
@@ -21,14 +24,9 @@ export const Map = ({ postMarkers, mapSearchCoord }) => {
 				apikey: 'Plzpoyk5PfFE85BLe9FTbYJlSarM9Wb2lMjzki6QQwY'
 			});
 
-			currentPosition((currentCoordinates) => {
-				setCurrentCoordinates(currentCoordinates);
-				console.log(currentCoordinates);
-			});
-
 			const defaultLayers = platform.createDefaultLayers();
 			const map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
-				center: currentCoordinates,
+				center: center,
 				zoom: 10,
 				pixelRatio: window.devicePixelRatio || 1
 			});
@@ -49,7 +47,7 @@ export const Map = ({ postMarkers, mapSearchCoord }) => {
 			});
 
 			// currentlocation marker
-			let locationOfUser = currentCoordinates;
+			let locationOfUser = center;
 			let icon = new H.map.Icon('https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Home.png');
 			let marker = new H.map.Marker(locationOfUser, { icon: icon });
 			map.addObject(marker);
@@ -122,7 +120,7 @@ export const Map = ({ postMarkers, mapSearchCoord }) => {
 				map.dispose();
 			};
 		},
-		[ mapRef, postMarkers, mapSearchCoord ]
+		[ mapRef, postMarkers, mapSearchCoord, center ]
 	);
 	return <div className='map' ref={mapRef} />;
 };

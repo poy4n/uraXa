@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
-import { handleErrors } from '../../services/errorHandlerService';
+import { handleErrors, parseErrors } from '../../services/errorHandlerService';
 import history from '../../history';
 
 import './Profile.css';
@@ -39,9 +39,7 @@ export default function Profile() {
 					setLoading(false);
 				})
 				.catch((err) => {
-					err.text().then( errorMessage => {
-						console.log(errorMessage);
-					});
+					parseErrors(err);
 				});
 		},
 		[ login ]
@@ -74,9 +72,7 @@ export default function Profile() {
 				setData([ ...data, newData ]);
 			})
 			.catch((err) => {
-				err.text().then( errorMessage => {
-					console.log(errorMessage);
-				});
+				parseErrors(err);
 			});
 	};
 

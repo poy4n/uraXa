@@ -22,6 +22,7 @@ export default function App() {
 	const [ login, setLogin ] = useState(false);
 	const [ types, setTypes ] = useState([]);
 	const [ mapSearch, setMapSearch ] = useState([]);
+	const [ center, setCenter ] = useState({});
 
 	const [ data, setData ] = useState([]);
 
@@ -34,6 +35,8 @@ export default function App() {
 		setUsername,
 		login,
 		setLogin,
+		center,
+		setCenter,
 		data,
 		setData,
 		types,

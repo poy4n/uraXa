@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
-import { handleErrors } from '../../services/errorHandlerService';
+import { handleErrors, parseErrors } from '../../services/errorHandlerService';
+import { autoSuggest } from '../search/autoSuggest';
 import history from '../../history';
 import { UserContext } from '../../UserContext';
 
@@ -11,48 +12,77 @@ export default function Signup() {
 	const { setToken } = useContext(UserContext);
 	const { username, setUsername } = useContext(UserContext);
 	const { setLogin } = useContext(UserContext);
-
+	const { center, setCenter } = useContext(UserContext);
+	
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 	const [ password, setPassword ] = useState('');
+	const [ location, setLocation ] = useState('');
+	const [ position, setPosition ] = useState('');
 
-	useEffect(
+	useEffect( 
 		() => {
-			if (username.trim() && email.trim() && password.trim()) {
-				setIsButtonDisabled(false);
-			} else {
-				setIsButtonDisabled(true);
-			}
-		},
-		[ username, email, password ]
-	);
-	console.log(username, email, password);
+			autoSuggest(location)
+				.then(handleErrors)
+				.then((res) => {
+					console.log(res);
+					let position = { lat: -37.8136, lng: 144.9631 };
 
-	const handleJoin = (e) => {
-		e.preventDefault();
-
-		let url = '/api/signup';
-
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ email: email, password: password, username: username })
-		};
-		fetch(url, requestOptions)
-			.then(handleErrors)
-			.then((response) => response.json())
-			.then((data) => {
-				console.log(data);
-				setEmail(data.user.email);
-				setToken(data.user.token);
-				setUsername(data.user.username);
-				setLogin(true);
-
-				history.push('/map');
+					if(res !== undefined && res.length > 0) {
+						position = `(${res[0].position.lat}, ${res[0].position.lng})`;
+					}
+					
+					setPosition(position);					
 			})
-			.catch((err) => {
-				err.text().then( errorMessage => {
-					console.log(errorMessage);
-				});
+			.catch(err => {
+				parseErrors(err);	
+			})
+		}, 
+		[ location ] 
+	);
+		
+		useEffect(
+			() => {
+				if (username.trim() && email.trim() && password.trim() && position.trim()) {
+					setIsButtonDisabled(false);
+				} else {
+					setIsButtonDisabled(true);
+				}
+			},
+			[ username, email, password, position ]
+			);
+			console.log(username, email, password);
+			
+			const handleJoin = (e) => {
+				e.preventDefault();
+				
+				let url = '/api/signup';
+				
+				const requestOptions = {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email: email, password: password, username: username, position: position })
+				};
+				fetch(url, requestOptions)
+				.then(handleErrors)
+				.then((response) => response.json())
+				.then((data) => {
+					console.log(data);
+					console.log({ lat: data.user.position.x, lng: data.user.position.y });
+					
+					setEmail(data.user.email);
+					setToken(data.user.token);
+					setUsername(data.user.username);
+					setCenter({ lat: data.user.position.x, lng: data.user.position.y });
+					setLogin(true);
+
+					console.log(center);
+					
+					
+					history.push('/map');
+				})
+				.catch((err) => {
+					parseErrors(err);					
+					setLogin(false);
 			});
 		history.push('/map');
 	};
@@ -82,6 +112,22 @@ export default function Signup() {
 				<div className='input-wraper'>
 					<input
 						className='input'
+						placeholder='name of a city, place or address'
+						type='text'
+						id='location'
+						name='location'
+						autoComplete='off'
+						onChange={(e) => setLocation(e.target.value)}
+						required
+					/>
+					<label className='label' htmlFor='location'>
+						Location
+					</label>
+				</div>
+				
+				<div className='input-wraper'>
+					<input
+						className='input'
 						type='email'
 						id='email'
 						name='email'
@@ -107,6 +153,7 @@ export default function Signup() {
 						Password
 					</label>
 				</div>
+				
 				<button className='btn' type='submit' disabled={isButtonDisabled}>
 					Join
 				</button>

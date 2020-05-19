@@ -22,8 +22,8 @@ function findByToken(token) {
 
 // insert / create user to table
 
-function createUser(email, pass_digest, username, description, token) {
-    return db.query("INSERT INTO users (email, password_digest, username, description, token) VALUES ($1, $2, $3, $4, $5) RETURNING *;", [email, pass_digest, username, description, token]);
+function createUser(email, pass_digest, username, description, token, position) {
+    return db.query("INSERT INTO users (email, password_digest, username, description, token, position) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;", [email, pass_digest, username, description, token, position]);
 }
 
 // update user's avatar and description

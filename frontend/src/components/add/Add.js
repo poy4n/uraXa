@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
 import history from '../../history';
 import { autoSuggest } from '../search/autoSuggest';
-import { handleErrors } from '../../services/errorHandlerService'
+import { handleErrors, parseErrors } from '../../services/errorHandlerService'
 import Bar from '../bar/Bar';
 
 import '../signup/Signup.css';
@@ -51,9 +51,7 @@ export default function Add() {
 				setTypes(data.tags);
 			})
 			.catch((err) => {
-				err.text().then( errorMessage => {
-					console.log(errorMessage);
-				});
+				parseErrors(err);
 			});
 	});
 
@@ -92,9 +90,7 @@ export default function Add() {
 					setData([ ...data, newData ]);
 				})
 				.catch((err) => {
-					err.text().then( errorMessage => {
-						console.log(errorMessage);
-					});
+					parseErrors(err);
 				});
 		});
 		history.push('/map');
