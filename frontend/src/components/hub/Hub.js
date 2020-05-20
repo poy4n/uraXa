@@ -43,7 +43,12 @@ export default function Hub() {
 
 	useEffect(
 		() => {
-			let marks = postsMarkers(tags);
+			console.log('this is marks');
+			let tempost = postsMarkers(tags);
+			let marks = [];
+			tempost.forEach((post) => {
+				marks.push({lat: post.location.x, lng: post.location.y});
+			})
 			console.log(marks);
 			if (marks.length > 0) {
 				setPostMarkers(marks);
@@ -57,7 +62,7 @@ export default function Hub() {
 			let marks = searchMarkers(mapSearch);
 			console.log(mapSearch);
 			if (marks.length > 0) {
-				setMapSearchCoord(marks);
+				setMapSearchCoord(marks);	// marks is a tag object contains
 			}
 		},
 		[ mapSearch ]
