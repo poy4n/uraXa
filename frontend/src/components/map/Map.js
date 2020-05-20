@@ -146,3 +146,5 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 	);
 	return <div className='map' ref={mapRef} />;
 };
+
+test
