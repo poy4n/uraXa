@@ -12,6 +12,7 @@ export default function Hub() {
 	const [ tags, setTags ] = useState([]);
 	const [ postMarkers, setPostMarkers ] = useState([]);
 	const [ mapSearchCoord, setMapSearchCoord ] = useState([]);
+	const [ clickedMarker, setClickedMarker] = userState(null);	//在这改
 
 	const { mapSearch, setMapSearch } = useContext(UserContext);
 	const { center } = useContext(UserContext);
@@ -44,11 +45,12 @@ export default function Hub() {
 	useEffect(
 		() => {
 			console.log('this is marks');
-			let tempost = postsMarkers(tags);
-			let marks = [];
-			tempost.forEach((post) => {
-				marks.push({lat: post.location.x, lng: post.location.y});
-			})
+			// let tempost = postsMarkers(tags);
+			// let marks = [];
+			// tempost.forEach((post) => {
+			// 	marks.push({lat: post.location.x, lng: post.location.y});
+			// })
+			let marks = postsMarkers(tags);
 			console.log(marks);
 			if (marks.length > 0) {
 				setPostMarkers(marks);

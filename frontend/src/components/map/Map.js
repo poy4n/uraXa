@@ -35,15 +35,26 @@ export const Map = ({ postMarkers, mapSearchCoord, center }) => {
 			const ui = H.ui.UI.createDefault(map, defaultLayers);
 
 			// post marker
-			postMarkers.forEach((coordinate) => {
-				if (!isEmpty(coordinate)) {
-					let LocationOfPostMarker = coordinate;
-					let icon = new H.map.Icon(
-						'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png'
-					);
-					let marker = new H.map.Marker(LocationOfPostMarker, { icon: icon });
-					map.addObject(marker);
-				}
+			postMarkers.forEach((post) => {
+				const postIcon = 'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png';
+				const postImage = post.image;
+				const postTitle = post.title;
+				const postLocation = { lat: post.location.x, lng: post.location.y };
+
+				let icon = new H.map.Icon(postIcon);	
+				let marker = new H.map.Marker(postLocation, { icon: icon });
+				marker.setData(
+					`
+						<div class="pin_card">
+							<img src="${postImage}" class="pin_image">
+							<p class="pin_text">${postTitle}</p>
+						</div>
+					`
+				)
+				marker.addEventListener('tap', () => {
+					//在这改
+				})
+				map.addObject(marker);	
 			});
 
 			// currentlocation marker
@@ -105,12 +116,6 @@ export const Map = ({ postMarkers, mapSearchCoord, center }) => {
 					let pointer = evt.currentPointer;
 					let pointerPosition = map.screenToGeo(pointer.viewportX, pointer.viewportY);
 
-					// let icon = new H.map.Icon(
-					// 	'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Red_ball.png'
-					// );
-					// let marker = new H.map.Marker(pointerPosition, { icon: icon });
-					// marker.setData('helloooo');
-					// map.addObject(marker);
 					setPin(pointerPosition)
 
 				}
