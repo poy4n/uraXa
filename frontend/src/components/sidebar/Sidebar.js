@@ -5,7 +5,6 @@ import { UserContext } from '../../UserContext';
 
 import './Sidebar.css';
 
-
 const reverse = (event) => {
 	const sidebar = document.querySelector('div.sidebar');
 	const posts = document.querySelector('.sidebar-display-none');
@@ -17,6 +16,10 @@ const reverse = (event) => {
 		posts.classList.toggle('sidebar-display-posts');
 	}
 };
+
+export const displayAddForm = () => {
+	console.log('click')
+}
 
 export const Sidebar = () => {
 	const { data } = useContext(UserContext);

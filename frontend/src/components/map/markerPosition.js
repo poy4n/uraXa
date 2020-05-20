@@ -1,20 +1,4 @@
-// export const postsMarkers = (tags) => {
-// 	console.log('this is tags')
-// 	console.log(tags)
-// 	return tags.map((tag) => {
-// 		let coordinates = {};
-// 		if (tag.posts.length > 0) {
-// 			tag.posts.forEach((item) => {
-// 				coordinates = { lat: item.location.x, lng: item.location.y };
-// 			});
-// 		}
-// 		return coordinates;
-// 	});
-// };
-
 export const postsMarkers = (tags) => {
-	console.log('this is tags');
-	console.log(tags);
 	const posts = [];
 	tags.forEach((tag) => {
 		if (tag.posts.length > 0) {
@@ -28,9 +12,9 @@ export const postsMarkers = (tags) => {
 };
 
 export const searchMarkers = (mapSearch) => {
-	let coordinates = [];
+	let searchPlaces = [];
 	mapSearch.map((search) => {
-		coordinates.push(search.position);
+		searchPlaces.push({ coordinates: search.position, title: search.address.label });
 	});
-	return coordinates;
+	return searchPlaces;
 };
