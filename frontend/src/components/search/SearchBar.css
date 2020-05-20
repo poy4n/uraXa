@@ -8,6 +8,7 @@
 }
 
 .search-bar {
+	display: grid;
 	width: 100%;
 	height: 60px;
 }
@@ -38,7 +39,7 @@ input[type=text] {
 	border: 1px solid #f66d51;
 	background-color: #fefefe;
 	height: 30px;
-	font-size: 12px;
+	font-size: 14px;
 	width: 100px;
 	font-family: 'Josefin Sans', sans-serif;
 }
