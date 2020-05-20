@@ -16,10 +16,11 @@ export default function Add() {
 	const [ category, setCategory ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 
-	const { data, setData } = useContext(UserContext);
+	const { posts, setPosts } = useContext(UserContext);
 	const { email } = useContext(UserContext);
 	const { token } = useContext(UserContext);
 	const { types, setTypes } = useContext(UserContext);
+	const { userCentre, setUserCentre } = useContext(UserContext);
 
 	useEffect(
 		() => {
@@ -53,7 +54,7 @@ export default function Add() {
 			.catch((err) => {
 				parseErrors(err);
 			});
-	});
+	}, []);
 
 	const handleAdd = (e) => {
 		e.preventDefault();
@@ -69,7 +70,7 @@ export default function Add() {
 		dataForm.append('image', image);
 		dataForm.append('tag', category);
 
-		autoSuggest(location).then((res) => {
+		autoSuggest(location, userCentre).then((res) => {
 			dataForm.append('location', `(${res[0].position.lat}, ${res[0].position.lng})`);
 
 			const requestOptions = {
@@ -84,10 +85,10 @@ export default function Add() {
 					console.log(json);
 					return json;
 				})
-				.then((userData) => {
-					console.log(userData.posts[0]);
-					let newData = userData.posts[0];
-					setData([ ...data, newData ]);
+				.then((userPosts) => {
+					console.log(userPosts.posts[0]);
+					let newPost = userPosts.posts[0];
+					setPosts([ ...posts, newPost ]);
 				})
 				.catch((err) => {
 					parseErrors(err);
@@ -123,7 +124,7 @@ export default function Add() {
 
 				<div className='input-wraper'>
 					<textarea
-						style={{ height: '150px' }}
+						style={{ height: '250px' }}
 						className='input'
 						placeholder='tell the world your story'
 						type='text'

@@ -13,9 +13,10 @@ export default function Hub() {
 	const [ postMarkers, setPostMarkers ] = useState([]);
 	const [ mapSearchCoord, setMapSearchCoord ] = useState([]);
 
-	const { mapSearch, setMapSearch } = useContext(UserContext);
-	const { center } = useContext(UserContext);
-	console.log(center);
+	const { citySearch } = useContext(UserContext);
+	const { mapPlaces } = useContext(UserContext);
+	const { cityCentre } = useContext(UserContext);
+	const { userCentre } = useContext(UserContext);
 
 	useEffect(() => {
 		let url = `/api/post/tags/all`;
@@ -29,11 +30,9 @@ export default function Hub() {
 			.then(handleErrors)
 			.then((response) => {
 				const json = response.json();
-				console.log(json);
 				return json;
 			})
 			.then((data) => {
-				console.log(data.postsByTag);
 				setTags(data.postsByTag);
 			})
 			.catch((err) => {
@@ -43,6 +42,7 @@ export default function Hub() {
 
 	useEffect(
 		() => {
+
 			console.log('this is marks');
 			let tempost = postsMarkers(tags);
 			let marks = [];
@@ -50,6 +50,7 @@ export default function Hub() {
 				marks.push({lat: post.location.x, lng: post.location.y});
 			})
 			console.log(marks);
+
 			if (marks.length > 0) {
 				setPostMarkers(marks);
 			}
@@ -59,13 +60,12 @@ export default function Hub() {
 
 	useEffect(
 		() => {
-			let marks = searchMarkers(mapSearch);
-			console.log(mapSearch);
+			let marks = searchMarkers(mapPlaces);
 			if (marks.length > 0) {
 				setMapSearchCoord(marks);	// marks is a tag object contains
 			}
 		},
-		[ mapSearch ]
+		[ mapPlaces ]
 	);
 
 	return (
@@ -75,7 +75,7 @@ export default function Hub() {
 				<div className='container-map'>
 					{/* <Filter /> */}
 					<SearchBar />
-					<Map postMarkers={postMarkers} mapSearchCoord={mapSearchCoord} center={center} />
+					<Map postMarkers={postMarkers} mapSearchCoord={mapSearchCoord} userCentre={userCentre} cityCentre={cityCentre} citySearch={citySearch} />
 				</div>
 			</div>
 		</React.Fragment>

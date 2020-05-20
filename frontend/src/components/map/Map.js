@@ -1,21 +1,30 @@
 import * as React from 'react';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 // import currentPosition from './currentPosition';
 import { isEmpty } from 'lodash';
-
+import lodash from 'lodash';
 import './Map.css';
 import { UserContext } from '../../UserContext';
 
-export const Map = ({ postMarkers, mapSearchCoord, center }) => {
+export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch }) => {
 	const mapRef = React.useRef(null);
-	if(isEmpty(center)){
-		center = { lat: -37.8136, lng: 144.9631 };
-	}
-	console.log(center);
+	const { login } = useContext(UserContext);
+	const { posts } = useContext(UserContext);
 
-	// const [ currentCoordinates, setCurrentCoordinates ] = useState();
-	// console.log(currentCoordinates);
-	
+	/*
+
+	if not logged in
+	centre of the map is hard coded melb
+	user can search around melb
+	user can change city centre and the map jumps to the new city
+
+	if logged in
+	centre of the map is user's input location
+	user can search around its location
+	user can change city centre and the map jumps to the new city
+
+	*/
+
 	useEffect(
 		() => {
 			if (!mapRef.current) return;
@@ -24,12 +33,25 @@ export const Map = ({ postMarkers, mapSearchCoord, center }) => {
 				apikey: 'Plzpoyk5PfFE85BLe9FTbYJlSarM9Wb2lMjzki6QQwY'
 			});
 
-			const defaultLayers = platform.createDefaultLayers();
-			const map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
-				center: center,
-				zoom: 10,
-				pixelRatio: window.devicePixelRatio || 1
-			});
+			let map;
+			let defaultLayers;
+			const mapFocus = (centre) => {
+				defaultLayers = platform.createDefaultLayers();
+				map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
+					center: centre,
+					zoom: 12,
+					pixelRatio: window.devicePixelRatio || 1
+				});
+			}
+
+			if(login) {
+				mapFocus(userCentre);
+			} else {
+				mapFocus(cityCentre);
+			}
+
+			if(citySearch.length > 0)
+			mapFocus(citySearch[0]);
 
 			new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 			const ui = H.ui.UI.createDefault(map, defaultLayers);
@@ -46,11 +68,21 @@ export const Map = ({ postMarkers, mapSearchCoord, center }) => {
 				}
 			});
 
-			// currentlocation marker
-			let locationOfUser = center;
-			let icon = new H.map.Icon('https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Home.png');
-			let marker = new H.map.Marker(locationOfUser, { icon: icon });
-			map.addObject(marker);
+			// centre marker
+			const centreMarker = (centre, url) => {
+				let locationOfUser = centre;
+				let icon = new H.map.Icon(url);
+				let marker = new H.map.Marker(locationOfUser, { icon: icon });
+				map.addObject(marker);
+			}
+
+			let homeIcon = 'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Home.png';
+			let locationIcon = 'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Cube.png'
+			if(login) {
+				centreMarker(userCentre, lodash.isEqual(userCentre, cityCentre) ? locationIcon : homeIcon);
+			} else {
+				centreMarker(cityCentre, locationIcon);
+			}
 
 			// map search marker
 			mapSearchCoord.forEach((coordinate) => {
@@ -63,24 +95,22 @@ export const Map = ({ postMarkers, mapSearchCoord, center }) => {
 			});
 
 			// style
-			const provider = map.getBaseLayer().getProvider();
-			const style = new H.map.Style(
-				'https://heremaps.github.io/maps-api-for-javascript-examples/change-style-at-load/data/dark.yaml',
-				'https://js.api.here.com/v3/3.1/styles/omv/'
-			);
-			// provider.setStyle(style);
+			// const provider = map.getBaseLayer().getProvider();
+			// const style = new H.map.Style('styles/style.yaml', 'https://js.api.here.com/v3/3.1/styles/omv/');
+			// // provider.setStyle(style);
 
-			const setPin = (location, img, txt) => {
+			// for user posts
+			const setPin = (location, image, title) => {
 				let icon = new H.map.Icon(
 					'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Red_ball.png'
 				);
 				let marker = new H.map.Marker(location, { icon: icon });
-				const pinContent = (img, txt) => {
+				const pinContent = (image, title) => {
 					return(
 						`
 							<div class="pin_card">
-								<img src="${img}" class="pin_image">
-								<p class="pin_text">${txt}</p>
+								<img src="${image}" class="pin_image">
+								<p class="pin_text">${title}</p>
 							</div>
 						`
 					);
@@ -95,7 +125,6 @@ export const Map = ({ postMarkers, mapSearchCoord, center }) => {
 				ui.removeBubble(ui.getBubbles()[0]);	// Remove current bubble
 				
 				if (evt.target instanceof H.map.Marker) {
-					// currentBubble.close();
 					var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
 						content: evt.target.getData()
 					});
@@ -104,15 +133,8 @@ export const Map = ({ postMarkers, mapSearchCoord, center }) => {
 					console.log(evt);
 					let pointer = evt.currentPointer;
 					let pointerPosition = map.screenToGeo(pointer.viewportX, pointer.viewportY);
-
-					// let icon = new H.map.Icon(
-					// 	'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Red_ball.png'
-					// );
-					// let marker = new H.map.Marker(pointerPosition, { icon: icon });
-					// marker.setData('helloooo');
-					// map.addObject(marker);
+					console.log(pointerPosition)
 					setPin(pointerPosition)
-
 				}
 			});
 
@@ -120,7 +142,7 @@ export const Map = ({ postMarkers, mapSearchCoord, center }) => {
 				map.dispose();
 			};
 		},
-		[ mapRef, postMarkers, mapSearchCoord, center ]
+		[ mapRef, postMarkers, mapSearchCoord, cityCentre, userCentre, posts ]
 	);
 	return <div className='map' ref={mapRef} />;
 };
