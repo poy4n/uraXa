@@ -47,6 +47,7 @@ export default function SearchBar() {
 	const handleSearchPlaces = (e) => {
 		e.preventDefault();
 		autoSuggest(searchPlaces, userCentre).then((res) => {
+			console.log(res)
 			setMapPlaces(res);
 		});
 	};
@@ -65,7 +66,7 @@ export default function SearchBar() {
 				<div>
 					<input
 						className='search-input'
-						placeholder='search for a place e.g. park, caffe, address'
+						placeholder='search for a place e.g. park, cafe, address'
 						type='text'
 						name='search'
 						id='search'

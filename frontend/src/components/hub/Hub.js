@@ -42,15 +42,11 @@ export default function Hub() {
 
 	useEffect(
 		() => {
-
-			console.log('this is marks');
 			let tempost = postsMarkers(tags);
 			let marks = [];
 			tempost.forEach((post) => {
 				marks.push({lat: post.location.x, lng: post.location.y});
 			})
-			console.log(marks);
-
 			if (marks.length > 0) {
 				setPostMarkers(marks);
 			}
