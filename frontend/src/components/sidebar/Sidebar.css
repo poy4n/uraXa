@@ -32,10 +32,9 @@ span.arrow {
 	justify-content: center;
 	height: 290px;
 	width: 500px;
-	box-shadow: 0px 0px 10px 1px #c9c9c9;
 	margin: auto;
 	margin-left: 10px;
 	margin-right: 10px;
-	border-radius: 20px;
-	border: 1px solid #f66d51;
+	border-top: 1px solid #f66d51;
+	border-bottom: 1px solid #f66d51;
 }
