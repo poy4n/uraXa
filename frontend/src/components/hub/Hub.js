@@ -12,6 +12,8 @@ export default function Hub() {
 	const [ tags, setTags ] = useState([]);
 	const [ postMarkers, setPostMarkers ] = useState([]);
 	const [ mapSearchCoord, setMapSearchCoord ] = useState([]);
+	const [ postInMarker, setPostInMarker] = useState(null);
+	const [ sidebarShow, setSidebarShow] = useState(false);
 
 	const { citySearch } = useContext(UserContext);
 	const { mapPlaces } = useContext(UserContext);
@@ -44,11 +46,12 @@ export default function Hub() {
 		() => {
 
 			console.log('this is marks');
-			let tempost = postsMarkers(tags);
-			let marks = [];
-			tempost.forEach((post) => {
-				marks.push({lat: post.location.x, lng: post.location.y});
-			})
+			// let tempost = postsMarkers(tags);
+			// let marks = [];
+			// tempost.forEach((post) => {
+			// 	marks.push({lat: post.location.x, lng: post.location.y});
+			// })
+			let marks = postsMarkers(tags);
 			console.log(marks);
 
 			if (marks.length > 0) {
@@ -71,11 +74,23 @@ export default function Hub() {
 	return (
 		<React.Fragment>
 			<div className='hub'>
-				<Sidebar />
+				<Sidebar 
+					postInMarker={postInMarker} 
+					setSidebarShow={setSidebarShow}
+					sidebarShow={sidebarShow}
+				/>
 				<div className='container-map'>
 					{/* <Filter /> */}
 					<SearchBar />
-					<Map postMarkers={postMarkers} mapSearchCoord={mapSearchCoord} userCentre={userCentre} cityCentre={cityCentre} citySearch={citySearch} />
+					<Map 
+						postMarkers={postMarkers} 
+						mapSearchCoord={mapSearchCoord} 
+						userCentre={userCentre} 
+						cityCentre={cityCentre} 
+						citySearch={citySearch} 
+						setPostInMarker={setPostInMarker}
+						setSidebarShow={setSidebarShow}
+					/>
 				</div>
 			</div>
 		</React.Fragment>

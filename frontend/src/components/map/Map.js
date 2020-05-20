@@ -6,7 +6,7 @@ import lodash from 'lodash';
 import './Map.css';
 import { UserContext } from '../../UserContext';
 
-export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch }) => {
+export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch, setPostInMarker, setSidebarShow }) => {
 	const mapRef = React.useRef(null);
 	const { login } = useContext(UserContext);
 	const { posts } = useContext(UserContext);
@@ -57,15 +57,27 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 			const ui = H.ui.UI.createDefault(map, defaultLayers);
 
 			// post marker
-			postMarkers.forEach((coordinate) => {
-				if (!isEmpty(coordinate)) {
-					let LocationOfPostMarker = coordinate;
-					let icon = new H.map.Icon(
-						'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png'
-					);
-					let marker = new H.map.Marker(LocationOfPostMarker, { icon: icon });
-					map.addObject(marker);
-				}
+			postMarkers.forEach((post) => {
+				const postIcon = 'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png';
+				const postImage = post.image;
+				const postTitle = post.title;
+				const postLocation = { lat: post.location.x, lng: post.location.y };
+
+				let icon = new H.map.Icon(postIcon);	
+				let marker = new H.map.Marker(postLocation, { icon: icon });
+				marker.setData(
+					`
+						<div class="pin_card">
+							<img src="${postImage}" class="pin_image">
+							<p class="pin_text">${postTitle}</p>
+						</div>
+					`
+				)
+				marker.addEventListener('tap', () => {
+					setPostInMarker(post);
+					setSidebarShow(true);
+				})
+				map.addObject(marker);	
 			});
 
 			// centre marker
@@ -146,5 +158,3 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 	);
 	return <div className='map' ref={mapRef} />;
 };
-
-test

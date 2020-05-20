@@ -1,30 +1,55 @@
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { UserContext } from '../../UserContext';
 
 import './Sidebar.css';
 
+let sidebarCurrentIsShown = false;		// Sidebar is initially hidden
 
-const reverse = (event) => {
+const reverse = () => {
 	const sidebar = document.querySelector('div.sidebar');
 	const posts = document.querySelector('.sidebar-display-none');
+	const arrowIcon = document.querySelector('span.arrow');
 
 	sidebar.classList.toggle('sidebar--expand');
-	event.target.classList.toggle('reverse');
+	arrowIcon.classList.toggle('reverse');
 
 	if (posts !== null) {
 		posts.classList.toggle('sidebar-display-posts');
 	}
+
 };
 
-export const Sidebar = () => {
+export const Sidebar = (props) => {
 	const { data } = useContext(UserContext);
 	const { username } = useContext(UserContext);
 
+	const [ sidebarCurrentIsShown, setSidebarCurrentIsShown ] = useState(false);
+
+	useEffect(() => {
+		// sidebarShow should have a proper name, maybe markClicked 
+		if (props.sidebarShow && !sidebarCurrentIsShown) {		// Sidebar slides in when it is hidden
+			reverse();
+			setSidebarCurrentIsShown(true);
+		}
+	})
+
+	const handleClick = (e) => {
+		if (sidebarCurrentIsShown) {
+			reverse();
+			props.setSidebarShow(false);
+			setSidebarCurrentIsShown(false);
+		} else {
+			reverse();
+			props.setSidebarShow(true);
+			setSidebarCurrentIsShown(true);
+		}
+	}
+
 	return (
 		<div className='sidebar'>
-			<span className='arrow' onClick={reverse}>
+			<span className='arrow' onClick={handleClick}>
 				>
 			</span>
 			{data &&
