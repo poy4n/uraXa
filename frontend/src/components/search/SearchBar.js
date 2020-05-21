@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { autoSuggest } from './autoSuggest';
 import { UserContext } from '../../UserContext';
+import { handleErrors, parseErrors } from '../../services/errorHandlerService';
 
 import './SearchBar.css';
 
@@ -13,6 +14,31 @@ export default function SearchBar() {
 	const [ searchPlaces, setSearchPlaces ] = useState('');
 	const [ placesButtonDisabled, setPlacesButtonDisabled ] = useState(true);
 	const [ cityButtonDisabled, setCityButtonDisabled ] = useState(true);
+
+	const [ location, setLocation ] = useState('');
+	const [ position, setPosition ] = useState('');
+	const [ relativeLocations, setRelativeLocations ] = useState(null);
+
+	useEffect(
+		() => {
+			autoSuggest(location, userCentre)
+				.then(handleErrors)
+				.then((res) => {
+					console.log(res);
+					let position = { lat: -37.8136, lng: 144.9631 };
+
+					if (res !== undefined && res.length > 0) {
+						position = `(${res[0].position.lat}, ${res[0].position.lng})`;
+					}
+
+					setPosition(position);
+				})
+				.catch((err) => {
+					parseErrors(err);
+				});
+		},
+		[ location ]
+	);
 
 	useEffect(
 		() => {
@@ -42,6 +68,7 @@ export default function SearchBar() {
 
 	const handleCity = (e) => {
 		setCitySearch(e.target.value);
+		setLocation(e.target.value);
 	};
 
 	const handleSearchPlaces = (e) => {
