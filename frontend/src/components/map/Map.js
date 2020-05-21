@@ -79,6 +79,11 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 					setPostInMarker(post);
 					setMarkIsClicked(true);	// inherit from Hub.js, check if icon is clicked
 				})
+
+				marker.addEventListener('pointerenter', () => {
+					alert('cool')
+				})
+
 				map.addObject(marker);	
 			});
 

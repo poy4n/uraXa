@@ -8,16 +8,12 @@ import './Sidebar.css';
 
 const reverse = () => {
 	const sidebar = document.querySelector('div.sidebar');
-	const posts = document.querySelector('.sidebar-display-none');
+	// const posts = document.querySelector('.sidebar-display-none');
 	const arrowIcon = document.querySelector('span.arrow');
 
 	sidebar.classList.toggle('sidebar--expand');
 	arrowIcon.classList.toggle('reverse');
-
-	if (posts !== null) {
-		posts.classList.toggle('sidebar-display-posts');
-	}
-
+	// posts.classList.toggle('sidebar-display');
 };
 
 export const Sidebar = (props) => {
@@ -62,15 +58,18 @@ export const Sidebar = (props) => {
 					);
 				})} */}
 				{props.postInMarker ?
-					<div className='sidebar-display-none'>
-						<div className='img-container'>
-							<img src={props.postInMarker.image} className='img-post' />
+					<div className='sidebar-post'>
+						<div className='sidebar-data-container'>
+							<img src={props.postInMarker.image} className='sidebar-post-image' />
 							<h2 className='title-post'>{props.postInMarker.title}</h2>
-							<p className='user-post'>By: {username}</p>
-							<p className='date-post'>{props.postInMarker.date.slice(0, 10)}</p>
-						</div>
-						<div className='data-container'>
+							
+
 							<h4>{props.postInMarker.text}</h4>
+						</div>
+
+						<div className="sidebar-footer">
+							<p className='date-post'>{props.postInMarker.date.slice(0, 10)}</p>
+							<p className='date-post'>By: {username}</p>
 						</div>
 					</div>
 					: <p>Please choose an icon to check post</p>
