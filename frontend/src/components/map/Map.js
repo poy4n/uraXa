@@ -6,7 +6,7 @@ import lodash from 'lodash';
 import './Map.css';
 import { UserContext } from '../../UserContext';
 
-export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch, setPostInMarker, setSidebarShow }) => {
+export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch, setPostInMarker, setMarkIsClicked, setLastClickedPost }) => {
 	const mapRef = React.useRef(null);
 	const { login } = useContext(UserContext);
 	const { posts } = useContext(UserContext);
@@ -73,9 +73,11 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 						</div>
 					`
 				)
+
+				// Add onclick event listener to triangular icon
 				marker.addEventListener('tap', () => {
 					setPostInMarker(post);
-					setSidebarShow(true);
+					setMarkIsClicked(true);	// inherit from Hub.js, check if icon is clicked
 				})
 				map.addObject(marker);	
 			});

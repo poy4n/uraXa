@@ -5,7 +5,6 @@ import { UserContext } from '../../UserContext';
 
 import './Sidebar.css';
 
-let sidebarCurrentIsShown = false;		// Sidebar is initially hidden
 
 const reverse = () => {
 	const sidebar = document.querySelector('div.sidebar');
@@ -28,23 +27,17 @@ export const Sidebar = (props) => {
 	const [ sidebarCurrentIsShown, setSidebarCurrentIsShown ] = useState(false);
 
 	useEffect(() => {
-		// sidebarShow should have a proper name, maybe markClicked 
-		if (props.sidebarShow && !sidebarCurrentIsShown) {		// Sidebar slides in when it is hidden
+		if (props.markIsClicked && sidebarCurrentIsShown === false) {		// Sidebar slides in when it is hidden and marker is clicked
 			reverse();
 			setSidebarCurrentIsShown(true);
 		}
 	})
 
+	// Click arrow icon to call this function, 
 	const handleClick = (e) => {
-		if (sidebarCurrentIsShown) {
-			reverse();
-			props.setSidebarShow(false);
-			setSidebarCurrentIsShown(false);
-		} else {
-			reverse();
-			props.setSidebarShow(true);
-			setSidebarCurrentIsShown(true);
-		}
+		reverse();
+		if (props.markIsClicked) props.setMarkIsClicked(false);
+		setSidebarCurrentIsShown(!sidebarCurrentIsShown);
 	}
 
 	return (
@@ -52,7 +45,7 @@ export const Sidebar = (props) => {
 			<span className='arrow' onClick={handleClick}>
 				>
 			</span>
-			{data &&
+			{/* {data &&
 				data.map((post, index) => {
 					return (
 						<div key={index} className='sidebar-display-none'>
@@ -67,7 +60,22 @@ export const Sidebar = (props) => {
 							</div>
 						</div>
 					);
-				})}
+				})} */}
+				{props.postInMarker ?
+					<div className='sidebar-display-none'>
+						<div className='img-container'>
+							<img src={props.postInMarker.image} className='img-post' />
+							<h2 className='title-post'>{props.postInMarker.title}</h2>
+							<p className='user-post'>By: {username}</p>
+							<p className='date-post'>{props.postInMarker.date.slice(0, 10)}</p>
+						</div>
+						<div className='data-container'>
+							<h4>{props.postInMarker.text}</h4>
+						</div>
+					</div>
+					: <p>Please choose an icon to check post</p>
+				}
+				
 		</div>
 	);
 };
