@@ -36,6 +36,12 @@ export const Map = ({
 
 	*/
 
+	useEffect(() => {
+		if (document.querySelector('.pin-img')) {
+			document.querySelector('.pin-img').onclick = () => {setMarkIsClicked(true)};
+		}
+	})
+
 	useEffect(
 		() => {
 			if (!mapRef.current) return;
