@@ -4,7 +4,6 @@ import { useState, useEffect, useContext } from 'react';
 import { isEmpty, isEqual } from 'lodash';
 import './Map.css';
 import { UserContext } from '../../UserContext';
-// import { displayAddForm } from '../sidebar/Sidebar';
 
 export const Map = ({
 	postMarkers,
@@ -35,6 +34,14 @@ export const Map = ({
 	user can change city centre and the map jumps to the new city
 
 	*/
+
+	useEffect(() => {
+		if (document.querySelector('.pin-img')) {
+			document.querySelector('.pin-img').onclick = () => {
+				setMarkIsClicked(true);
+			};
+		}
+	});
 
 	useEffect(
 		() => {
@@ -68,6 +75,7 @@ export const Map = ({
 
 			const diplayDataOnMap = (content) => {
 				let html = '';
+
 				if (mapPlaces.length > 0 && content !== 'pin' && typeof content !== 'object') {
 					html = `
 					<div class="pin-card">
@@ -86,7 +94,7 @@ export const Map = ({
 					html = `
 					<div class="pin-card">
 						<div class="container-pin-img">
-							<img class="pin-img" src='${content.image}'></img>
+							<img class="pin-img" src=${content.image}></img>
 						</div>
 						<p class="pin-text">${content.title}</p>
 					</div>
@@ -96,7 +104,6 @@ export const Map = ({
 			};
 
 			// post marker
-
 			postMarkers.forEach((result) => {
 				if (!isEmpty(result)) {
 					let icon = new H.map.Icon(
@@ -113,8 +120,16 @@ export const Map = ({
 						setMarkIsClicked(true); // inherit from Hub.js, check if icon is clicked
 					});
 
-					marker.addEventListener('pointerenter', () => {});
+					marker.addEventListener('pointerenter', (evt) => {
+						ui.removeBubble(ui.getBubbles()[0]); // Remove current bubble
 
+						if (evt.target instanceof H.map.Marker) {
+							let bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+								content: evt.target.getData()
+							});
+							ui.addBubble(bubble);
+						}
+					});
 					map.addObject(marker);
 				}
 			});
