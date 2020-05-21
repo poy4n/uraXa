@@ -17,7 +17,12 @@ function findByUserId(user_id) {
 
 // find posts by tag_id
 function findByTag(tag_id) {
-    return db.query("select * from posts where tag_id = $1;", [tag_id]);
+    return db.query("select posts.id, title, text, location, user_id, image, date, tag_id, username from posts INNER JOIN users ON (posts.user_id=users.id) where tag_id = $1;", [tag_id]);
+}
+
+// find posts by tag_id
+function allPostsWithTagsAndUserNames() {
+    return db.query("SELECT posts.id, title, text, location, user_id, image, date, tag_id, tag, username FROM posts INNER JOIN tags ON (posts.tag_id=tags.id) INNER JOIN users ON (posts.user_id=users.id);");
 }
 
 // insert / create post
@@ -41,6 +46,7 @@ module.exports = {
     findById,
     findByUserId,
     findByTag,
+    allPostsWithTagsAndUserNames,
     createPost,
     deletePost,
     deletePostsByUserId
