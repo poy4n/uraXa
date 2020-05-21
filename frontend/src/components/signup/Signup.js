@@ -13,33 +13,33 @@ export default function Signup() {
 	const { username, setUsername } = useContext(UserContext);
 	const { setLogin } = useContext(UserContext);
 	const { userCentre, setUserCentre } = useContext(UserContext);
-	
+
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 	const [ password, setPassword ] = useState('');
 	const [ location, setLocation ] = useState('');
 	const [ position, setPosition ] = useState('');
 
-	useEffect( 
+	useEffect(
 		() => {
 			autoSuggest(location, userCentre)
 				.then(handleErrors)
 				.then((res) => {
-				console.log(res);
-				let position = { lat: -37.8136, lng: 144.9631 };
+					console.log(res);
+					let position = { lat: -37.8136, lng: 144.9631 };
 
-				if(res !== undefined && res.length > 0) {
-					position = `(${res[0].position.lat}, ${res[0].position.lng})`;
-				}
-				
-				setPosition(position);					
-			})
-			.catch(err => {
-				parseErrors(err);	
-			})
-		}, 
-		[ location ] 
+					if (res !== undefined && res.length > 0) {
+						position = `(${res[0].position.lat}, ${res[0].position.lng})`;
+					}
+
+					setPosition(position);
+				})
+				.catch((err) => {
+					parseErrors(err);
+				});
+		},
+		[ location ]
 	);
-		
+
 	useEffect(
 		() => {
 			if (username.trim() && email.trim() && password.trim() && position.trim()) {
@@ -50,33 +50,33 @@ export default function Signup() {
 		},
 		[ username, email, password, position ]
 	);
-			
+
 	const handleJoin = (e) => {
 		e.preventDefault();
-		
+
 		let url = '/api/signup';
-		
+
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email, password: password, username: username, position: position })
 		};
 		fetch(url, requestOptions)
-		.then(handleErrors)
-		.then((response) => response.json())
-		.then((data) => {
-			setEmail(data.user.email);
-			setToken(data.user.token);
-			setUsername(data.user.username);
-			setUserCentre({ lat: data.user.position.x, lng: data.user.position.y });
-			setLogin(true);
+			.then(handleErrors)
+			.then((response) => response.json())
+			.then((data) => {
+				setEmail(data.user.email);
+				setToken(data.user.token);
+				setUsername(data.user.username);
+				setUserCentre({ lat: data.user.position.x, lng: data.user.position.y });
+				setLogin(true);
 
-			history.push('/map');
-		})
-		.catch((err) => {
-			parseErrors(err);					
-			setLogin(false);
-		});
+				history.push('/map');
+			})
+			.catch((err) => {
+				parseErrors(err);
+				setLogin(false);
+			});
 	};
 
 	return (
@@ -114,10 +114,10 @@ export default function Signup() {
 						required
 					/>
 					<label className='label' htmlFor='location'>
-						Location
+						Base Location
 					</label>
 				</div>
-				
+
 				<div className='input-wraper'>
 					<input
 						className='input'
@@ -148,7 +148,7 @@ export default function Signup() {
 						Password
 					</label>
 				</div>
-				
+
 				<button className='btn' type='submit' disabled={isButtonDisabled}>
 					Join
 				</button>

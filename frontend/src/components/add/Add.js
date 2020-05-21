@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
 import history from '../../history';
 import { autoSuggest } from '../search/autoSuggest';
-import { handleErrors, parseErrors } from '../../services/errorHandlerService'
+import { handleErrors, parseErrors } from '../../services/errorHandlerService';
 import Bar from '../bar/Bar';
 
 import '../signup/Signup.css';
@@ -13,6 +13,7 @@ export default function Add() {
 	const [ description, setDescription ] = useState('');
 	const [ location, setLocation ] = useState('');
 	const [ image, setImage ] = useState(null);
+	const [ preview, setPreview ] = useState(null);
 	const [ category, setCategory ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 
@@ -101,11 +102,27 @@ export default function Add() {
 	const charsLeft = maxLength - description.length;
 
 	return (
-		<div className='form-container'>
-			<div className='title'>
-				<h2>Add your story</h2>
-			</div>
+		<div className='add-container'>
 			<form className='form-wraper' method='POST' name='signup'>
+				<div className='title'>
+					<h2>Add Story</h2>
+				</div>
+				<div className='input-wraper'>
+					<input
+						className='input'
+						type='file'
+						id='file'
+						name='file'
+						onChange={(e) => {
+							setImage(e.target.files[0]);
+							setPreview(URL.createObjectURL(e.target.files[0]));
+						}}
+						required
+					/>
+					<label className='file-label' htmlFor='file'>
+						Upload an Image
+					</label>
+				</div>
 				<div className='input-wraper'>
 					<input
 						className='input'
@@ -115,6 +132,7 @@ export default function Add() {
 						name='title'
 						autoComplete='off'
 						onChange={(e) => setTitle(e.target.value)}
+						maxlength='15'
 						required
 					/>
 					<label className='label' htmlFor='title'>
@@ -180,24 +198,14 @@ export default function Add() {
 						Category
 					</label>
 				</div>
-
-				<div className='input-wraper'>
-					<input
-						className='input'
-						type='file'
-						id='file'
-						name='file'
-						onChange={(e) => setImage(e.target.files[0])}
-						required
-					/>
-					<label className='file-label' htmlFor='file'>
-						Upload an Image
-					</label>
-				</div>
 				<button className='btn' disabled={isButtonDisabled} onClick={(e) => handleAdd(e)}>
 					Publish
 				</button>
 			</form>
+			<div className='container-img-preview'>
+				<img className='img-preview' src={preview} />
+				<h5>image preview box</h5>
+			</div>
 		</div>
 	);
 }

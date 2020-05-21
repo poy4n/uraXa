@@ -1,10 +1,3 @@
-.hub {
-	display: flex;
-	justify-content: center;
-	margin: auto;
-	width: 100%;
-}
-
 .container-posts {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
@@ -92,8 +85,8 @@
 
 .delete-btn {
 	position: relative;
-	left: 400px;
-	bottom: 20px;
+	left: 90px;
+	bottom: 30px;
 	border: none;
 	cursor: pointer;
 	border-radius: 50px;
