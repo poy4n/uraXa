@@ -108,23 +108,25 @@ router.get('/post/tag', (req, res) => {
 });
 
 const postsByTags = tags => {
-    return Promise.all(                                                       
-        tags.map(tag =>
-            Post
-                .findByTag(tag.id)
-                .then(postsRecord => {
-                    if(postsRecord.rows.length > 0) {                                            
-                        return { tag: tag.tag, posts: postsRecord.rows };                                    
-                    } else {
-                        return { tag: tag.tag, posts: []}
-                    } 
-                })
-                .catch(err => res.status(500).send({ error: err.message }))
-        ))   
+    return Promise
+        .all(                                                       
+            tags.map(tag =>
+                Post
+                    .findByTag(tag.id)
+                    .then(postsRecord => {
+                        if(postsRecord.rows.length > 0) {                                            
+                            return { tag: tag.tag, posts: postsRecord.rows };                                    
+                        } else {
+                            return { tag: tag.tag, posts: []}
+                        } 
+                    })
+                    .catch(err => { throw err })
+                )
+        )   
         .then(postsByTag => {
             return postsByTag
         })
-        .catch((err) => res.status(500).send({ error: err.message })) 
+        .catch(err => { throw err }) 
 }
 
 // get posts by all tags
@@ -144,21 +146,23 @@ router.get('/post/tags/all', (req, res) => {
 });
 
 const getTagsRecords = ids => {
-    return Promise.all(
-        ids.map(tagId => 
-            Tag
-                .findById(tagId)
-                .then(tagsRecord => {
-                    console.log(tagsRecord.rows[0]);                    
-                    return tagsRecord.rows[0];
-                })                        
-                .catch((err) => res.status(500).send({ error: err.message }))
-    ))
+    return Promise
+        .all(
+            ids.map(tagId => 
+                Tag
+                    .findById(tagId)
+                    .then(tagsRecord => {
+                        console.log(tagsRecord.rows[0]);                    
+                        return tagsRecord.rows[0];
+                    })                        
+                    .catch(err => { throw err })
+            )
+    )
     .then(tags => {
         console.log(tags);        
         return tags;
     })
-    .catch((err) => res.status(500).send({ error: err.message }))
+    .catch(err => { throw err })
 }
 
 // find posts by tag ids
@@ -174,6 +178,16 @@ router.get('/post/tag/ids', (req, res) => {
             .catch((err) => res.status(500).send({ error: err.message }));
         })
         .catch((err) => res.status(500).send({ error: err.message }))           
+});
+
+// get all posts including tags and usernames
+router.get('/post/all', (req, res) => {       
+    Post
+        .allPostsWithTagsAndUserNames()
+        .then(postsRecord => {
+            return res.status(200).json({ posts: postsRecord.rows })
+        })
+        .catch((err) => res.status(500).send({ error: err.message }));    
 });
 
 // create post
