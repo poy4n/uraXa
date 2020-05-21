@@ -6,7 +6,7 @@ import './Map.css';
 import { UserContext } from '../../UserContext';
 import { displayAddForm } from '../sidebar/Sidebar';
 
-export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch }) => {
+export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch, setPostInMarker, setMarkIsClicked, setLastClickedPost }) => {
 	const mapRef = React.useRef(null);
 	const { login } = useContext(UserContext);
 	const { posts } = useContext(UserContext);
@@ -87,6 +87,7 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 			};
 
 			// post marker
+
 			postMarkers.forEach((result) => {
 				if (!isEmpty(result)) {
 					let icon = new H.map.Icon(
@@ -97,6 +98,19 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 					marker.setData(diplayDataOnMap(content));
 					map.addObject(marker);
 				}
+
+				// Add onclick event listener to triangular icon
+				marker.addEventListener('tap', () => {
+					setPostInMarker(post);
+					setMarkIsClicked(true);	// inherit from Hub.js, check if icon is clicked
+				})
+
+				marker.addEventListener('pointerenter', () => {
+					alert('cool')
+				})
+
+				map.addObject(marker);	
+
 			});
 
 			// centre marker
