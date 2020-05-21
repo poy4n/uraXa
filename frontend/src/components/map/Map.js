@@ -4,9 +4,18 @@ import { useState, useEffect, useContext } from 'react';
 import { isEmpty, isEqual } from 'lodash';
 import './Map.css';
 import { UserContext } from '../../UserContext';
-import { displayAddForm } from '../sidebar/Sidebar';
+// import { displayAddForm } from '../sidebar/Sidebar';
 
-export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch, setPostInMarker, setMarkIsClicked, setLastClickedPost }) => {
+export const Map = ({
+	postMarkers,
+	mapSearchCoord,
+	cityCentre,
+	userCentre,
+	citySearch,
+	setPostInMarker,
+	setMarkIsClicked,
+	setLastClickedPost
+}) => {
 	const mapRef = React.useRef(null);
 	const { login } = useContext(UserContext);
 	const { posts } = useContext(UserContext);
@@ -68,7 +77,7 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 				} else if (content === 'pin') {
 					html = `
 					<div class="pin-card">
-						<button class='pin-btn' onclick='${() => displayAddForm()}'>
+						<button class='pin-btn'>
 							Add Story
 						</button>
 					</div>
@@ -97,20 +106,17 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 					let content = { image: result.image, title: result.title };
 					marker.setData(diplayDataOnMap(content));
 					map.addObject(marker);
+
+					// Add onclick event listener to triangular icon
+					marker.addEventListener('tap', () => {
+						setPostInMarker(result);
+						setMarkIsClicked(true); // inherit from Hub.js, check if icon is clicked
+					});
+
+					marker.addEventListener('pointerenter', () => {});
+
+					map.addObject(marker);
 				}
-
-				// Add onclick event listener to triangular icon
-				marker.addEventListener('tap', () => {
-					setPostInMarker(post);
-					setMarkIsClicked(true);	// inherit from Hub.js, check if icon is clicked
-				})
-
-				marker.addEventListener('pointerenter', () => {
-					alert('cool')
-				})
-
-				map.addObject(marker);	
-
 			});
 
 			// centre marker
