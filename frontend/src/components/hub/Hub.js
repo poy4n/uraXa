@@ -3,8 +3,8 @@ import { Map } from '../map/Map';
 import { Sidebar } from '../sidebar/Sidebar';
 import SearchBar from '../search/SearchBar';
 import Filter from '../filterTags/Filter';
-import { postsMarkers, searchMarkers } from '../map/markerPosition';
-import { handleErrors } from "../../services/errorHandlerService";
+import { markPosts, markPlaces } from '../map/markerPosition';
+import { handleErrors, parseErrors } from '../../services/errorHandlerService';
 import { UserContext } from '../../UserContext';
 import '../map/Map.css';
 
@@ -12,8 +12,13 @@ export default function Hub() {
 	const [ tags, setTags ] = useState([]);
 	const [ postMarkers, setPostMarkers ] = useState([]);
 	const [ mapSearchCoord, setMapSearchCoord ] = useState([]);
+	const [ postInMarker, setPostInMarker] = useState(null);  // When click post icon (triangular) in Map.js, will save post object to postInMarker, then show postInMarker in Sidebar.js
+	const [ markIsClicked, setMarkIsClicked] = useState(false);	// This status is both used in Map.js and Sidebar.js
 
-	const { mapSearch, setMapSearch } = useContext(UserContext);
+	const { citySearch } = useContext(UserContext);
+	const { mapPlaces } = useContext(UserContext);
+	const { cityCentre } = useContext(UserContext);
+	const { userCentre } = useContext(UserContext);
 
 	useEffect(() => {
 		let url = `/api/post/tags/all`;
@@ -27,26 +32,27 @@ export default function Hub() {
 			.then(handleErrors)
 			.then((response) => {
 				const json = response.json();
-				console.log(json);
 				return json;
 			})
 			.then((data) => {
-				console.log(data.postsByTag);
 				setTags(data.postsByTag);
 			})
 			.catch((err) => {
-				err.text().then( errorMessage => {
-					console.log(errorMessage);
-				});
+				parseErrors(err);
 			});
 	}, []);
 
+	// return a list of posts objects
 	useEffect(
 		() => {
-			let marks = postsMarkers(tags);
-			console.log(marks);
-			if (marks.length > 0) {
-				setPostMarkers(marks);
+			let tempost = markPosts(tags);
+			let posts = [];
+			tempost.forEach((post) => {
+				let coordinates = { lat: post.location.x, lng: post.location.y };
+				posts.push({ image: post.image, title: post.title, coordinates: coordinates });
+			});
+			if (posts.length > 0) {
+				setPostMarkers(posts);
 			}
 		},
 		[ tags ]
@@ -54,23 +60,35 @@ export default function Hub() {
 
 	useEffect(
 		() => {
-			let marks = searchMarkers(mapSearch);
-			console.log(mapSearch);
+			let marks = markPlaces(mapPlaces);
 			if (marks.length > 0) {
-				setMapSearchCoord(marks);
+				setMapSearchCoord(marks); // marks is a tag object contains
 			}
 		},
-		[ mapSearch ]
+		[ mapPlaces ]
 	);
 
 	return (
 		<React.Fragment>
 			<div className='hub'>
-				<Sidebar />
+				<Sidebar 
+					postInMarker={postInMarker} 
+					setMarkIsClicked={setMarkIsClicked}
+					markIsClicked={markIsClicked}
+				/>
 				<div className='container-map'>
 					{/* <Filter /> */}
 					<SearchBar />
-					<Map postMarkers={postMarkers} mapSearchCoord={mapSearchCoord} />
+
+					<Map 
+						postMarkers={postMarkers} 	// pass a list of posts objects to map
+						mapSearchCoord={mapSearchCoord} 
+						userCentre={userCentre} 
+						cityCentre={cityCentre} 
+						citySearch={citySearch} 
+						setPostInMarker={setPostInMarker}
+						setMarkIsClicked={setMarkIsClicked}
+					/>
 				</div>
 			</div>
 		</React.Fragment>

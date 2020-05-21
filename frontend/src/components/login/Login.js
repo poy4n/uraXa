@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import history from '../../history';
 import { UserContext } from '../../UserContext';
-import { handleErrors } from '../../services/errorHandlerService'
+import { handleErrors, parseErrors } from '../../services/errorHandlerService'
 
 import './Login.css';
 
@@ -10,6 +10,8 @@ export default function Login() {
 	const { setToken } = useContext(UserContext);
 	const { login, setLogin } = useContext(UserContext);
 	const { setUsername } = useContext(UserContext);
+	const { userCentre, setUserCentre } = useContext(UserContext);
+
 
 	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
@@ -42,19 +44,22 @@ export default function Login() {
 			.then(handleErrors)
 			.then((response) => response.json())
 			.then((data) => {
+				console.log(data);
+
 				setEmail(data.user.email);
 				setToken(data.user.token);
 				setUsername(data.user.username);
+				setUserCentre({ lat: data.user.position.x, lng: data.user.position.y });
 				setLogin(true);
 
+				console.log(userCentre);
+				
 				history.push('/map');
 			})
 			.catch((err) => {
-				err.text().then( errorMessage => {
-					console.log(errorMessage);
-					setLogin(false);
-					setHelperText('incorrect email or password, try again');
-				})
+				parseErrors(err);
+				setLogin(false);
+				setHelperText('incorrect email or password, try again');
 			});
 	};
 
@@ -68,6 +73,7 @@ export default function Login() {
 				<div className='input-wraper'>
 					<input
 						className='input'
+						placeholder='your email'
 						type='email'
 						id='email'
 						name='email'
@@ -83,6 +89,7 @@ export default function Login() {
 				<div className='input-wraper'>
 					<input
 						className='input'
+						placeholder='your password'
 						type='password'
 						id='password'
 						name='password'

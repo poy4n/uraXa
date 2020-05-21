@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
 import history from '../../history';
 import { autoSuggest } from '../search/autoSuggest';
-import { handleErrors } from '../../services/errorHandlerService'
+import { handleErrors, parseErrors } from '../../services/errorHandlerService';
 import Bar from '../bar/Bar';
 
 import '../signup/Signup.css';
@@ -13,13 +13,15 @@ export default function Add() {
 	const [ description, setDescription ] = useState('');
 	const [ location, setLocation ] = useState('');
 	const [ image, setImage ] = useState(null);
+	const [ preview, setPreview ] = useState(null);
 	const [ category, setCategory ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 
-	const { data, setData } = useContext(UserContext);
+	const { posts, setPosts } = useContext(UserContext);
 	const { email } = useContext(UserContext);
 	const { token } = useContext(UserContext);
 	const { types, setTypes } = useContext(UserContext);
+	const { userCentre, setUserCentre } = useContext(UserContext);
 
 	useEffect(
 		() => {
@@ -51,11 +53,9 @@ export default function Add() {
 				setTypes(data.tags);
 			})
 			.catch((err) => {
-				err.text().then( errorMessage => {
-					console.log(errorMessage);
-				});
+				parseErrors(err);
 			});
-	});
+	}, []);
 
 	const handleAdd = (e) => {
 		e.preventDefault();
@@ -71,7 +71,7 @@ export default function Add() {
 		dataForm.append('image', image);
 		dataForm.append('tag', category);
 
-		autoSuggest(location).then((res) => {
+		autoSuggest(location, userCentre).then((res) => {
 			dataForm.append('location', `(${res[0].position.lat}, ${res[0].position.lng})`);
 
 			const requestOptions = {
@@ -86,15 +86,13 @@ export default function Add() {
 					console.log(json);
 					return json;
 				})
-				.then((userData) => {
-					console.log(userData.posts[0]);
-					let newData = userData.posts[0];
-					setData([ ...data, newData ]);
+				.then((userPosts) => {
+					console.log(userPosts.posts[0]);
+					let newPost = userPosts.posts[0];
+					setPosts([ ...posts, newPost ]);
 				})
 				.catch((err) => {
-					err.text().then( errorMessage => {
-						console.log(errorMessage);
-					});
+					parseErrors(err);
 				});
 		});
 		history.push('/map');
@@ -104,11 +102,27 @@ export default function Add() {
 	const charsLeft = maxLength - description.length;
 
 	return (
-		<div className='form-container'>
-			<div className='title'>
-				<h2>Add your story</h2>
-			</div>
+		<div className='add-container'>
 			<form className='form-wraper' method='POST' name='signup'>
+				<div className='title'>
+					<h2>Add Story</h2>
+				</div>
+				<div className='input-wraper'>
+					<input
+						className='input'
+						type='file'
+						id='file'
+						name='file'
+						onChange={(e) => {
+							setImage(e.target.files[0]);
+							setPreview(URL.createObjectURL(e.target.files[0]));
+						}}
+						required
+					/>
+					<label className='file-label' htmlFor='file'>
+						Upload an Image
+					</label>
+				</div>
 				<div className='input-wraper'>
 					<input
 						className='input'
@@ -118,6 +132,7 @@ export default function Add() {
 						name='title'
 						autoComplete='off'
 						onChange={(e) => setTitle(e.target.value)}
+						maxlength='15'
 						required
 					/>
 					<label className='label' htmlFor='title'>
@@ -127,7 +142,7 @@ export default function Add() {
 
 				<div className='input-wraper'>
 					<textarea
-						style={{ height: '150px' }}
+						style={{ height: '250px' }}
 						className='input'
 						placeholder='tell the world your story'
 						type='text'
@@ -183,24 +198,14 @@ export default function Add() {
 						Category
 					</label>
 				</div>
-
-				<div className='input-wraper'>
-					<input
-						className='input'
-						type='file'
-						id='file'
-						name='file'
-						onChange={(e) => setImage(e.target.files[0])}
-						required
-					/>
-					<label className='file-label' htmlFor='file'>
-						Upload an Image
-					</label>
-				</div>
 				<button className='btn' disabled={isButtonDisabled} onClick={(e) => handleAdd(e)}>
 					Publish
 				</button>
 			</form>
+			<div className='container-img-preview'>
+				<img className='img-preview' src={preview} />
+				<h5>image preview box</h5>
+			</div>
 		</div>
 	);
 }

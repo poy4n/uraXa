@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS "users"
  CONSTRAINT "PK_table_6" PRIMARY KEY ( "id" )
 );
 
+ALTER TABLE users ADD COLUMN position point NOT NULL; 
+
 -- ************************************** "tags"
 
 CREATE TABLE IF NOT EXISTS "tags"

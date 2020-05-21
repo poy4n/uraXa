@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import Profile from './components/profile/Profile';
 import Hub from './components/hub/Hub';
 import Signup from './components/signup/Signup';
@@ -7,9 +6,7 @@ import Login from './components/login/Login';
 import Add from './components/add/Add';
 import Home from './components/home/Home';
 import Footer from './components/footer/Footer';
-
 import { UserContext } from './UserContext';
-
 import { Router, Switch, Route, NavLink } from 'react-router-dom';
 import history from './history';
 
@@ -21,9 +18,12 @@ export default function App() {
 	const [ username, setUsername ] = useState('');
 	const [ login, setLogin ] = useState(false);
 	const [ types, setTypes ] = useState([]);
-	const [ mapSearch, setMapSearch ] = useState([]);
+	const [ mapPlaces, setMapPlaces ] = useState([]);
+	const [ citySearch, setCitySearch ] = useState([]);
+	const [ cityCentre, setCityCentre ] = useState({ lat: -37.8136, lng: 144.9631 });
+	const [ userCentre, setUserCentre ] = useState({ lat: -37.8136, lng: 144.9631 });
+	const [ posts, setPosts ] = useState([]);
 
-	const [ data, setData ] = useState([]);
 
 	const userContext = {
 		token,
@@ -34,12 +34,18 @@ export default function App() {
 		setUsername,
 		login,
 		setLogin,
-		data,
-		setData,
+		cityCentre,
+		setCityCentre,
+		posts,
+		setPosts,
 		types,
 		setTypes,
-		mapSearch,
-		setMapSearch
+		mapPlaces,
+		setMapPlaces,
+		userCentre,
+		setUserCentre,
+		citySearch,
+		setCitySearch
 	};
 
 	return (

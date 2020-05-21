@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
-import { handleErrors } from '../../services/errorHandlerService';
+import { handleErrors, parseErrors } from '../../services/errorHandlerService';
+import { autoSuggest } from '../search/autoSuggest';
 import history from '../../history';
 import { UserContext } from '../../UserContext';
 
@@ -11,21 +12,44 @@ export default function Signup() {
 	const { setToken } = useContext(UserContext);
 	const { username, setUsername } = useContext(UserContext);
 	const { setLogin } = useContext(UserContext);
+	const { userCentre, setUserCentre } = useContext(UserContext);
 
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 	const [ password, setPassword ] = useState('');
+	const [ location, setLocation ] = useState('');
+	const [ position, setPosition ] = useState('');
 
 	useEffect(
 		() => {
-			if (username.trim() && email.trim() && password.trim()) {
+			autoSuggest(location, userCentre)
+				.then(handleErrors)
+				.then((res) => {
+					console.log(res);
+					let position = { lat: -37.8136, lng: 144.9631 };
+
+					if (res !== undefined && res.length > 0) {
+						position = `(${res[0].position.lat}, ${res[0].position.lng})`;
+					}
+
+					setPosition(position);
+				})
+				.catch((err) => {
+					parseErrors(err);
+				});
+		},
+		[ location ]
+	);
+
+	useEffect(
+		() => {
+			if (username.trim() && email.trim() && password.trim() && position.trim()) {
 				setIsButtonDisabled(false);
 			} else {
 				setIsButtonDisabled(true);
 			}
 		},
-		[ username, email, password ]
+		[ username, email, password, position ]
 	);
-	console.log(username, email, password);
 
 	const handleJoin = (e) => {
 		e.preventDefault();
@@ -35,26 +59,24 @@ export default function Signup() {
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ email: email, password: password, username: username })
+			body: JSON.stringify({ email: email, password: password, username: username, position: position })
 		};
 		fetch(url, requestOptions)
 			.then(handleErrors)
 			.then((response) => response.json())
 			.then((data) => {
-				console.log(data);
 				setEmail(data.user.email);
 				setToken(data.user.token);
 				setUsername(data.user.username);
+				setUserCentre({ lat: data.user.position.x, lng: data.user.position.y });
 				setLogin(true);
 
 				history.push('/map');
 			})
 			.catch((err) => {
-				err.text().then( errorMessage => {
-					console.log(errorMessage);
-				});
+				parseErrors(err);
+				setLogin(false);
 			});
-		history.push('/map');
 	};
 
 	return (
@@ -67,6 +89,7 @@ export default function Signup() {
 				<div className='input-wraper'>
 					<input
 						className='input'
+						placeholder='your name'
 						type='text'
 						id='username'
 						name='username'
@@ -82,6 +105,23 @@ export default function Signup() {
 				<div className='input-wraper'>
 					<input
 						className='input'
+						placeholder='name of a city, place or address'
+						type='text'
+						id='location'
+						name='location'
+						autoComplete='off'
+						onChange={(e) => setLocation(e.target.value)}
+						required
+					/>
+					<label className='label' htmlFor='location'>
+						Base Location
+					</label>
+				</div>
+
+				<div className='input-wraper'>
+					<input
+						className='input'
+						placeholder='your email'
 						type='email'
 						id='email'
 						name='email'
@@ -97,6 +137,7 @@ export default function Signup() {
 				<div className='input-wraper'>
 					<input
 						className='input'
+						placeholder='your password'
 						type='password'
 						id='password'
 						name='password'
@@ -107,6 +148,7 @@ export default function Signup() {
 						Password
 					</label>
 				</div>
+
 				<button className='btn' type='submit' disabled={isButtonDisabled}>
 					Join
 				</button>

@@ -1,36 +1,83 @@
+.hub {
+	display: flex;
+	justify-content: center;
+	margin: auto;
+	width: 100%;
+}
+
 .map {
-	height: 83vh;
+	height: 80vh;
 	margin: auto;
 	box-shadow: 0px 0px 30px 1px #727272;
 }
-
 .container-map {
 	width: 100%;
 }
 
 .H_ib_body {
-	animation: bubble 0.3s;
+	animation: bubble 0.5s;
 }
 
-.pin_card {
-	display: flex;
-	width: 250px;
+.pin-card {
+	display: grid;
+	width: 150px;
 }
 
-.pin_image {
-	width: 100px;
-	height: 100px;
+.pin-img {
+	object-fit: cover;
+	width: 150px;
+	height: 150px;
 	display: inline-block;
 	margin-right: 20px;
 }
 
-.pin_text {
-	width: 70%;
+.container-pin-img {
+	width: 150px;
+	height: 150px;
+	box-shadow: 0px 0px 10px 1px #808080;
+}
+
+.pin-text {
+	width: 100%;
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+.pin-btn {
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+	color: #f66d51;
+	background-color: #fefefe;
+	border: 1px solid #f66d51;
+	height: 30px;
+	font-size: 14px;
+	width: 100%;
+	margin-top: 20px;
+	font-family: 'Josefin Sans', sans-serif;
+}
+
+.pin-btn:hover {
+	border: 1px solid #f66d51;
+	color: #fefefe;
+	background-color: #f66d51;
+}
+
+.pin-btn:focus {
+	outline: none;
 }
 
 @keyframes bubble {
-	0% {transform: scale(0);}
-	70% {transform: scale(1.05);}
-	85% {transform: scale(0.95);}
-	100% {transform: scale(1);}
+	0% {
+		transform: scale(0);
+	}
+	70% {
+		transform: scale(1.05);
+	}
+	85% {
+		transform: scale(0.95);
+	}
+	100% {
+		transform: scale(1);
+	}
 }
