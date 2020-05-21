@@ -6,7 +6,7 @@ import './Map.css';
 import { UserContext } from '../../UserContext';
 import { displayAddForm } from '../sidebar/Sidebar';
 
-export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch }) => {
+export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, citySearch, setPostInMarker, setMarkIsClicked, setLastClickedPost }) => {
 	const mapRef = React.useRef(null);
 	const { login } = useContext(UserContext);
 	const { posts } = useContext(UserContext);
@@ -78,15 +78,34 @@ export const Map = ({ postMarkers, mapSearchCoord, cityCentre, userCentre, cityS
 			}
 
 			// post marker
-			postMarkers.forEach((coordinate) => {
-				if (!isEmpty(coordinate)) {
-					let LocationOfPostMarker = coordinate;
-					let icon = new H.map.Icon(
-						'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png'
-					);
-					let marker = new H.map.Marker(LocationOfPostMarker, { icon: icon });
-					map.addObject(marker);
-				}
+			postMarkers.forEach((post) => {
+				const postIcon = 'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png';
+				const postImage = post.image;
+				const postTitle = post.title;
+				const postLocation = { lat: post.location.x, lng: post.location.y };
+
+				let icon = new H.map.Icon(postIcon);	
+				let marker = new H.map.Marker(postLocation, { icon: icon });
+				marker.setData(
+					`
+						<div class="pin_card">
+							<img src="${postImage}" class="pin_image">
+							<p class="pin_text">${postTitle}</p>
+						</div>
+					`
+				)
+
+				// Add onclick event listener to triangular icon
+				marker.addEventListener('tap', () => {
+					setPostInMarker(post);
+					setMarkIsClicked(true);	// inherit from Hub.js, check if icon is clicked
+				})
+
+				marker.addEventListener('pointerenter', () => {
+					alert('cool')
+				})
+
+				map.addObject(marker);	
 			});
 
 			// centre marker

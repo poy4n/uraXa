@@ -12,6 +12,8 @@ export default function Hub() {
 	const [ tags, setTags ] = useState([]);
 	const [ postMarkers, setPostMarkers ] = useState([]);
 	const [ mapSearchCoord, setMapSearchCoord ] = useState([]);
+	const [ postInMarker, setPostInMarker] = useState(null);  // When click post icon (triangular) in Map.js, will save post object to postInMarker, then show postInMarker in Sidebar.js
+	const [ markIsClicked, setMarkIsClicked] = useState(false);	// This status is both used in Map.js and Sidebar.js
 
 	const { citySearch } = useContext(UserContext);
 	const { mapPlaces } = useContext(UserContext);
@@ -40,13 +42,10 @@ export default function Hub() {
 			});
 	}, []);
 
+	// return a list of posts objects
 	useEffect(
 		() => {
-			let tempost = postsMarkers(tags);
-			let marks = [];
-			tempost.forEach((post) => {
-				marks.push({lat: post.location.x, lng: post.location.y});
-			})
+			let marks = postsMarkers(tags);
 			if (marks.length > 0) {
 				setPostMarkers(marks);
 			}
@@ -67,11 +66,23 @@ export default function Hub() {
 	return (
 		<React.Fragment>
 			<div className='hub'>
-				<Sidebar />
+				<Sidebar 
+					postInMarker={postInMarker} 
+					setMarkIsClicked={setMarkIsClicked}
+					markIsClicked={markIsClicked}
+				/>
 				<div className='container-map'>
 					{/* <Filter /> */}
 					<SearchBar />
-					<Map postMarkers={postMarkers} mapSearchCoord={mapSearchCoord} userCentre={userCentre} cityCentre={cityCentre} citySearch={citySearch} />
+					<Map 
+						postMarkers={postMarkers} 	// pass a list of posts objects to map
+						mapSearchCoord={mapSearchCoord} 
+						userCentre={userCentre} 
+						cityCentre={cityCentre} 
+						citySearch={citySearch} 
+						setPostInMarker={setPostInMarker}
+						setMarkIsClicked={setMarkIsClicked}
+					/>
 				</div>
 			</div>
 		</React.Fragment>
