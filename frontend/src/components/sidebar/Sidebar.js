@@ -5,7 +5,6 @@ import { UserContext } from '../../UserContext';
 
 import './Sidebar.css';
 
-
 const reverse = () => {
 	const sidebar = document.querySelector('div.sidebar');
 	// const posts = document.querySelector('.sidebar-display-none');
@@ -15,6 +14,7 @@ const reverse = () => {
 	arrowIcon.classList.toggle('reverse');
 	// posts.classList.toggle('sidebar-display');
 };
+
 
 export const Sidebar = (props) => {
 	const { data } = useContext(UserContext);
