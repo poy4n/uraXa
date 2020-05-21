@@ -3,8 +3,8 @@ import { Map } from '../map/Map';
 import { Sidebar } from '../sidebar/Sidebar';
 import SearchBar from '../search/SearchBar';
 import Filter from '../filterTags/Filter';
-import { postsMarkers, searchMarkers } from '../map/markerPosition';
-import { handleErrors, parseErrors } from "../../services/errorHandlerService";
+import { markPosts, markPlaces } from '../map/markerPosition';
+import { handleErrors, parseErrors } from '../../services/errorHandlerService';
 import { UserContext } from '../../UserContext';
 import '../map/Map.css';
 
@@ -45,9 +45,14 @@ export default function Hub() {
 	// return a list of posts objects
 	useEffect(
 		() => {
-			let marks = postsMarkers(tags);
-			if (marks.length > 0) {
-				setPostMarkers(marks);
+			let tempost = markPosts(tags);
+			let posts = [];
+			tempost.forEach((post) => {
+				let coordinates = { lat: post.location.x, lng: post.location.y };
+				posts.push({ image: post.image, title: post.title, coordinates: coordinates });
+			});
+			if (posts.length > 0) {
+				setPostMarkers(posts);
 			}
 		},
 		[ tags ]
@@ -55,9 +60,9 @@ export default function Hub() {
 
 	useEffect(
 		() => {
-			let marks = searchMarkers(mapPlaces);
+			let marks = markPlaces(mapPlaces);
 			if (marks.length > 0) {
-				setMapSearchCoord(marks);	// marks is a tag object contains
+				setMapSearchCoord(marks); // marks is a tag object contains
 			}
 		},
 		[ mapPlaces ]
@@ -74,6 +79,7 @@ export default function Hub() {
 				<div className='container-map'>
 					{/* <Filter /> */}
 					<SearchBar />
+
 					<Map 
 						postMarkers={postMarkers} 	// pass a list of posts objects to map
 						mapSearchCoord={mapSearchCoord} 

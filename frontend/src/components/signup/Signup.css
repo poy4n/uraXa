@@ -2,6 +2,30 @@
 	display: grid;
 	place-items: center;
 }
+
+.add-container {
+	display: flex;
+	place-items: center;
+	justify-content: center;
+}
+
+.container-img-preview {
+	margin-left: 100px;
+	width: 400px;
+	height: 400px;
+}
+
+.img-preview {
+	width: 400px;
+	height: 400px;
+	object-fit: cover;
+	box-shadow: 0px 0px 30px 1px #727272;
+}
+
+.container-img-preview h5 {
+	margin-top: 10px;
+}
+
 .input-wraper {
 	position: relative;
 	display: -ms-grid;
@@ -39,7 +63,6 @@
 	color: #f66d51;
 	background-color: #fefefe;
 	border: 1px solid #f66d51;
-
 	height: 30px;
 	padding-left: 20px;
 	padding-right: 20px;
