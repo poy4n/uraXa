@@ -21,7 +21,22 @@
 	border-radius: 50px;
 }
 
-.search-input:focus,
+.search-input + .listbox {
+	display: none;
+}
+
+.search-input:focus + .listbox {
+	display: block;
+}
+
+.search-input:focus {
+	outline: none;
+	width: 300px;
+	height: 20px;
+	margin: 15px 15px 0 0;
+	border: 1px solid #a1a1a1;
+}
+
 .search-btn:focus {
 	outline: none;
 }
@@ -48,4 +63,31 @@ input[type=text] {
 	border: 1px solid #f66d51;
 	color: #fefefe;
 	background-color: #f66d51;
+}
+
+.listbox {
+	background-color: white;
+	width: 300px;
+	border: 1px solid #a1a1a1;
+	font-family: Arial;
+	font-size: 12px;
+	border-radius: 0 0 20px 20px;
+	margin-top: -1px;
+	overflow: hidden;
+	position: absolute;
+}
+
+.listbox li {
+	display: flex;
+	height: 32px;
+	padding-left: 20px;
+	line-height: 14px;
+	list-style-type: none;
+	flex-direction: column;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.listbox li:hover {
+	background-color: #dfdede;
 }

@@ -35,6 +35,7 @@ export const Map = ({
 
 	*/
 
+	// This use effect need to be modified later
 	useEffect(() => {
 		if (document.querySelector('.pin-img')) {
 			document.querySelector('.pin-img').onclick = () => {
