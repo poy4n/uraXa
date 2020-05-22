@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
-// import currentPosition from './currentPosition';
+import { useEffect, useContext } from 'react';
 import { isEmpty, isEqual } from 'lodash';
 import './Map.css';
 import { UserContext } from '../../UserContext';
@@ -13,13 +12,15 @@ export const Map = ({
 	citySearch,
 	setPostInMarker,
 	setMarkIsClicked,
-	setLastClickedPost
+	setLocationClickCoord,
+	setLocationIsClicked
 }) => {
 	const mapRef = React.useRef(null);
 	const { login } = useContext(UserContext);
 	const { posts } = useContext(UserContext);
 	const { mapPlaces } = useContext(UserContext);
 	const { username } = useContext(UserContext);
+	const { postLoading } = useContext(UserContext);
 
 	/*
 
@@ -35,14 +36,6 @@ export const Map = ({
 
 	*/
 
-	useEffect(() => {
-		if (document.querySelector('.pin-img')) {
-			document.querySelector('.pin-img').onclick = () => {
-				setMarkIsClicked(true);
-			};
-		}
-	});
-
 	useEffect(
 		() => {
 			if (!mapRef.current) return;
@@ -57,7 +50,7 @@ export const Map = ({
 				defaultLayers = platform.createDefaultLayers();
 				map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
 					center: centre,
-					zoom: 12,
+					zoom: 13,
 					pixelRatio: window.devicePixelRatio || 1
 				});
 			};
@@ -67,11 +60,16 @@ export const Map = ({
 			} else {
 				mapFocus(cityCentre);
 			}
-
 			if (citySearch.length > 0) mapFocus(citySearch[0]);
 
+			// ui control and position
 			new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 			const ui = H.ui.UI.createDefault(map, defaultLayers);
+
+			let mapSettings = ui.getControl('mapsettings');
+			let zoom = ui.getControl('zoom');
+			mapSettings.setAlignment('top-right');
+			zoom.setAlignment('top-right');
 
 			const diplayDataOnMap = (content) => {
 				let html = '';
@@ -85,9 +83,9 @@ export const Map = ({
 				} else if (content === 'pin') {
 					html = `
 					<div class="pin-card">
-						<button class='pin-btn'>
+						<p>
 							Add Story
-						</button>
+						</p>
 					</div>
 					`;
 				} else if (typeof content === 'object') {
@@ -106,9 +104,7 @@ export const Map = ({
 			// post marker
 			postMarkers.forEach((result) => {
 				if (!isEmpty(result)) {
-					let icon = new H.map.Icon(
-						'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Pyramid.png'
-					);
+					let icon = new H.map.Icon('https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_10.png');
 					let marker = new H.map.Marker(result.coordinates, { icon: icon });
 					let content = { image: result.image, title: result.title };
 					marker.setData(diplayDataOnMap(content));
@@ -118,19 +114,20 @@ export const Map = ({
 					marker.addEventListener('tap', () => {
 						setPostInMarker(result);
 						setMarkIsClicked(true); // inherit from Hub.js, check if icon is clicked
+						setLocationIsClicked(false);
 					});
 
-					marker.addEventListener('pointerenter', (evt) => {
-						ui.removeBubble(ui.getBubbles()[0]); // Remove current bubble
+					// marker.addEventListener('pointerenter', (evt) => {
+					// 	ui.removeBubble(ui.getBubbles()[0]); // Remove current bubble
 
-						if (evt.target instanceof H.map.Marker) {
-							let bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
-								content: evt.target.getData()
-							});
-							ui.addBubble(bubble);
-						}
-					});
-					map.addObject(marker);
+					// 	if (evt.target instanceof H.map.Marker) {
+					// 		let bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+					// 			content: evt.target.getData()
+					// 		});
+					// 		ui.addBubble(bubble);
+					// 	}
+					// });
+					// map.addObject(marker);
 				}
 			});
 
@@ -143,8 +140,8 @@ export const Map = ({
 				map.addObject(marker);
 			};
 
-			let homeIcon = 'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Home.png';
-			let locationIcon = 'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Cube.png';
+			let homeIcon = 'https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_26.png';
+			let locationIcon = 'https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_26.png';
 			let contentDesc = `Hello ${username}`;
 			if (login) {
 				centreMarker(userCentre, isEqual(userCentre, cityCentre) ? locationIcon : homeIcon, contentDesc);
@@ -154,27 +151,33 @@ export const Map = ({
 
 			// map search marker
 			mapSearchCoord.forEach((result) => {
-				let icon = new H.map.Icon(
-					'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Yellow_ball.png'
-				);
+				let icon = new H.map.Icon('https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_10.png');
 				let marker = new H.map.Marker(result.coordinates, { icon: icon });
 				marker.setData(diplayDataOnMap(result.title));
 				map.addObject(marker);
 			});
 
-			// style
+			// // style
 			// const provider = map.getBaseLayer().getProvider();
-			// const style = new H.map.Style('styles/style.yaml', 'https://js.api.here.com/v3/3.1/styles/omv/');
-			// // provider.setStyle(style);
+			// const style = new H.map.Style(
+			// 	'https://heremaps.github.io/maps-api-for-javascript-examples/change-style-at-load/data/dark.yaml',
+			// 	'https://js.api.here.com/v3/3.1/styles/omv/'
+			// );
+			// provider.setStyle(style);
 
+			// user click - red ball
 			const setPin = (location) => {
-				let icon = new H.map.Icon(
-					'https://cdn4.iconfinder.com/data/icons/48x48-free-object-icons/48/Red_ball.png'
-				);
+				let icon = new H.map.Icon('https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_10.png');
 				let marker = new H.map.Marker(location, { icon: icon });
 
 				marker.setData(diplayDataOnMap('pin'));
 				map.addObject(marker);
+
+				marker.addEventListener('tap', () => {
+					setLocationClickCoord(location);
+					setLocationIsClicked(true); // inherit from Hub.js, check if red icon is clicked
+					setPostInMarker(null);
+				});
 			};
 
 			// tap location
@@ -197,7 +200,7 @@ export const Map = ({
 				map.dispose();
 			};
 		},
-		[ mapRef, postMarkers, mapSearchCoord, cityCentre, userCentre, posts ]
+		[ mapRef, postMarkers, mapSearchCoord, cityCentre, userCentre, posts, login, postLoading ]
 	);
 	return <div className='map' ref={mapRef} />;
 };
