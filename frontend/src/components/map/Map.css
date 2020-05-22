@@ -8,7 +8,8 @@
 .map {
 	height: 80vh;
 	margin: auto;
-	box-shadow: 0px 0px 30px 1px #727272;
+	box-shadow: 0px 0px 30px 1px #808080;
+	border: 1px solid #f66d51;
 }
 
 .container-map {
@@ -21,27 +22,25 @@
 
 .pin-card {
 	display: grid;
-	width: 150px;
+	width: 110px;
 }
 
 .pin-img {
 	object-fit: cover;
-	width: 150px;
-	height: 150px;
+	width: 100px;
+	height: 100px;
 	display: inline-block;
-	margin-right: 20px;
 }
 
 .container-pin-img {
-	width: 150px;
-	height: 150px;
+	width: 100px;
+	height: 100px;
 	box-shadow: 0px 0px 10px 1px #808080;
 }
 
 .pin-text {
 	width: 100%;
 	margin-top: 10px;
-	font-weight: bold;
 }
 
 .pin-btn {

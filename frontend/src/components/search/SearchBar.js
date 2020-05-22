@@ -5,25 +5,11 @@ import { UserContext } from '../../UserContext';
 import './SearchBar.css';
 
 export default function SearchBar() {
-	const { mapPlaces, setMapPlaces } = useContext(UserContext);
 	const { userCentre, setUserCentre } = useContext(UserContext);
 	const { cityCentre, setCityCentre } = useContext(UserContext);
 
 	const [ citySearch, setCitySearch ] = useState('');
-	const [ searchPlaces, setSearchPlaces ] = useState('');
-	const [ placesButtonDisabled, setPlacesButtonDisabled ] = useState(true);
 	const [ cityButtonDisabled, setCityButtonDisabled ] = useState(true);
-
-	useEffect(
-		() => {
-			if (searchPlaces.trim()) {
-				setPlacesButtonDisabled(false);
-			} else {
-				setPlacesButtonDisabled(true);
-			}
-		},
-		[ searchPlaces ]
-	);
 
 	useEffect(
 		() => {
@@ -36,20 +22,8 @@ export default function SearchBar() {
 		[ citySearch ]
 	);
 
-	const handleSearch = (e) => {
-		setSearchPlaces(e.target.value);
-	};
-
 	const handleCity = (e) => {
 		setCitySearch(e.target.value);
-	};
-
-	const handleSearchPlaces = (e) => {
-		e.preventDefault();
-		autoSuggest(searchPlaces, userCentre).then((res) => {
-			console.log(res);
-			setMapPlaces(res);
-		});
 	};
 
 	const handleSearchCity = (e) => {
@@ -66,7 +40,7 @@ export default function SearchBar() {
 				<div>
 					<input
 						className='search-input'
-						placeholder='go to a place e.g. berlin, eiffel tower, ngv gallery'
+						placeholder='go to a place'
 						type='text'
 						name='search'
 						id='search'
@@ -76,21 +50,6 @@ export default function SearchBar() {
 					/>
 					<button className='search-btn' disabled={cityButtonDisabled} onClick={handleSearchCity}>
 						Go
-					</button>
-				</div>
-				<div>
-					<input
-						className='search-input'
-						placeholder='search for a place e.g. park, cafe, address'
-						type='text'
-						name='search'
-						id='search'
-						autoComplete='off'
-						value={searchPlaces}
-						onChange={handleSearch}
-					/>
-					<button className='search-btn' disabled={placesButtonDisabled} onClick={handleSearchPlaces}>
-						Search
 					</button>
 				</div>
 			</form>
