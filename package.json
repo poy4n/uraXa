@@ -1,0 +1,20 @@
+{
+  "name": "uraXa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BeaSuf/uraXa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BeaSuf/uraXa/issues"
+  },
+  "homepage": "https://github.com/BeaSuf/uraXa#readme"
+}
