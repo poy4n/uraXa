@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { isEmpty, isEqual } from 'lodash';
 import './Map.css';
 import { UserContext } from '../../UserContext';
@@ -12,8 +12,7 @@ export const Map = ({
 	citySearch,
 	setPostInMarker,
 	setMarkIsClicked,
-	setLocationClickCoord,
-	setLocationIsClicked
+	setLocationClickCoord
 }) => {
 	const mapRef = React.useRef(null);
 	const { login } = useContext(UserContext);
@@ -21,20 +20,7 @@ export const Map = ({
 	const { mapPlaces } = useContext(UserContext);
 	const { username } = useContext(UserContext);
 	const { postLoading } = useContext(UserContext);
-
-	/*
-
-	if not logged in
-	centre of the map is hard coded melb
-	user can search around melb
-	user can change city centre and the map jumps to the new city
-
-	if logged in
-	centre of the map is user's input location
-	user can search around its location
-	user can change city centre and the map jumps to the new city
-
-	*/
+	const { setLocationIsClicked } = useContext(UserContext); // This status is both used in Map.js and Sidebar.js
 
 	useEffect(
 		() => {
@@ -44,13 +30,14 @@ export const Map = ({
 				apikey: 'Plzpoyk5PfFE85BLe9FTbYJlSarM9Wb2lMjzki6QQwY'
 			});
 
+			// initial position of the map
 			let map;
 			let defaultLayers;
 			const mapFocus = (centre) => {
 				defaultLayers = platform.createDefaultLayers();
 				map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
 					center: centre,
-					zoom: 13,
+					zoom: 12,
 					pixelRatio: window.devicePixelRatio || 1
 				});
 			};
@@ -63,7 +50,8 @@ export const Map = ({
 			if (citySearch.length > 0) mapFocus(citySearch[0]);
 
 			// ui control and position
-			new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+			const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+			behavior.disable(H.mapevents.Behavior.DBLTAPZOOM);
 			const ui = H.ui.UI.createDefault(map, defaultLayers);
 
 			let mapSettings = ui.getControl('mapsettings');
@@ -71,6 +59,7 @@ export const Map = ({
 			mapSettings.setAlignment('top-right');
 			zoom.setAlignment('top-right');
 
+			// bubble content generator
 			const diplayDataOnMap = (content) => {
 				let html = '';
 
@@ -84,7 +73,7 @@ export const Map = ({
 					html = `
 					<div class="pin-card">
 						<p>
-							Add Story
+							${login ? 'Add a Story' : 'Please LogIn to add a story'}
 						</p>
 					</div>
 					`;
@@ -116,18 +105,6 @@ export const Map = ({
 						setMarkIsClicked(true); // inherit from Hub.js, check if icon is clicked
 						setLocationIsClicked(false);
 					});
-
-					// marker.addEventListener('pointerenter', (evt) => {
-					// 	ui.removeBubble(ui.getBubbles()[0]); // Remove current bubble
-
-					// 	if (evt.target instanceof H.map.Marker) {
-					// 		let bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
-					// 			content: evt.target.getData()
-					// 		});
-					// 		ui.addBubble(bubble);
-					// 	}
-					// });
-					// map.addObject(marker);
 				}
 			});
 
@@ -158,16 +135,18 @@ export const Map = ({
 			});
 
 			// // style
-			// const provider = map.getBaseLayer().getProvider();
-			// const style = new H.map.Style(
-			// 	'https://heremaps.github.io/maps-api-for-javascript-examples/change-style-at-load/data/dark.yaml',
-			// 	'https://js.api.here.com/v3/3.1/styles/omv/'
-			// );
-			// provider.setStyle(style);
+			const provider = map.getBaseLayer().getProvider();
+			const style = new H.map.Style(
+				'https://js.api.here.com/v3/3.1/styles/omv/normal.day.yaml',
+				'https://js.api.here.com/v3/3.1/styles/omv/'
+			);
+			provider.setStyle(style);
 
-			// user click - red ball
+			// user click - add post
 			const setPin = (location) => {
-				let icon = new H.map.Icon('https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_10.png');
+				let icon = new H.map.Icon(
+					'https://cdn1.iconfinder.com/data/icons/Momentum_GlossyEntireSet/32/pin-red.png'
+				);
 				let marker = new H.map.Marker(location, { icon: icon });
 
 				marker.setData(diplayDataOnMap('pin'));
@@ -175,12 +154,19 @@ export const Map = ({
 
 				marker.addEventListener('tap', () => {
 					setLocationClickCoord(location);
-					setLocationIsClicked(true); // inherit from Hub.js, check if red icon is clicked
+					setLocationIsClicked(true);
 					setPostInMarker(null);
 				});
 			};
 
 			// tap location
+			map.addEventListener('dbltap', function(evt) {
+				let pointer = evt.currentPointer;
+				let pointerPosition = map.screenToGeo(pointer.viewportX, pointer.viewportY);
+				setPin(pointerPosition);
+			});
+
+			// make bubble on a click
 			map.addEventListener('tap', function(evt) {
 				// bubble
 				ui.removeBubble(ui.getBubbles()[0]); // Remove current bubble
@@ -190,10 +176,6 @@ export const Map = ({
 						content: evt.target.getData()
 					});
 					ui.addBubble(bubble);
-				} else {
-					let pointer = evt.currentPointer;
-					let pointerPosition = map.screenToGeo(pointer.viewportX, pointer.viewportY);
-					setPin(pointerPosition);
 				}
 			});
 			return () => {

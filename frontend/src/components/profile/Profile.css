@@ -18,10 +18,10 @@
 	justify-content: center;
 	height: 300px;
 	width: 500px;
-	box-shadow: 0px 0px 10px 1px #808080;
+	box-shadow: 0px 0px 10px 1px #c9c9c9;
 	margin: auto;
 	border-radius: 20px;
-	border: 1px solid #f66d51;
+	border: 2px solid #f66d51;
 }
 
 .add-post button {

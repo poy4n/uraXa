@@ -5,7 +5,7 @@ import history from '../../history';
 import { autoSuggest } from '../search/autoSuggest';
 import { handleErrors, parseErrors } from '../../services/errorHandlerService';
 import Bar from '../bar/Bar';
-import { isEmpty, isEqual } from 'lodash';
+import { isEmpty } from 'lodash';
 
 import '../signup/Signup.css';
 
@@ -26,6 +26,9 @@ export default function Add() {
 	const { userCentre } = useContext(UserContext);
 	const { setPostLoading } = useContext(UserContext);
 	const { locationClickCoord, setLocationClickCoord } = useContext(UserContext);
+	const { setPublish } = useContext(UserContext);
+	const { setLocationIsClicked } = useContext(UserContext);
+	const { domain } = useContext(UserContext);
 
 	useEffect(
 		() => {
@@ -39,7 +42,7 @@ export default function Add() {
 	);
 
 	useEffect(() => {
-		let url = `/api/tag?email=${email}&token=${token}`;
+		let url = `${domain}/api/tag?email=${email}&token=${token}`;
 
 		const requestOptions = {
 			method: 'GET',
@@ -53,7 +56,6 @@ export default function Add() {
 				return json;
 			})
 			.then((data) => {
-				console.log(data.tags);
 				setTypes(data.tags);
 			})
 			.catch((err) => {
@@ -63,7 +65,6 @@ export default function Add() {
 
 	useEffect(
 		() => {
-			console.log(locationClickCoord);
 			if (!isEmpty(locationClickCoord)) {
 				let location = document.querySelector('#location-input');
 				if (location !== null) location.classList.toggle('input-location-none');
@@ -78,8 +79,7 @@ export default function Add() {
 		e.preventDefault();
 		setPostLoading(true);
 
-		console.log('clicked');
-		let url = '/api/post';
+		let url = `${domain}/api/post`;
 
 		const dataForm = new FormData();
 
@@ -94,6 +94,7 @@ export default function Add() {
 			let coordinates = !isEmpty(locationClickCoord)
 				? `(${locationClickCoord.lat}, ${locationClickCoord.lng})`
 				: `(${res[0].position.lat}, ${res[0].position.lng})`;
+
 			dataForm.append('location', coordinates);
 
 			const requestOptions = {
@@ -106,10 +107,11 @@ export default function Add() {
 				.then((response) => {
 					const json = response.json();
 					setPostLoading(false);
+					setPublish(true);
+					setLocationIsClicked(false);
 					return json;
 				})
 				.then((userPosts) => {
-					console.log(userPosts);
 					let newPost = userPosts.post;
 					setPosts([ ...posts, newPost ]);
 
@@ -124,14 +126,17 @@ export default function Add() {
 		history.push('/map');
 	};
 
-	const maxLength = 550;
+	const maxLength = 500;
 	const charsLeft = maxLength - description.length;
 
 	return (
 		<React.Fragment>
 			{login ? (
-				<div className='form-container'>
-					<form className='form-wraper' method='POST' name='signup'>
+				<div className='add-container'>
+					<div className='container-img-preview'>
+						<img className='img-preview' src={preview} />
+					</div>
+					<form className='form-wraper' method='POST' name='signup' id='form'>
 						<div className='title'>
 							<h2>Add Story</h2>
 						</div>
@@ -148,7 +153,7 @@ export default function Add() {
 								required
 							/>
 							<label className='file-label' htmlFor='file'>
-								Upload an Image
+								Upload/Edit an Image
 							</label>
 						</div>
 						<div className='input-wraper'>
@@ -160,7 +165,7 @@ export default function Add() {
 								name='title'
 								autoComplete='off'
 								onChange={(e) => setTitle(e.target.value)}
-								maxlength='15'
+								maxLength='20'
 								required
 							/>
 							<label className='label' htmlFor='title'>
@@ -178,7 +183,7 @@ export default function Add() {
 								name='description'
 								autoComplete='off'
 								onChange={(e) => setDescription(e.target.value)}
-								maxlength='550'
+								maxLength='500'
 								required
 							/>
 							<Bar maxLength={maxLength} charsLeft={charsLeft} />
@@ -230,9 +235,6 @@ export default function Add() {
 							Publish
 						</button>
 					</form>
-					<div className='container-img-preview'>
-						<img className='img-preview' src={preview} />
-					</div>
 				</div>
 			) : (
 				history.push('/login')

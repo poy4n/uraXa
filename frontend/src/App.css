@@ -9,18 +9,15 @@ body {
 	font-family: 'Josefin Sans', sans-serif;
 }
 
-main {
-	padding-bottom: 45px;
-	overflow: auto;
-}
-
 .header {
+	position: relative;
 	background-color: #fefefe;
 	box-shadow: 0px 0px 10px 1px #c9c9c9;
 	height: 40px;
 	width: 100%;
 	margin: auto;
 	margin-top: 20px;
+	z-index: 1;
 }
 
 .header h1 {

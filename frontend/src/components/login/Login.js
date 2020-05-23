@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import history from '../../history';
 import { UserContext } from '../../UserContext';
-import { handleErrors, parseErrors } from '../../services/errorHandlerService'
+import { handleErrors, parseErrors } from '../../services/errorHandlerService';
 
 import './Login.css';
 
@@ -12,10 +12,10 @@ export default function Login() {
 	const { setUsername } = useContext(UserContext);
 	const { userCentre, setUserCentre } = useContext(UserContext);
 
-
 	const [ password, setPassword ] = useState('');
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 	const [ helperText, setHelperText ] = useState('');
+	const { domain } = useContext(UserContext);
 
 	useEffect(
 		() => {
@@ -32,7 +32,7 @@ export default function Login() {
 	const handleLogin = (e) => {
 		e.preventDefault();
 
-		let url = '/api/login';
+		let url = `${domain}/api/login`;
 
 		const requestOptions = {
 			method: 'POST',
@@ -53,7 +53,7 @@ export default function Login() {
 				setLogin(true);
 
 				console.log(userCentre);
-				
+
 				history.push('/map');
 			})
 			.catch((err) => {
@@ -66,7 +66,7 @@ export default function Login() {
 	return (
 		<div className='form-container'>
 			<div className='title'>
-				<h2>Your moments make great stories</h2>
+				<h2>LogIn to add stories</h2>
 				<h4>Thanks for being a guide</h4>
 			</div>
 			<form className='form-wraper' method='POST' name='signup' onSubmit={handleLogin}>

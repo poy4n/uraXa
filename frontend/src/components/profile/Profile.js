@@ -12,13 +12,14 @@ export default function Profile() {
 	const { username } = useContext(UserContext);
 	const { posts, setPosts } = useContext(UserContext);
 	const { login } = useContext(UserContext);
+	const { domain } = useContext(UserContext);
 
 	const [ loading, setLoading ] = useState(false);
 	const [ error ] = useState(true);
 
 	useEffect(
 		() => {
-			let url = `/api/post/email?email=${email}&token=${token}`;
+			let url = `${domain}/api/post/email?email=${email}&token=${token}`;
 
 			const requestOptions = {
 				method: 'GET',
@@ -51,7 +52,7 @@ export default function Profile() {
 		});
 		setPosts(newPost);
 
-		let url = '/api/post/id';
+		let url = `${domain}/api/post/id`;
 
 		const requestOptions = {
 			method: 'DELETE',

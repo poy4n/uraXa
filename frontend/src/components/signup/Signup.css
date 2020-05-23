@@ -3,9 +3,16 @@
 	place-items: center;
 }
 
+.add-container {
+	display: grid;
+	place-items: center;
+	position: relative;
+	bottom: 80px;
+}
+
 .container-img-preview {
 	position: relative;
-	bottom: 685px;
+	bottom: -110px;
 	left: 150px;
 	width: 100px;
 	height: 100px;
@@ -15,7 +22,7 @@
 	object-fit: cover;
 	width: 100px;
 	height: 100px;
-	box-shadow: 0px 0px 30px 1px #808080;
+	border: none;
 }
 
 .container-img-preview h5 {

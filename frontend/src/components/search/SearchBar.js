@@ -13,29 +13,29 @@ export default function SearchBar() {
 	const [ cityButtonDisabled, setCityButtonDisabled ] = useState(true);
 
 	const [ location, setLocation ] = useState('');
-	const [ position, setPosition ] = useState('');
-	const [ relativeLocations, setRelativeLocations ] = useState(null);
+	const [ setPosition ] = useState('');
 
 	// Check relavant locations hook
 	const [ suggestedLocations, setSuggestedLocations ] = useState([]);	// used in listbox
 	const [ focused, setFocused ] = useState(false);
-
 
 	useEffect(
 		() => {
 			autoSuggest(location, userCentre)
 				.then(handleErrors)
 				.then((res) => {
-					setSuggestedLocations(res.map((r) => {
-						return r
-					}));
-					let position = { lat: -37.8136, lng: 144.9631 };
-
-					if (res !== undefined && res.length > 0) {
-						position = `(${res[0].position.lat}, ${res[0].position.lng})`;
+					if(res !== undefined) {
+						setSuggestedLocations(res.map((r) => {
+							return r
+						}));
+						
+						let position;
+						if (res !== undefined && res.length > 0) {
+							position = `(${res[0].position.lat}, ${res[0].position.lng})`;
+						}
+						setPosition(position);
 					}
 
-					setPosition(position);
 				})
 				.catch((err) => {
 					parseErrors(err);
