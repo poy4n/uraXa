@@ -1,28 +1,40 @@
 import React, { useContext, useEffect, useState } from 'react';
-
+import Add from '../add/Add';
 import { UserContext } from '../../UserContext';
+import { isEmpty } from 'lodash';
 
 import './Sidebar.css';
 
-const reverse = () => {
-	const sidebar = document.querySelector('div.sidebar');
-	// const posts = document.querySelector('.sidebar-display-none');
-	const arrowIcon = document.querySelector('span.arrow');
-
-	sidebar.classList.toggle('sidebar--expand');
-	arrowIcon.classList.toggle('reverse');
-	// posts.classList.toggle('sidebar-display');
-};
-
-export const Sidebar = (props) => {
-	const { data } = useContext(UserContext);
+export const Sidebar = ({
+	markIsClicked,
+	locationIsClicked,
+	setMarkIsClicked,
+	setLocationIsClicked,
+	postInMarker,
+	setPostInMarker
+}) => {
 	const { username } = useContext(UserContext);
-
 	const [ sidebarCurrentIsShown, setSidebarCurrentIsShown ] = useState(false);
 
+	const reverse = () => {
+		const sidebar = document.querySelector('div.sidebar');
+		const arrowIcon = document.querySelector('span.arrow');
+		const message = document.querySelector('.sidebar-display-none');
+
+		sidebar.classList.toggle('sidebar--expand');
+		arrowIcon.classList.toggle('reverse');
+
+		if (message !== null) message.classList.toggle('sidebar-display');
+	};
+
 	useEffect(() => {
-		if (props.markIsClicked && sidebarCurrentIsShown === false) {
+		if (markIsClicked && sidebarCurrentIsShown === false) {
 			// Sidebar slides in when it is hidden and marker is clicked
+			reverse();
+			setSidebarCurrentIsShown(true);
+		}
+		if (locationIsClicked && sidebarCurrentIsShown === false) {
+			// Sidebar slides in when it is hidden and red marker is clicked
 			reverse();
 			setSidebarCurrentIsShown(true);
 		}
@@ -31,7 +43,11 @@ export const Sidebar = (props) => {
 	// Click arrow icon to call this function,
 	const handleClick = (e) => {
 		reverse();
-		if (props.markIsClicked) props.setMarkIsClicked(false);
+		if (markIsClicked) setMarkIsClicked(false);
+		setSidebarCurrentIsShown(!sidebarCurrentIsShown);
+		setPostInMarker(null);
+
+		if (locationIsClicked) setLocationIsClicked(false);
 		setSidebarCurrentIsShown(!sidebarCurrentIsShown);
 	};
 
@@ -40,23 +56,28 @@ export const Sidebar = (props) => {
 			<span className='arrow' onClick={handleClick}>
 				>
 			</span>
-			{props.postInMarker ? (
+			{locationIsClicked ? <Add /> : null}
+			{!isEmpty(postInMarker) ? (
 				<div className='sidebar-post'>
-					<div className='sidebar-data-container'>
-						<img src={props.postInMarker.image} className='sidebar-post-image' />
-						<h2 className='title-post'>{props.postInMarker.title}</h2>
-
-						<h4>{props.postInMarker.text}</h4>
+					<div className='sidebar-post-container'>
+						<div>
+							<img src={postInMarker.image} className='sidebar-post-image' />
+						</div>
+						<h1 className='title-post'>{postInMarker.title}</h1>
+						<h3 className='text-post'>{postInMarker.text}</h3>
 					</div>
-
-					<div className='sidebar-footer'>
-						{/* <p className='date-post'>{props.postInMarker.date.slice(0, 10)}</p> */}
-						<p className='date-post'>By: {username}</p>
+					<div className='sidebar-data-container'>
+						<h4 className='username-pos'>By: {username}</h4>
+						<h4 className='date-post'>{postInMarker.date.slice(0, 10)}</h4>
 					</div>
 				</div>
-			) : (
-				<p>Please choose an icon to check post</p>
-			)}
+			) : null}
+			{!locationIsClicked && isEmpty(postInMarker) ? (
+				<div className='sidebar-display-none'>
+					<img src='https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_10.png' />
+					<p>explore the map to see and add stories</p>
+				</div>
+			) : null}
 		</div>
 	);
 };

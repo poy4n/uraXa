@@ -23,7 +23,8 @@ export default function App() {
 	const [ cityCentre, setCityCentre ] = useState({ lat: -37.8136, lng: 144.9631 });
 	const [ userCentre, setUserCentre ] = useState({ lat: -37.8136, lng: 144.9631 });
 	const [ posts, setPosts ] = useState([]);
-
+	const [ postLoading, setPostLoading ] = useState(false);
+	const [ locationClickCoord, setLocationClickCoord ] = useState({});
 
 	const userContext = {
 		token,
@@ -45,47 +46,50 @@ export default function App() {
 		userCentre,
 		setUserCentre,
 		citySearch,
-		setCitySearch
+		setCitySearch,
+		postLoading,
+		setPostLoading,
+		locationClickCoord,
+		setLocationClickCoord
 	};
 
 	return (
 		<div>
 			<Router history={history}>
-			<main>
-				<div className='header'>
-					<div className='header-left'>
-						{!login ? <h1>uralla</h1> : null}
-						{login ? <h1>uraXa</h1> : null}
-						<NavLink className='nav' activeClassName='active-nav' to='/' exact>
-							Home
-						</NavLink>
-						<NavLink className='nav' activeClassName='active-nav' to='/map'>
-							Map
-						</NavLink>
+				<main>
+					<div className='header'>
+						<div className='header-left'>
+							{!login ? <h1>uralla</h1> : null}
+							{login ? <h1>uraXa</h1> : null}
+							<NavLink className='nav' activeClassName='active-nav' to='/' exact>
+								Home
+							</NavLink>
+							<NavLink className='nav' activeClassName='active-nav' to='/map'>
+								Map
+							</NavLink>
+						</div>
+						<div className='header-right'>
+							<h5>
+								{login ? 'heXo' : ''} {login ? username : ''}
+							</h5>
+							{login ? (
+								<NavLink className='nav' activeClassName='active-nav' to='/profile'>
+									Profile
+								</NavLink>
+							) : null}
+							{!login ? (
+								<NavLink className='nav' activeClassName='active-nav' to='/login'>
+									LogIn
+								</NavLink>
+							) : null}
+							{!login ? (
+								<NavLink className='nav' activeClassName='active-nav' to='/signup'>
+									SignUp
+								</NavLink>
+							) : null}
+						</div>
 					</div>
-					<div className='header-right'>
-						<h5>
-							{login ? 'heXo' : ''} {login ? username : ''}
-						</h5>
-						{login ? (
-							<NavLink className='nav' activeClassName='active-nav' to='/profile'>
-								Profile
-							</NavLink>
-						) : null}
-						{!login ? (
-							<NavLink className='nav' activeClassName='active-nav' to='/login'>
-								LogIn
-							</NavLink>
-						) : null}
-						{!login ? (
-							<NavLink className='nav' activeClassName='active-nav' to='/signup'>
-								SignUp
-							</NavLink>
-						) : null}
-					</div>
-				</div>
-				<Switch>
-
+					<Switch>
 						<UserContext.Provider value={userContext}>
 							<Route path='/profile'>
 								<Profile />
@@ -106,9 +110,8 @@ export default function App() {
 								<Home />
 							</Route>
 						</UserContext.Provider>
-					
-				</Switch>
-			</main>
+					</Switch>
+				</main>
 			</Router>
 			<Footer />
 		</div>

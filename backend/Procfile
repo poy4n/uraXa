@@ -1,0 +1,1 @@
+web: npm install backend && node backend/server.js 

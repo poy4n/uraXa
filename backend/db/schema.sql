@@ -20,10 +20,11 @@ CREATE TABLE IF NOT EXISTS "users"
  "description"     text NULL,
  "username"        text NOT NULL,
  "token"           text NOT NULL,
+ "position"        point NOT NULL,
  CONSTRAINT "PK_table_6" PRIMARY KEY ( "id" )
 );
 
-ALTER TABLE users ADD COLUMN position point NOT NULL; 
+-- ALTER TABLE users ADD COLUMN position point NOT NULL; 
 
 -- ************************************** "tags"
 
