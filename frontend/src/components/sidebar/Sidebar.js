@@ -83,9 +83,9 @@ export const Sidebar = ({ markIsClicked, setMarkIsClicked, postInMarker, setPost
 					<img src='https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_26.png' />
 					<p>search the map to go to new places</p>
 					<img src='https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_10.png' />
-					<p>click on the icon to explore stories</p>
+					<p>click on the icon to explore posted stories</p>
 					<img src='https://cdn1.iconfinder.com/data/icons/Momentum_GlossyEntireSet/32/pin-red.png' />
-					<p>click on the map to add stories</p>
+					<p>double click on the map to post stories</p>
 				</div>
 			) : null}
 		</div>
