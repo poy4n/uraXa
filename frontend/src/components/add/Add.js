@@ -139,6 +139,7 @@ export default function Add() {
 					<form className='form-wraper' method='POST' name='signup' id='form'>
 						<div className='title'>
 							<h2>Add Story</h2>
+							<p>fill in all fields</p>
 						</div>
 						<div className='input-wraper'>
 							<input
@@ -153,7 +154,7 @@ export default function Add() {
 								required
 							/>
 							<label className='file-label' htmlFor='file'>
-								Upload/Edit an Image
+								Upload / Edit an Image
 							</label>
 						</div>
 						<div className='input-wraper'>
