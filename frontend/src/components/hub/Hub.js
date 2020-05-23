@@ -13,7 +13,6 @@ export default function Hub() {
 	const [ mapSearchCoord, setMapSearchCoord ] = useState([]);
 	const [ postInMarker, setPostInMarker ] = useState(null); // When click post icon (triangular) in Map.js, will save post object to postInMarker, then show postInMarker in Sidebar.js
 	const [ markIsClicked, setMarkIsClicked ] = useState(false); // This status is both used in Map.js and Sidebar.js
-	const [ locationIsClicked, setLocationIsClicked ] = useState(false); // This status is both used in Map.js and Sidebar.js
 
 	const { locationClickCoord, setLocationClickCoord } = useContext(UserContext);
 	const { citySearch } = useContext(UserContext);
@@ -21,10 +20,12 @@ export default function Hub() {
 	const { cityCentre } = useContext(UserContext);
 	const { userCentre } = useContext(UserContext);
 	const { postLoading } = useContext(UserContext);
+	const { posts } = useContext(UserContext);
+	const { domain } = useContext(UserContext);
 
 	useEffect(
 		() => {
-			let url = `/api/post/tags/all`;
+			let url = `${domain}/api/post/tags/all`;
 
 			const requestOptions = {
 				method: 'GET',
@@ -44,14 +45,13 @@ export default function Hub() {
 					parseErrors(err);
 				});
 		},
-		[ locationClickCoord ]
+		[ posts ]
 	);
 
 	// return a list of posts objects
 	useEffect(
 		() => {
 			let tempost = markPosts(tags);
-			console.log(tags);
 			let posts = [];
 			tempost.forEach((post) => {
 				let coordinates = { lat: post.location.x, lng: post.location.y };
@@ -60,7 +60,8 @@ export default function Hub() {
 					text: post.text,
 					image: post.image,
 					title: post.title,
-					coordinates: coordinates
+					coordinates: coordinates,
+					username: post.username
 				});
 			});
 			if (posts.length > 0) {
@@ -83,7 +84,7 @@ export default function Hub() {
 	return (
 		<React.Fragment>
 			<div className='loading-error'>
-				{postLoading && <h3>. | . | . | .a new story is loading. | . | . | .</h3>}
+				{postLoading && <h3>. | . | . | a new story is loading | . | . | .</h3>}
 			</div>
 			<div className='hub'>
 				<Sidebar
@@ -91,10 +92,8 @@ export default function Hub() {
 					setPostInMarker={setPostInMarker}
 					setMarkIsClicked={setMarkIsClicked}
 					markIsClicked={markIsClicked}
-					locationIsClicked={locationIsClicked}
 					locationClickCoord={locationClickCoord}
 					setLocationClickCoord={setLocationClickCoord}
-					setLocationIsClicked={setLocationIsClicked}
 				/>
 				<div className='container-map'>
 					<SearchBar />
@@ -106,7 +105,6 @@ export default function Hub() {
 						citySearch={citySearch}
 						setPostInMarker={setPostInMarker}
 						setMarkIsClicked={setMarkIsClicked}
-						setLocationIsClicked={setLocationIsClicked}
 						setLocationClickCoord={setLocationClickCoord}
 					/>
 				</div>

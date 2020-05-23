@@ -13,6 +13,7 @@ export default function Signup() {
 	const { username, setUsername } = useContext(UserContext);
 	const { setLogin } = useContext(UserContext);
 	const { userCentre, setUserCentre } = useContext(UserContext);
+	const { domain } = useContext(UserContext);
 
 	const [ isButtonDisabled, setIsButtonDisabled ] = useState(true);
 	const [ password, setPassword ] = useState('');
@@ -24,7 +25,6 @@ export default function Signup() {
 			autoSuggest(location, userCentre)
 				.then(handleErrors)
 				.then((res) => {
-					console.log(res);
 					let position = { lat: -37.8136, lng: 144.9631 };
 
 					if (res !== undefined && res.length > 0) {
@@ -54,7 +54,7 @@ export default function Signup() {
 	const handleJoin = (e) => {
 		e.preventDefault();
 
-		let url = '/api/signup';
+		let url = `${domain}/api/signup`;
 
 		const requestOptions = {
 			method: 'POST',

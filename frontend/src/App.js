@@ -20,11 +20,14 @@ export default function App() {
 	const [ types, setTypes ] = useState([]);
 	const [ mapPlaces, setMapPlaces ] = useState([]);
 	const [ citySearch, setCitySearch ] = useState([]);
-	const [ cityCentre, setCityCentre ] = useState({ lat: -37.8136, lng: 144.9631 });
-	const [ userCentre, setUserCentre ] = useState({ lat: -37.8136, lng: 144.9631 });
+	const [ cityCentre, setCityCentre ] = useState({ lat: -16.925491, lng: 145.75412 });
+	const [ userCentre, setUserCentre ] = useState({ lat: -16.925491, lng: 145.75412 });
 	const [ posts, setPosts ] = useState([]);
 	const [ postLoading, setPostLoading ] = useState(false);
 	const [ locationClickCoord, setLocationClickCoord ] = useState({});
+	const [ publish, setPublish ] = useState(false);
+	const [ locationIsClicked, setLocationIsClicked ] = useState(false);
+	const [ domain ] = useState( process.env.PRODUCTION ? 'https://uraxa-api.herokuapp.com/' : 'http://localhost:8080');
 
 	const userContext = {
 		token,
@@ -50,68 +53,71 @@ export default function App() {
 		postLoading,
 		setPostLoading,
 		locationClickCoord,
-		setLocationClickCoord
+		setLocationClickCoord,
+		publish,
+		setPublish,
+		locationIsClicked,
+		setLocationIsClicked,
+		domain
 	};
 
 	return (
 		<div>
 			<Router history={history}>
-				<main>
-					<div className='header'>
-						<div className='header-left'>
-							{!login ? <h1>uralla</h1> : null}
-							{login ? <h1>uraXa</h1> : null}
-							<NavLink className='nav' activeClassName='active-nav' to='/' exact>
-								Home
-							</NavLink>
-							<NavLink className='nav' activeClassName='active-nav' to='/map'>
-								Map
-							</NavLink>
-						</div>
-						<div className='header-right'>
-							<h5>
-								{login ? 'heXo' : ''} {login ? username : ''}
-							</h5>
-							{login ? (
-								<NavLink className='nav' activeClassName='active-nav' to='/profile'>
-									Profile
-								</NavLink>
-							) : null}
-							{!login ? (
-								<NavLink className='nav' activeClassName='active-nav' to='/login'>
-									LogIn
-								</NavLink>
-							) : null}
-							{!login ? (
-								<NavLink className='nav' activeClassName='active-nav' to='/signup'>
-									SignUp
-								</NavLink>
-							) : null}
-						</div>
+				<div className='header'>
+					<div className='header-left'>
+						{!login ? <h1>uralla</h1> : null}
+						{login ? <h1>uraXa</h1> : null}
+						<NavLink className='nav' activeClassName='active-nav' to='/' exact>
+							Home
+						</NavLink>
+						<NavLink className='nav' activeClassName='active-nav' to='/map'>
+							Map
+						</NavLink>
 					</div>
-					<Switch>
-						<UserContext.Provider value={userContext}>
-							<Route path='/profile'>
-								<Profile />
-							</Route>
-							<Route path='/map'>
-								<Hub />
-							</Route>
-							<Route path='/signup'>
-								<Signup />
-							</Route>
-							<Route path='/login'>
-								<Login />
-							</Route>
-							<Route path='/add'>
-								<Add />
-							</Route>
-							<Route path='/' exact>
-								<Home />
-							</Route>
-						</UserContext.Provider>
-					</Switch>
-				</main>
+					<div className='header-right'>
+						<h5>
+							{login ? 'heXo' : ''} {login ? username : ''}
+						</h5>
+						{login ? (
+							<NavLink className='nav' activeClassName='active-nav' to='/profile'>
+								Profile
+							</NavLink>
+						) : null}
+						{!login ? (
+							<NavLink className='nav' activeClassName='active-nav' to='/login'>
+								LogIn
+							</NavLink>
+						) : null}
+						{!login ? (
+							<NavLink className='nav' activeClassName='active-nav' to='/signup'>
+								SignUp
+							</NavLink>
+						) : null}
+					</div>
+				</div>
+				<Switch>
+					<UserContext.Provider value={userContext}>
+						<Route path='/profile'>
+							<Profile />
+						</Route>
+						<Route path='/map'>
+							<Hub />
+						</Route>
+						<Route path='/signup'>
+							<Signup />
+						</Route>
+						<Route path='/login'>
+							<Login />
+						</Route>
+						<Route path='/add'>
+							<Add />
+						</Route>
+						<Route path='/' exact>
+							<Home />
+						</Route>
+					</UserContext.Provider>
+				</Switch>
 			</Router>
 			<Footer />
 		</div>
