@@ -35,8 +35,8 @@ span.arrow {
 
 .text-post,
 .username-pos {
-	margin-top: 10px;
-	line-height: 1.2;
+	/* margin-top: 10px; */
+	line-height: 1.3;
 }
 
 .sidebar-post-container {
