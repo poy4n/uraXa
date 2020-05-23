@@ -74,6 +74,7 @@ export const Sidebar = ({ markIsClicked, setMarkIsClicked, postInMarker, setPost
 					</div>
 					<div className='sidebar-data-container'>
 						<h4 className='username-pos'>By: {postInMarker.username}</h4>
+						<h4 className='date-post'>Tag: {postInMarker.tag}</h4>
 						<h4 className='date-post'>{postInMarker.date.slice(0, 10)}</h4>
 					</div>
 				</div>

@@ -61,7 +61,8 @@ export default function Hub() {
 					image: post.image,
 					title: post.title,
 					coordinates: coordinates,
-					username: post.username
+					username: post.username,
+					tag: post.tag
 				});
 			});
 			if (posts.length > 0) {

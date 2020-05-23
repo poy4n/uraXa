@@ -16,7 +16,7 @@ export default function SearchBar() {
 	const [ setPosition ] = useState('');
 
 	// Check relavant locations hook
-	const [ suggestedLocations, setSuggestedLocations ] = useState([]);	// used in listbox
+	const [ suggestedLocations, setSuggestedLocations ] = useState([]); // used in listbox
 	const [ focused, setFocused ] = useState(false);
 
 	useEffect(
@@ -24,18 +24,19 @@ export default function SearchBar() {
 			autoSuggest(location, userCentre)
 				.then(handleErrors)
 				.then((res) => {
-					if(res !== undefined) {
-						setSuggestedLocations(res.map((r) => {
-							return r
-						}));
-						
+					if (res !== undefined) {
+						setSuggestedLocations(
+							res.map((r) => {
+								return r;
+							})
+						);
+
 						let position;
 						if (res !== undefined && res.length > 0) {
 							position = `(${res[0].position.lat}, ${res[0].position.lng})`;
 						}
 						setPosition(position);
 					}
-
 				})
 				.catch((err) => {
 					parseErrors(err);
@@ -70,19 +71,18 @@ export default function SearchBar() {
 
 	const directSearchCity = (e, location) => {
 		e.preventDefault();
-		setCitySearch(e.target.innerHTML)
+		setCitySearch(e.target.innerHTML);
 		setCityCentre(location.position);
 		setUserCentre(location.position);
-	}
+	};
 
-	
 	return (
 		<div className='search-container'>
 			<form className='search-bar'>
 				<div>
 					<input
-						className= {'search-input'}
-						placeholder='go to a place'
+						className={'search-input'}
+						placeholder='Where to? Try a city, place, address'
 						type='text'
 						name='search'
 						id='search'
@@ -91,21 +91,28 @@ export default function SearchBar() {
 						onChange={handleCity}
 						onFocus={() => setFocused(true)}
 						onBlur={() => setFocused(false)}
-						style={(citySearch.length && suggestedLocations.length !== 0 && focused) ? {"borderRadius": "20px 20px 0 0"} : null}
+						style={
+							citySearch.length && suggestedLocations.length !== 0 && focused ? (
+								{ borderRadius: '20px 20px 0 0' }
+							) : null
+						}
 					/>
-					
-					{(citySearch.length && suggestedLocations.length !== 0) ?
-						<div className="listbox">
+
+					{citySearch.length && suggestedLocations.length !== 0 ? (
+						<div className='listbox'>
 							<ul>
 								{suggestedLocations.map((location, index) => {
-									return (<li key={index} onMouseDown={(e) => directSearchCity(e, location)}>{location.title}</li>);
+									return (
+										<li key={index} onMouseDown={(e) => directSearchCity(e, location)}>
+											{location.title}
+										</li>
+									);
 								})}
-								</ul>
+							</ul>
 						</div>
-						: null
-					}
-						
-					<button className='search-btn' disabled={cityButtonDisabled}  onClick={handleSearchCity}>
+					) : null}
+
+					<button className='search-btn' disabled={cityButtonDisabled} onClick={handleSearchCity}>
 						Go
 					</button>
 				</div>
