@@ -44,6 +44,22 @@ $ npm start
 
 As a user with no account you can explore Cairns as the case study and see posts from the community. All users can signup and create an account based on their desired location. Once loged in, users can start exploring and adding their own stories in any location and contribute to the community.
 
+## `LogIn`
+
+Use any of details provided below to LogIn and experince the flow of the app.
+
+Email: trish@email.com
+Password: pass
+
+Email: terri@email.com
+Password: pass
+
+Email: rosha@email.com
+Password: pass
+
+Email: arne@email.com
+Password: pass
+
 ## `Technologies & Libraries`
 
 - HERE map API
