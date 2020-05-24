@@ -27,7 +27,7 @@ export default function App() {
 	const [ locationClickCoord, setLocationClickCoord ] = useState({});
 	const [ publish, setPublish ] = useState(false);
 	const [ locationIsClicked, setLocationIsClicked ] = useState(false);
-	const [ domain ] = useState(process.env.PRODUCTION ? 'https://uraxa-api.herokuapp.com' : 'http://localhost:8080');
+	const [ domain ] = useState('https://uraxa-api.herokuapp.com');
 
 	const userContext = {
 		token,
