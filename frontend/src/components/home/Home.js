@@ -15,19 +15,19 @@ export default function Home() {
 					<div className='container-img'>
 						<img src='https://cdn2.iconfinder.com/data/icons/bagbox/png/globe-terrestre.png' />
 					</div>
-					<p>Wander the map and discover nearby stories.</p>
+					<p>Wander the map and <br></br>discover nearby stories.</p>
 				</div>
 				<div className='desc-explore'>
 					<div className='container-img'>
 						<img src='https://cdn4.iconfinder.com/data/icons/Travel_Icon_Pack/PNG/travel%20management.png' />
 					</div>
-					<p>Explore cities you can’t wait to travel to.</p>
+					<p>Explore cities you can’t <br></br>wait to travel to.</p>
 				</div>
 				<div className='desc-explore'>
 					<div className='container-img'>
 						<img src='https://cdn4.iconfinder.com/data/icons/refresh_cl/256/Misc/Holiday.png' />
 					</div>
-					<p>Share your stories and return to them any time.</p>
+					<p>Share your stories and <br></br>return to them any time.</p>
 				</div>
 			</div>
 
