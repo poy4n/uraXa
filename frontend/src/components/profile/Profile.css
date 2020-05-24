@@ -43,6 +43,9 @@
 	background-color: #fefefe;
 }
 
+.title-post-card {
+	margin-top: 10px;
+}
 .add-post button:focus {
 	outline: none;
 }
@@ -71,9 +74,8 @@
 	margin-top: 10px;
 }
 
-.date-post {
-	font-size: 13px;
-	margin-top: 5px;
+.data-post {
+	font-size: 12px;
 }
 
 .loading-error {
