@@ -71,11 +71,10 @@ export const Sidebar = ({ markIsClicked, setMarkIsClicked, postInMarker, setPost
 						</div>
 						<h1 className='title-post'>{postInMarker.title}</h1>
 						<h3 className='text-post'>{postInMarker.text}</h3>
+						<h4 className='data-post'>By: {postInMarker.username}</h4>
+						<h4 className='data-post'>{postInMarker.date.slice(0, 10)}</h4>
 					</div>
-					<div className='sidebar-data-container'>
-						<h4 className='username-pos'>By: {postInMarker.username}</h4>
-						<h4 className='date-post'>{postInMarker.date.slice(0, 10)}</h4>
-					</div>
+					
 				</div>
 			) : null}
 			{!locationIsClicked && isEmpty(postInMarker) ? (

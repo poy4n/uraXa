@@ -1,4 +1,6 @@
 .sidebar {
+	height: 75vh;
+	overflow-y: auto;
 	margin-top: 60px;
 	width: 0px;
 	position: relative;
@@ -20,9 +22,9 @@
 }
 
 span.arrow {
-	position: absolute;
+	position: fixed;
 	left: 20px;
-	top: -50px;
+	top: 70px;
 	font-size: 35px;
 	transition: transform 0.3s linear;
 	cursor: pointer;
@@ -35,7 +37,6 @@ span.arrow {
 }
 
 .sidebar-post {
-	display: grid;
 	height: 100%;
 	border-top: 1px solid #f66d51;
 	border-bottom: 1px solid #f66d51;
@@ -47,6 +48,11 @@ span.arrow {
 .username-pos {
 	margin-top: 10px;
 	line-height: 1.2;
+	font-size: 2vh;
+}
+
+.title-post {
+	font-size: 4vh;
 }
 
 .sidebar-post-container {
@@ -58,16 +64,14 @@ span.arrow {
 	text-align: center;
 }
 
-.sidebar-data-container {
-	position: relative;
-	top: 180px;
-	left: 20px;
-}
+/* .sidebar-data-container {
+	
+} */
 
 .sidebar-post-image {
 	object-fit: cover;
-	width: 300px;
-	height: 300px;
+	width: 200px;
+	height: 200px;
 	box-shadow: 0px 0px 10px 1px #808080;
 	border: 2px solid #f66d51;
 }
