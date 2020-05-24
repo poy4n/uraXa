@@ -82,7 +82,7 @@ export default function SearchBar() {
 				<div>
 					<input
 						className={'search-input'}
-						placeholder='Where to? Try a city, place, address'
+						placeholder='where to? try a city, place, address'
 						type='text'
 						name='search'
 						id='search'

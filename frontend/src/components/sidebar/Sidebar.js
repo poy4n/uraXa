@@ -35,12 +35,12 @@ export const Sidebar = ({ markIsClicked, setMarkIsClicked, postInMarker, setPost
 				reverse();
 				setSidebarCurrentIsShown(true);
 			} else if (locationIsClicked && sidebarCurrentIsShown && !login) {
-				setSidebarCurrentIsShown(false);
 				reverse();
+				setSidebarCurrentIsShown(false);
 			} else if (publish && sidebarCurrentIsShown && login) {
 				setSidebarCurrentIsShown(false);
-				setPublish(false);
 				reverse();
+				setPublish(false);
 			}
 		},
 		[ publish, markIsClicked, locationIsClicked, login ]
@@ -69,15 +69,11 @@ export const Sidebar = ({ markIsClicked, setMarkIsClicked, postInMarker, setPost
 						<div>
 							<img src={postInMarker.image} className='sidebar-post-image' />
 						</div>
+						<h4 className='data-post'>By: {postInMarker.username}</h4>
+						<h4 className='data-post'>Tag: {postInMarker.tag}</h4>
+						<h4 className='data-post'>{postInMarker.date.slice(0, 10)}</h4>
 						<h1 className='title-post'>{postInMarker.title}</h1>
 						<h3 className='text-post'>{postInMarker.text}</h3>
-						<h4 className='data-post'>By: {postInMarker.username}</h4>
-						<h4 className='data-post'>{postInMarker.date.slice(0, 10)}</h4>
-					</div>
-					<div className='sidebar-data-container'>
-						<h4 className='username-pos'>By: {postInMarker.username}</h4>
-						<h4 className='date-post'>Tag: {postInMarker.tag}</h4>
-						<h4 className='date-post'>{postInMarker.date.slice(0, 10)}</h4>
 					</div>
 				</div>
 			) : null}

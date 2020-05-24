@@ -12,30 +12,30 @@ tags.forEach(tag => {
 
 // users
 const usersName = ['Trish', 'Terri', 'Rosha', 'Arne'];
-
+ 
 const users = [
     {
-        email: 'Trish@email.com',
+        email: 'trish@email.com',
         password: 'pass',
-        username: 'Trish_username', 
+        username: 'Trish', 
         position: '(-16.92304, 145.76625)'             
     },
     {
-        email: 'Terri@email.com',
+        email: 'terri@email.com',
         password: 'pass',
-        username: 'Terri_username', 
+        username: 'Terri', 
         position: '(-16.92504, 145.76000)'             
     },
     {
-        email: 'Rosha@email.com',
+        email: 'rosha@email.com',
         password: 'pass',
-        username: 'Rosha_username', 
+        username: 'Rosha', 
         position: '(-16.92104, 145.76540)'             
     },
     {
-        email: 'Arne@email.com',
+        email: 'arne@email.com',
         password: 'pass',
-        username: 'Arne_username', 
+        username: 'Arne', 
         position: '(-16.92004, 145.76140)'             
     }
 ]

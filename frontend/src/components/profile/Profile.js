@@ -94,7 +94,7 @@ export default function Profile() {
 								<div key={index} className='hub-posts'>
 									<div className='img-container'>
 										<img src={post.image} className='img-post' />
-										<h2 className='title-post'>{post.title}</h2>
+										<h2 className='title-post-card'>{post.title}</h2>
 										<p className='user-post'>By: {username}</p>
 										<p className='date-post'>{post.date.slice(0, 10)}</p>
 										<button
