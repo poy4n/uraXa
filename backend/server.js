@@ -18,6 +18,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Express only serves static assets in production
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("frontend/build"));
+}
 
 app.get('/', (req, res) => {
     res.json({welcome: 'uraxa_api'})

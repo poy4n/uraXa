@@ -74,7 +74,11 @@ export const Sidebar = ({ markIsClicked, setMarkIsClicked, postInMarker, setPost
 						<h4 className='data-post'>By: {postInMarker.username}</h4>
 						<h4 className='data-post'>{postInMarker.date.slice(0, 10)}</h4>
 					</div>
-					
+					<div className='sidebar-data-container'>
+						<h4 className='username-pos'>By: {postInMarker.username}</h4>
+						<h4 className='date-post'>Tag: {postInMarker.tag}</h4>
+						<h4 className='date-post'>{postInMarker.date.slice(0, 10)}</h4>
+					</div>
 				</div>
 			) : null}
 			{!locationIsClicked && isEmpty(postInMarker) ? (
@@ -82,9 +86,9 @@ export const Sidebar = ({ markIsClicked, setMarkIsClicked, postInMarker, setPost
 					<img src='https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_26.png' />
 					<p>search the map to go to new places</p>
 					<img src='https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_10.png' />
-					<p>click on the icon to explore stories</p>
+					<p>click on the icon to explore posted stories</p>
 					<img src='https://cdn1.iconfinder.com/data/icons/Momentum_GlossyEntireSet/32/pin-red.png' />
-					<p>click on the map to add stories</p>
+					<p>double click on the map to post stories</p>
 				</div>
 			) : null}
 		</div>

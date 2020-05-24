@@ -119,7 +119,7 @@ export const Map = ({
 
 			let homeIcon = 'https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_26.png';
 			let locationIcon = 'https://cdn2.iconfinder.com/data/icons/gur-project-1/32/1_26.png';
-			let contentDesc = `Hello ${username}`;
+			let contentDesc = `Welcome ${username}`;
 			if (login) {
 				centreMarker(userCentre, isEqual(userCentre, cityCentre) ? locationIcon : homeIcon, contentDesc);
 			} else {
