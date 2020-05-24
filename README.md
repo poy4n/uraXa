@@ -48,16 +48,16 @@ As a user with no account you can explore Cairns as the case study and see posts
 
 Use any of details provided below to LogIn and experince the flow of the app.
 
-Email: trish@email.com
+Email: `trish@email.com`
 Password: pass
 
-Email: terri@email.com
+Email: `terri@email.com`
 Password: pass
 
-Email: rosha@email.com
+Email: `rosha@email.com`
 Password: pass
 
-Email: arne@email.com
+Email: `arne@email.com`
 Password: pass
 
 ## `Technologies & Libraries`
