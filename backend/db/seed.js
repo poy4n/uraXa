@@ -11,8 +11,6 @@ tags.forEach(tag => {
 });
 
 // users
-const usersName = ['Trish', 'Terri', 'Rosha', 'Arne'];
- 
 const users = [
     {
         email: 'trish@email.com',
