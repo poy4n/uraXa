@@ -60,3 +60,9 @@ body {
 	font-size: 18px;
 	color: #f66d51;
 }
+
+@media screen and (max-width: 600px) {
+	.nav {
+		margin-left: 10px;
+	}
+}

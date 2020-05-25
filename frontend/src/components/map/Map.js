@@ -54,11 +54,6 @@ export const Map = ({
 			behavior.disable(H.mapevents.Behavior.DBLTAPZOOM);
 			const ui = H.ui.UI.createDefault(map, defaultLayers);
 
-			let mapSettings = ui.getControl('mapsettings');
-			let zoom = ui.getControl('zoom');
-			mapSettings.setAlignment('top-right');
-			zoom.setAlignment('top-right');
-
 			// bubble content generator
 			const diplayDataOnMap = (content) => {
 				let html = '';

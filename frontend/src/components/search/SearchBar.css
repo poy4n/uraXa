@@ -91,3 +91,9 @@ input[type=text] {
 .listbox li:hover {
 	background-color: #dfdede;
 }
+
+@media screen and (max-width: 600px) {
+	.search-input {
+		width: 200px;
+	}
+}

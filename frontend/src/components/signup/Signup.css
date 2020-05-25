@@ -135,7 +135,7 @@ input[type="file"] {
 	outline: none;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
 	.description {
 		display: grid;
 		margin: auto;
@@ -149,5 +149,9 @@ input[type="file"] {
 
 	.container-explore {
 		margin-right: 0px;
+	}
+
+	.input-wraper .input {
+		width: 300px;
 	}
 }
