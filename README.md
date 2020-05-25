@@ -12,7 +12,7 @@ uraXa map is a free community resource which provide locals with a simple way to
 
 ## `Settings`
 
-Change Domain vraibale in line30 App.js from `https://uraxa-api.herokuapp.com` to `http://localhost:8080` in order to run servers for development.
+Change Domain varibale in line30 App.js from `https://uraxa-api.herokuapp.com` to `http://localhost:8080` in order to run servers for development.
 
 ## `Launch`
 
